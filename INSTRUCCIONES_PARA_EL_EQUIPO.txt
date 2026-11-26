@@ -1,0 +1,48 @@
+================================================================================
+ENTREGA INDIVIDUAL: PUNTO 6 - ARQUITECTURA DEL SISTEMA
+PROYECTO: ONPE VISIÓN (AVANCE DE PROYECTO FINAL II - SEMANA 8)
+CURSO: DISEÑO DE PRODUCTOS Y SERVICIOS (100000SI67) - UTP 2026
+DOCENTE: SANTILLAN ACHING, NILTON OMAR
+================================================================================
+
+Hola equipo,
+
+Aquí les adjunto el paquete completo con MI PARTE ASIGNADA:
+"6. ARQUITECTURA DEL SISTEMA" (Frontend, Backend, Base de Datos, IA e Infraestructura).
+
+CONTENIDO DE ESTA CARPETA / ZIP:
+--------------------------------------------------------------------------------
+1. Punto_6_Arquitectura_del_Sistema_ONPE_Vision.docx
+   -> Documento formal en Word con el desarrollo completo de los 4 puntos pedidos:
+      - 6.1. Frontend (Dashboard Central en Google Maps y PWA 3 Clics offline).
+      - 6.2. Backend (Clúster Node.js/Express, WebSockets cada 30s, Reglas Semafóricas).
+      - 6.3. Base de Datos (PostgreSQL 16 + PostGIS, 10,401 locales, Índices GiST).
+      - 6.4. Inteligencia Artificial (Modelo XAI con Valores SHAP para Contraloría/JNE).
+      - 6.5. Infraestructura de Red Dedicada (Tecnología MPLS con SLA > 99.9%).
+      - Tabla comparativa de componentes y tecnologías (Punto 7).
+   -> NOTA PARA QUIEN JUNTE EL INFORME: Pueden copiar y pegar directamente este 
+      contenido en la Sección 6 del informe grupal.
+
+2. Diagrama_1_Arquitectura_Multicapa.svg
+   -> Diagrama visual de arquitectura en bloques con las 4 capas y la red MPLS.
+      Pueden insertarlo en el Word como "Figura 1: Arquitectura Multicapa del Sistema".
+
+3. Diagrama_2_Flujo_Telemetria_XAI.svg
+   -> Diagrama del pipeline de datos desde el camión/GPS hasta el semáforo de alerta.
+      Pueden insertarlo en el Word como "Figura 2: Pipeline de Telemetría en Tiempo Real".
+
+4. schema_onpe_vision.sql
+   -> Script de Base de Datos para PostgreSQL 16 + PostGIS. Contiene las tablas,
+      los índices espaciales GiST y la función para verificar desvíos de geocerca.
+      (Sirve como respaldo técnico si el docente pide ver el código SQL).
+
+5. simulador_backend.js
+   -> Script de servidor en Node.js que simula la API REST de telemetría y el cálculo
+      de valores SHAP. Ejecutable directamente con: "node simulador_backend.js".
+
+6. index.html y logo_onpe.jpg
+   -> Prototipo web interactivo con Google Maps en tiempo real y la pestaña
+      "Arquitectura (Punto 6)" navegable y adaptable para cualquier celular o PC.
+
+Todo está listo, probado y con las referencias bibliográficas integradas.
+================================================================================

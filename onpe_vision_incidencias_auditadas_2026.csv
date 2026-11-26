@@ -1,0 +1,15 @@
+Codigo_Incidencia,ODPE,Descripcion_Evento,Gravedad,Hora_Registro,Estado_Resolucion
+INC-001,Lima Sur,Incumplimiento contractual despacho Galaga SAC en 15 colegios,CRITICA,05:15,En Auxilio PNP
+INC-002,Huancavelica,Averia mecanica en sistema de frenos en Ticlio (#DEZ-782),CRITICA,05:42,Transbordo en Curso
+INC-003,Loreto,Retraso de 1.8h por fuerte correntada en cuenca del Nanay,MEDIA,06:05,Monitoreo Radial
+INC-004,Lima Sur,Retraso en entrega de anforas en I.E. Javier Heraud SJM,CRITICA,06:12,Reserva Despachada
+INC-005,Puno,Helada y neblina severa reducen visibilidad a 15 km/h,MEDIA,06:18,Transito Seguro
+INC-006,Arequipa,Precinto QR escaneado con exito en Colegio Independencia,BAJA,06:22,Conforme
+INC-007,Lima Sur,Furgon #GAL-109 detenido sin senal GPS por 20 minutos,CRITICA,06:25,Patrulla Asignada
+INC-008,Ucayali,Embarcacion arribo a puerto fluvial con custodia completa,BAJA,06:30,Conforme
+INC-009,Piura,Entrega conforme de anforas en Centro de Acopio Central,BAJA,06:33,Conforme
+INC-010,Cusco,Transito normal en corredor vial de Valle Sagrado,BAJA,06:35,Conforme
+INC-011,Junin,Paso habilitado en La Oroya sin manifestaciones,BAJA,06:38,Conforme
+INC-012,Ayacucho,Convoy #DEZ-447 ingresa a ODPE Huamanga conforme,BAJA,06:40,Conforme
+INC-013,San Martin,Descarga de material electoral con firma digital de actas,BAJA,06:42,Conforme
+INC-014,Lima Sur,Notificacion oficial cursada a Contraloria por penalidades,ALTA,06:44,Expediente Abierto

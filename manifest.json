@@ -1,0 +1,16 @@
+{
+  "name": "ONPE Visión 2026 - Terminal Táctico de Campo",
+  "short_name": "ONPE Campo",
+  "description": "Terminal PWA de Recepción y Conformidad Electoral con firma criptográfica offline",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#060B14",
+  "theme_color": "#060B14",
+  "icons": [
+    {
+      "src": "logo_onpe.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

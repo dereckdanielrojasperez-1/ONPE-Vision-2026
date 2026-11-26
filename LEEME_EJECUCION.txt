@@ -1,0 +1,104 @@
+===============================================================================
+       ONPE VISIÓN 2026 - CENTRO DE MANDO Y CUSTODIA ELECTORAL INTELIGENTE
+===============================================================================
+
+PROYECTO ACADÉMICO OFICIAL
+Universidad Tecnológica del Perú (UTP)
+Curso: Diseño de Productos y Servicios (100000SI67)
+Docente: Dr. Nilton Omar Santillán Aching
+Año Académico: 2026
+
+INTEGRANTES DEL EQUIPO:
+- Sebastian Alejandro Farfán Espinoza
+- Dereck Daniel Rojas Perez
+- Diego Alexander Janampa Jaulis
+- Victor Manuel Rojas Taco
+- Kayden Andrew Navarro Caysahuana
+
+-------------------------------------------------------------------------------
+1. FORMAS DE EJECUCIÓN (DOS MÉTODOS DISPONIBLES)
+-------------------------------------------------------------------------------
+
+MÉTODO 1: EJECUCIÓN INTEGRAL CON BACKEND Y BASE DE DATOS (RECOMENDADO)
+   1. Requisito técnico: Node.js >= 22.5.0 (incluye módulo nativo node:sqlite).
+   2. Ejecute haciendo doble clic en el archivo:
+      EJECUTAR_ONPE_VISION.bat
+   3. El script verificará node:sqlite, iniciará el servidor backend Node.js en el
+      puerto 3000 con la base de datos relacional SQLite (onpe_vision.db).
+   4. Se abrirá automáticamente su navegador web predeterminado en:
+      http://localhost:3000
+
+MÉTODO 2: APERTURA DIRECTA SIN DEPENDENCIAS (MODO STANDALONE / PORTABLE)
+   1. Ejecute haciendo doble clic en el archivo:
+      index.html (o en ABRIR_INTERFAZ_WEB.bat)
+   2. La aplicación cargará inmediatamente en su navegador web (Chrome, Edge,
+      Firefox, Brave, etc.) con el gemelo digital completo, la simulación de
+      telemetría GPS, el Globo Terrestre 3D interactivo y el Copiloto ONPE
+      con síntesis de voz en español y base de datos local.
+
+-------------------------------------------------------------------------------
+2. CREDENCIALES DE ACCESO RÁPIDO PARA EL JURADO / EVALUADOR
+-------------------------------------------------------------------------------
+En la pantalla de inicio encontrará dos botones principales:
+- "Acceso Directo (Iniciar Sesión)": Ingreso inmediato con las credenciales
+  institucionales pre-cargadas (DNI: 72491038 / Rol: Jefe de Operaciones).
+- "Modo Prueba (Demostración Inmediata)": Ingreso con un solo clic para
+  demostración técnica rápida y visualización de telemetría activa.
+
+-------------------------------------------------------------------------------
+3. NUEVAS FUNCIONALIDADES DEL CHATBOT COPILOTO ONPE
+-------------------------------------------------------------------------------
+1. Interacción Conversacional Natural:
+   - Saludos casuales: Al escribir "hola, ¿qué tal?", "¿cómo estás?", "buenos días",
+     el chatbot responde de manera amable y profesional presentando su rol de
+     asistencia táctica en tiempo real, con síntesis de voz en español.
+2. Consulta Ejecutable de Base de Datos y Descarga al Dispositivo:
+   - Al solicitar "hazme una consulta" o "muéstrame todos los datos", el chatbot
+     consulta las 6 tablas relacionales de la base de datos SQLite (32 registros):
+     * Vehículos de transporte y custodia policial PNP
+     * Alertas algorítmicas de riesgo XAI TreeSHAP
+     * Locales de votación y colegios electorales
+     * Rutas electorales terrestres y fluviales
+     * Telemetría GPS en tiempo real
+     * Actas de recepción de material electoral
+   - Muestra una previsualización formateada en tabla dentro de la burbuja del chat.
+   - Dispara automáticamente la descarga del archivo de datos completo (JSON/CSV)
+     a la biblioteca o carpeta de Descargas del dispositivo del usuario.
+   - Ofrece botones de acción directa ("Descargar JSON" y "Descargar CSV") para
+     re-exportar los datos cuando el usuario lo requiera.
+
+-------------------------------------------------------------------------------
+4. ARQUITECTURA LIMPIA Y MODULARIZACIÓN PROFESIONAL DEL CÓDIGO
+-------------------------------------------------------------------------------
+El código monolítico ha sido completamente refactorizado, desacoplado y organizado:
+
+A) Hojas de Estilos Modulares (directorio css/):
+   - css/variables.css: Variables de diseño, paleta ONPE, tipografías y sombras.
+   - css/base.css: Reset, estructura envolvente, header y barra de navegación.
+   - css/components.css: Tarjetas 3D, botones, entradas, badges y alertas.
+   - css/views.css: Estilos específicos de cada una de las 13 vistas operativas.
+   - css/chatbot.css: Estilos del modal flotante, burbujas y tablas de datos.
+   - css/responsive.css: Adaptabilidad fluida para pantallas 1920px+, laptops,
+     tablets (iPad) y teléfonos móviles (375px+).
+
+B) Módulos de Lógica JavaScript (directorio js/):
+   - js/app.js: Estado global reactivo, ruteo de vistas, autenticación y tokens.
+   - js/telemetria.js: Simulación de flota GPS, tablas de convoyes y tooltips.
+   - js/analista.js: Gráficos de dispersión, tendencias operativas y simulador XAI TreeSHAP.
+   - js/grafo.js: Red vial topológica interactiva con nodos arrastrables y Terminal PWA.
+   - js/globo3d.js: Motor WebGL Three.js con simulación fotorrealista de la Tierra.
+   - js/database.js: Explorador relacional SQLite, consola SQL y exportador.
+   - js/notificaciones.js: Centro de alertas forenses auditadas en vivo y búsqueda global.
+   - js/tutorial.js: Guía interactiva paso a paso con posicionamiento inteligente.
+   - js/chatbot.js: Inteligencia del asistente, síntesis de voz, consultas y descargas.
+
+C) Módulos Autónomos Independientes (directorio modulos/):
+   Cada apartado cuenta con su propio index.html, style.css y script.js:
+   - modulos/chatbot-copiloto/
+   - modulos/control-transporte/
+   - modulos/globo-terrestre-3d/
+   - modulos/base-datos/
+
+===============================================================================
+                       ONPE - SEGURIDAD Y TRANSPARENCIA 2026
+===============================================================================

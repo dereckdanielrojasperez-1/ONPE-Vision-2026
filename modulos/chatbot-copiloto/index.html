@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Autónomo: Copiloto Inteligente ONPE Visión 2026</title>
+  <link rel="stylesheet" href="../../css/variables.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/chatbot.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="standalone-module-body">
+  <header class="app-top-header">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="../../index.html" class="btn-ghost" style="padding:6px 12px; font-size:12px; text-decoration:none;">← Volver al Centro de Mando</a>
+      <h2 style="font-size:16px; color:#FFFFFF; margin:0; font-family:'Sora',sans-serif;">Módulo Autónomo: Copiloto Inteligente ONPE Visión</h2>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="badge-estado badge-conforme">Enlace Cifrado Activo</span>
+      <span class="badge-estado badge-sla">SLA 99.94%</span>
+    </div>
+  </header>
+
+  <main class="chat-standalone-container">
+    <div class="chat-standalone-card">
+      <div class="chatbot-caja-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="avatar-copiloto-halo">
+            <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#22D3EE;fill:none;stroke-width:2;"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><rect x="4" y="8" width="16" height="12" rx="2"></rect><circle cx="9" cy="13" r="1.5" fill="#22D3EE"></circle><circle cx="15" cy="13" r="1.5" fill="#22D3EE"></circle><path d="M9 17h6"></path></svg>
+          </div>
+          <div>
+            <h3 style="font-size:15px; color:#FFFFFF; margin:0;">Copiloto ONPE Visión 2026</h3>
+            <span id="chatbot-seccion-nombre" style="font-size:11px; color:var(--texto-secundario);">Ventana: Base de Datos y Telemetría</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span id="indicador-voz-hablando" style="display:none; font-size:11px; color:var(--cian);">Hablando...</span>
+          <button id="btn-toggle-voz-chatbot" class="btn-secundario activo" onclick="alternarVozChatbot()" style="padding:5px 10px; font-size:11px;">
+            Voz: ON
+          </button>
+          <button id="btn-stop-audio-chatbot" class="btn-ghost" onclick="detenerVozChatbot()" style="padding:5px 10px; font-size:11px;">
+            Silenciar
+          </button>
+        </div>
+      </div>
+
+      <div class="chatbot-caja-body" id="contenedor-mensajes-chat" style="height: 520px; overflow-y: auto;">
+        <div class="msg-chatbot-item bot">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <strong style="color:#FFFFFF; font-size:13.5px;">¡Bienvenido al Copiloto Inteligente ONPE Visión!</strong>
+            <span class="micro-etiqueta" style="color:var(--cian); font-size:10px;">EN LÍNEA</span>
+          </div>
+          <p style="margin:4px 0 8px 0; font-size:13px; color:#D8E2F0;">
+            Estoy listo para interactuar contigo. Puedes saludarme con <em>"Hola, ¿qué tal?"</em>, pedirme <em>"Hazme una consulta"</em> o <em>"Muéstrame todos los datos"</em> para extraer y descargar todos los registros a tu dispositivo.
+          </p>
+        </div>
+      </div>
+
+      <div class="pills-sugerencias-chat" id="contenedor-quick-pills-chatbot">
+        <button class="pill-chat-sug" onclick="enviarMensajeChat('Hola, ¿qué tal?')">Hola, ¿qué tal?</button>
+        <button class="pill-chat-sug" onclick="enviarMensajeChat('Muéstrame todos los datos')">Muéstrame todos los datos</button>
+        <button class="pill-chat-sug" onclick="enviarMensajeChat('Hazme una consulta')">Hazme una consulta</button>
+        <button class="pill-chat-sug" onclick="enviarMensajeChat('Dame un listado de los reportes de última hora')">Reportes de última hora</button>
+      </div>
+
+      <div class="chatbot-caja-footer">
+        <input type="text" id="input-texto-chat" class="input-ioc" placeholder="Escribe 'hola', 'hazme una consulta' o 'muéstrame todos los datos'..." onkeydown="if(event.key==='Enter') enviarMensajeUsuario()">
+        <button class="btn-primario" onclick="enviarMensajeUsuario()" style="padding:10px 18px; font-weight:700;">
+          Enviar
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <div id="contenedor-toasts"></div>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/chatbot.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

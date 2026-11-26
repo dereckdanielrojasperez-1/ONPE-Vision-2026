@@ -1,0 +1,8 @@
+
+.standalone-module-body {
+  background: var(--bg-app-deep);
+  color: #EAF1FB;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

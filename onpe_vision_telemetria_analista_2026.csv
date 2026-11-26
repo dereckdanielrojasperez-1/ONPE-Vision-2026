@@ -1,0 +1,9 @@
+METRICA,VALOR_MEDIDO,OBJETIVO_SLA,ESTADO_OPERACIONAL
+Locales de Votacion Monitoreados,10401,10401,100% Cobertura Nacional
+ODPEs Conectadas,93,93,Red MPLS Activa
+Convoyes en Ruta,12,12,Monitoreo GPS 30s
+Efectivos PNP / FF.AA.,14280,14000,Custodia Desplegada
+Penalidades Proveedor Galaga SAC,"S/ 64,000",S/ 0,Retencion de Fianza Ejecutada
+Disponibilidad de Red Troncal,99.94%,99.90%,Conforme SLA
+Actas Procesadas en Turno 08:00 AM,2253 / 10401,10401,Flujo Continuo
+"Paso Andino Ticlio 4,818 msnm",Scania #DEZ-782,Transito,Auxilio Mecanico Provias Activo

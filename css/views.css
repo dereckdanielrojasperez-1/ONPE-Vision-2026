@@ -1,0 +1,1850 @@
+/* SECCIONES DE VISTAS (10 VISTAS)
+ ========================================================================== */
+.seccion-vista {
+ display: none !important;
+ padding: 24px 32px;
+ max-width: 100% !important;
+ margin: 0 !important;
+ width: 100% !important;
+ box-sizing: border-box !important;
+ flex: 1;
+}
+.seccion-vista.activa {
+ display: block !important;
+ animation: fade-vista 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-vista {
+ from { opacity: 0; transform: translateY(6px); }
+ to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+ VISTA 1: INICIO (HOME / HERO)
+ ========================================================================== */
+.hero-inicio {
+ padding: 36px 0 24px;
+ text-align: center;
+ max-width: 1000px;
+ margin: 0 auto 28px;
+}
+.badge-hero-onpe {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ background: rgba(47, 140, 255, 0.1);
+ border: 1px solid var(--borde-activo);
+ padding: 6px 16px;
+ border-radius: var(--radio-pill);
+ font-family: var(--font-mono);
+ font-size: 12px;
+ color: var(--cian);
+ margin-bottom: 18px;
+}
+.hero-inicio h2 {
+ font-size: clamp(26px, 3.8vw, 42px);
+ font-weight: 800;
+ line-height: 1.15;
+ margin-bottom: 16px;
+ background: linear-gradient(180deg, #FFFFFF 0%, #B8D5FA 100%);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+}
+.hero-inicio p {
+ font-size: 16px;
+ color: var(--texto-secundario);
+ max-width: 800px;
+ margin: 0 auto 26px;
+}
+.hero-cta-grupo {
+ display: flex;
+ gap: 16px;
+ justify-content: center;
+ flex-wrap: wrap;
+}
+
+/* 4 Tarjetas de Crisis 2026 */
+.grid-crisis-4 {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 20px;
+ margin-bottom: 40px;
+}
+.tarjeta-crisis {
+ background: var(--bg-surface);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 24px;
+ position: relative;
+ transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.tarjeta-crisis:hover {
+ transform: translateY(-3px);
+ border-color: var(--borde-brillante);
+}
+.crisis-cifra {
+ font-family: var(--font-display);
+ font-size: 40px;
+ font-weight: 800;
+ color: var(--rojo-critico);
+ line-height: 1;
+ margin-bottom: 8px;
+ font-variant-numeric: tabular-nums;
+}
+.crisis-cifra.neutro { color: var(--cian); }
+.crisis-cifra.alerta { color: var(--ambar-alerta); }
+.crisis-titulo {
+ font-size: 15px;
+ font-weight: 700;
+ color: var(--texto-principal);
+ margin-bottom: 6px;
+}
+.crisis-subtitulo-linea {
+ font-size: 13px;
+ color: var(--texto-secundario);
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ display: block;
+ cursor: help;
+}
+
+/* 6 Módulos con Miniaturas Visuales */
+.grid-modulos-6 {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+ gap: 24px;
+}
+.card-modulo-preview {
+ background: var(--bg-surface);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 24px;
+ cursor: pointer;
+ transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+ position: relative;
+ overflow: hidden;
+ display: flex;
+ flex-direction: column;
+}
+.card-modulo-preview:hover {
+ transform: translateY(-4px);
+ border-color: var(--cian);
+ box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(34, 211, 238, 0.2);
+}
+.modulo-header {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ margin-bottom: 14px;
+}
+.icono-modulo-circulo {
+ width: 44px;
+ height: 44px;
+ border-radius: 12px;
+ background: rgba(47, 140, 255, 0.12);
+ border: 1px solid var(--borde-activo);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: var(--cian);
+}
+.mini-preview-grafico {
+ height: 64px;
+ border-radius: 8px;
+ background: rgba(4, 7, 15, 0.7);
+ border: 1px dashed var(--borde-sutil);
+ margin: 14px 0;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: relative;
+ overflow: hidden;
+}
+.modulo-link-cta {
+ margin-top: auto;
+ font-size: 13px;
+ font-weight: 600;
+ color: var(--cian);
+ display: flex;
+ align-items: center;
+ gap: 6px;
+}
+
+/* ==========================================================================
+ VISTA 2: GESTIÓN DE DATOS (DESPACHO EN 2 PASOS)
+ ========================================================================== */
+.admin-header-operador {
+ background: var(--bg-surface);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 20px 24px;
+ margin-bottom: 24px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ flex-wrap: wrap;
+ gap: 16px;
+}
+.operador-info-bloque {
+ display: flex;
+ align-items: center;
+ gap: 16px;
+}
+.avatar-cm {
+ width: 48px;
+ height: 48px;
+ border-radius: 50%;
+ background: var(--gradiente-hero);
+ color: #04070F;
+ font-weight: 800;
+ font-family: var(--font-display);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 18px;
+}
+
+/* Stepper de 2 Pasos para Despacho */
+.stepper-despacho {
+ display: flex;
+ align-items: center;
+ gap: 16px;
+ margin-bottom: 24px;
+ background: var(--bg-base);
+ padding: 12px 20px;
+ border-radius: var(--radio-sm);
+ border: 1px solid var(--borde-sutil);
+}
+.paso-item {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ color: var(--texto-secundario);
+ font-size: 14px;
+ font-weight: 600;
+ cursor: pointer;
+}
+.paso-item.activo {
+ color: var(--cian);
+}
+.paso-num {
+ width: 28px;
+ height: 28px;
+ border-radius: 50%;
+ background: var(--bg-overlay);
+ border: 1px solid var(--borde-sutil);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-family: var(--font-mono);
+ font-size: 12px;
+}
+.paso-item.activo .paso-num {
+ background: var(--cian);
+ color: #04070F;
+ border-color: var(--cian);
+ box-shadow: 0 0 10px var(--cian);
+}
+.stepper-linea {
+ flex: 1;
+ height: 2px;
+ background: var(--borde-sutil);
+}
+.stepper-linea.completada {
+ background: var(--cian);
+}
+
+/* ==========================================================================
+ VISTA 3: CENTRO DE MANDO (DASHBOARD COMPLETO)
+ ========================================================================== */
+.layout-centro-mando {
+ display: grid;
+ grid-template-columns: 1fr 380px;
+ gap: 20px;
+ height: calc(100vh - 140px);
+ min-height: 720px;
+}
+.contenedor-mapa-operativo {
+ position: relative;
+ border-radius: var(--radio-card);
+ overflow: hidden;
+ border: 1px solid var(--borde-sutil);
+ box-shadow: var(--sombra-card);
+ height: 100%;
+}
+#mapa-operativo {
+ width: 100%;
+ height: 100%;
+ background: #02050B;
+}
+
+/* Leyenda integrada dentro del mapa */
+.leyenda-mapa-flotante {
+ position: absolute;
+ bottom: 20px;
+ left: 20px;
+ z-index: 800;
+ background: rgba(10, 18, 32, 0.92);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-sm);
+ padding: 12px 16px;
+ backdrop-filter: blur(8px);
+ font-size: 12px;
+ box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+.leyenda-mapa-flotante h5 {
+ font-size: 11px;
+ text-transform: uppercase;
+ font-family: var(--font-mono);
+ color: var(--texto-secundario);
+ margin-bottom: 8px;
+}
+.leyenda-fila {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ margin-bottom: 4px;
+}
+
+/* HUD de Telemetría GPS Popup Cerrable */
+.hud-telemetria-popup {
+ position: absolute;
+ top: 20px;
+ right: 20px;
+ z-index: 800;
+ width: 320px;
+ background: rgba(16, 27, 48, 0.95);
+ border: 1px solid var(--borde-brillante);
+ border-radius: var(--radio-card);
+ padding: 18px;
+ backdrop-filter: blur(12px);
+ box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+ transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.hud-header {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ margin-bottom: 12px;
+ padding-bottom: 8px;
+ border-bottom: 1px solid var(--borde-sutil);
+}
+.hud-cerrar-btn {
+ background: transparent;
+ border: none;
+ color: var(--texto-secundario);
+ cursor: pointer;
+ font-size: 16px;
+ padding: 2px 6px;
+ border-radius: 4px;
+}
+.hud-cerrar-btn:hover {
+ color: var(--rojo-critico);
+ background: rgba(240, 67, 90, 0.1);
+}
+
+/* Panel Lateral Derecho: 3 Bloques Estirados */
+.panel-lateral-mando {
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+ height: 100%;
+}
+.panel-sub-card {
+ background: var(--bg-surface);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 16px 20px;
+ display: flex;
+ flex-direction: column;
+}
+.panel-sub-card.flex-grow-1 {
+ flex: 1;
+ min-height: 200px;
+ overflow-y: auto;
+}
+
+/* Barra ODPE Engrosada */
+.barra-odpe-gruesa {
+ width: 100%;
+ height: 18px;
+ background: var(--bg-base);
+ border-radius: 9px;
+ overflow: hidden;
+ position: relative;
+ border: 1px solid var(--borde-sutil);
+ margin: 8px 0;
+}
+.barra-odpe-progreso {
+ height: 100%;
+ width: 88.5%;
+ background: var(--gradiente-hero);
+ border-radius: 9px;
+ box-shadow: 0 0 12px var(--cian);
+ transition: width 0.6s ease;
+}
+
+/* Sparkline de Anomalías con Ejes */
+.sparkline-box {
+ background: var(--bg-base);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-sm);
+ padding: 12px;
+ margin-top: 8px;
+}
+.sparkline-svg {
+ width: 100%;
+ height: 80px;
+ overflow: visible;
+}
+
+/* ==========================================================================
+ VISTA 4: MAPA NACIONAL
+ ========================================================================== */
+.toolbar-mapa-nacional {
+ display: flex;
+ gap: 12px;
+ margin-bottom: 16px;
+ flex-wrap: wrap;
+ align-items: center;
+}
+.mapa-nacional-box {
+ height: 700px;
+ border-radius: var(--radio-card);
+ overflow: hidden;
+ border: 1px solid var(--borde-sutil);
+ box-shadow: var(--sombra-card);
+ position: relative;
+}
+#mapa-cobertura-completo {
+ width: 100%;
+ height: 100%;
+ background: #02050B;
+}
+
+/* ==========================================================================
+ VISTA 6: MODELO XAI (SHAP CON ESCALA 0-100% Y 3ER PANEL)
+ ========================================================================== */
+.xai-grid-layout {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+ gap: 24px;
+ margin-bottom: 24px;
+}
+.escala-shap-eje {
+ display: flex;
+ justify-content: space-between;
+ font-family: var(--font-mono);
+ font-size: 11px;
+ color: var(--texto-secundario);
+ padding: 0 2px;
+ margin-top: 4px;
+}
+.barra-shap-wrapper {
+ margin-bottom: 14px;
+}
+.barra-shap-label {
+ display: flex;
+ justify-content: space-between;
+ font-size: 13px;
+ font-weight: 500;
+ margin-bottom: 4px;
+}
+.barra-shap-track {
+ width: 100%;
+ height: 14px;
+ background: var(--bg-base);
+ border-radius: 7px;
+ overflow: hidden;
+ border: 1px solid var(--borde-sutil);
+ position: relative;
+}
+.barra-shap-fill {
+ height: 100%;
+ border-radius: 7px;
+ transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fill-contratista { background: var(--gradiente-peligro); box-shadow: 0 0 10px rgba(240, 67, 90, 0.4); }
+.fill-retraso { background: var(--gradiente-ambar); }
+.fill-ruta { background: var(--gradiente-ia); }
+.fill-clima { background: linear-gradient(135deg, #0284C7, #22D3EE); }
+.fill-exclusion { background: linear-gradient(135deg, #EC4899, #F43F5E); }
+
+/* Caja de Acción Recomendada de Alto Contraste */
+.caja-accion-recomendada-xai {
+ background: rgba(34, 211, 238, 0.12);
+ border: 1px solid var(--borde-brillante);
+ border-left: 5px solid var(--cian);
+ border-radius: var(--radio-sm);
+ padding: 18px 20px;
+ margin-top: 18px;
+ font-size: 14px;
+ color: #FFFFFF;
+ box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+.caja-accion-recomendada-xai.critico {
+ background: rgba(240, 67, 90, 0.15);
+ border-color: var(--rojo-critico);
+ border-left: 5px solid var(--rojo-critico);
+}
+
+/* ==========================================================================
+ VISTA 8: ARQUITECTURA PUNTO 6 (TARJETAS + DIAGRAMA DE FLUJO)
+ ========================================================================== */
+.flowchart-arquitectura-3capas {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+ gap: 16px;
+ margin: 24px 0 32px;
+ position: relative;
+}
+.flowchart-step-card {
+ background: var(--bg-surface);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 24px;
+ position: relative;
+ border-top: 4px solid var(--azul-electrico);
+}
+.flowchart-step-card:nth-child(2) { border-top-color: var(--violeta-ia); }
+.flowchart-step-card:nth-child(3) { border-top-color: var(--cian); }
+
+/* ==========================================================================
+
+ FOTOGRAMA 1: CONTROL TOTAL DEL TRANSPORTE (videoframe_6147.png)
+ ========================================================================== */
+.layout-control-transporte {
+ display: grid;
+ grid-template-columns: 1fr 340px;
+ gap: 20px;
+ min-height: 720px;
+}
+@media (max-width: 1200px) {
+ .layout-control-transporte { grid-template-columns: 1fr; }
+}
+.toolbar-transporte-superior {
+ background: var(--bg-surface);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 14px 20px;
+ margin-bottom: 16px;
+ display: flex;
+ align-items: center;
+ gap: 14px;
+ flex-wrap: wrap;
+}
+.contenedor-canvas-grafo {
+ background: radial-gradient(circle at 50% 50%, rgba(16, 27, 48, 0.95) 0%, rgba(4, 7, 15, 0.98) 100%);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ position: relative;
+ overflow: hidden;
+ height: 720px;
+ display: flex;
+ flex-direction: column;
+}
+#canvas-grafo-red {
+ width: 100%;
+ height: 100%;
+ display: block;
+ cursor: grab;
+}
+#canvas-grafo-red:active { cursor: grabbing; }
+
+/* Overlay de Conexiones por Clúster (Fotograma 1) */
+.overlay-conexiones-clusters {
+ position: absolute;
+ bottom: 24px;
+ left: 24px;
+ background: rgba(10, 18, 32, 0.92);
+ border: 1px solid var(--borde-activo);
+ border-radius: var(--radio-card);
+ padding: 16px 20px;
+ backdrop-filter: blur(12px);
+ max-width: 340px;
+ box-shadow: var(--sombra-card);
+ z-index: 10;
+ animation: fadeIn 0.3s ease;
+}
+.cluster-item-fila {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ font-size: 12px;
+ padding: 4px 0;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.cluster-item-fila:last-child { border-bottom: none; }
+.cluster-dot {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ display: inline-block;
+ margin-right: 6px;
+}
+
+/* Panel Lateral: Influence Ranking de Transporte */
+.panel-ranking-transporte {
+ background: var(--bg-surface);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 18px;
+ display: flex;
+ flex-direction: column;
+ height: 720px;
+}
+.ranking-tabla-scroll {
+ overflow-y: auto;
+ flex: 1;
+ margin-top: 10px;
+}
+.ranking-item-card {
+ background: rgba(4, 7, 15, 0.6);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-sm);
+ padding: 10px 12px;
+ margin-bottom: 8px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ cursor: pointer;
+ transition: all 0.2s ease;
+}
+.ranking-item-card:hover, .ranking-item-card.activo {
+ border-color: var(--cian);
+ background: rgba(47, 140, 255, 0.12);
+ transform: translateX(3px);
+}
+.ranking-num {
+ font-family: var(--font-mono);
+ font-size: 12px;
+ color: var(--texto-apagado);
+ width: 22px;
+}
+.ranking-score-pill {
+ font-family: var(--font-mono);
+ font-size: 13px;
+ font-weight: 700;
+ padding: 2px 8px;
+ border-radius: var(--radio-pill);
+}
+
+/* ==========================================================================
+ FOTOGRAMA 2: GESTIÓN COMPLETA DEL PROYECTO (videoframe_8678.png)
+ ========================================================================== */
+.ticker-streaming-algoritmico {
+ background: rgba(4, 7, 15, 0.95);
+ border-top: 1px solid var(--borde-sutil);
+ border-bottom: 1px solid var(--borde-sutil);
+ padding: 6px 16px;
+ margin-bottom: 18px;
+ font-family: var(--font-mono);
+ font-size: 11px;
+ color: var(--cian);
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ overflow: hidden;
+ white-space: nowrap;
+}
+.grid-gestion-top-4 {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: 16px;
+ margin-bottom: 18px;
+}
+@media (max-width: 1100px) {
+ .grid-gestion-top-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 700px) {
+ .grid-gestion-top-4 { grid-template-columns: 1fr; }
+}
+
+/* Panel Central Neural Shell / Particle Cloud 3D */
+.panel-neural-shell-3d {
+ background: #020408;
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-card);
+ padding: 20px;
+ margin-bottom: 18px;
+ position: relative;
+ overflow: hidden;
+}
+.neural-shell-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 12px;
+ border-bottom: 1px solid var(--borde-sutil);
+ padding-bottom: 8px;
+}
+.neural-shell-canvas-box {
+ height: 380px;
+ width: 100%;
+ position: relative;
+}
+#canvas-neural-shell {
+ width: 100%;
+ height: 100%;
+ display: block;
+}
+.neural-inputs-col {
+ position: absolute;
+ left: 16px;
+ top: 50%;
+ transform: translateY(-50%);
+ display: flex;
+ flex-direction: column;
+ gap: 12px;
+ z-index: 5;
+ pointer-events: none;
+}
+.neural-outputs-col {
+ position: absolute;
+ right: 16px;
+ top: 50%;
+ transform: translateY(-50%);
+ display: flex;
+ flex-direction: column;
+ gap: 12px;
+ z-index: 5;
+ pointer-events: none;
+}
+.neural-pill-tag {
+ background: rgba(10, 18, 32, 0.88);
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-sm);
+ padding: 6px 12px;
+ font-family: var(--font-mono);
+ font-size: 11px;
+ backdrop-filter: blur(8px);
+ pointer-events: auto;
+}
+
+/* Grid Inferior: Execution Tape & Resolution Funnel */
+.grid-gestion-inferior-2 {
+ display: grid;
+ grid-template-columns: 1.2fr 0.8fr;
+ gap: 18px;
+}
+@media (max-width: 900px) {
+ .grid-gestion-inferior-2 { grid-template-columns: 1fr; }
+}
+.execution-tape-table-wrapper {
+ height: 220px;
+ overflow-y: auto;
+ font-family: var(--font-mono);
+ font-size: 11px;
+}
+
+/* ==========================================================================
+ CONSOLA Y EXPLORADOR DE BASE DE DATOS SQL
+ ========================================================================== */
+.sql-console-editor {
+ background: #04070F;
+ border: 1px solid var(--borde-sutil);
+ border-radius: var(--radio-sm);
+ padding: 12px;
+ font-family: var(--font-mono);
+ font-size: 13px;
+ color: var(--cian);
+ width: 100%;
+ resize: vertical;
+}
+
+/* ==========================================================================
+
+   VISTA: ANALISTA DE DATOS (FLAGSHIP STUDIO)
+   ========================================================================== */
+.analista-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.3fr) minmax(360px, 1fr);
+  gap: 24px;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-bottom: 24px;
+}
+
+/* Tarjeta Principal Hero (Spline Chart "Total Balance") */
+.card-analista-hero {
+  background: var(--bg-card-analyst);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card-elevated);
+}
+
+.card-analista-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(255, 122, 0, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-chart-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.hero-balance-label {
+  font-size: 13px;
+  color: #8E8E9E;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.hero-balance-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.hero-balance-val {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.badge-growth-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--accent-green-neon);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.chart-time-pills {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 12px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.time-pill-btn {
+  background: transparent;
+  border: none;
+  color: #8E8E9E;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.time-pill-btn:hover {
+  color: #FFFFFF;
+}
+
+.time-pill-btn.activo {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Lienzo del Spline Chart Glowing */
+.spline-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  margin: 10px 0 16px 0;
+}
+
+.spline-canvas-layer {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Tooltip Pin Flotante del Spline */
+.chart-tooltip-pin {
+  position: absolute;
+  top: 52px;
+  left: 62%;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+  animation: floatTooltip 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatTooltip {
+  0% { transform: translate(-50%, -100%) translateY(0); }
+  100% { transform: translate(-50%, -100%) translateY(-4px); }
+}
+
+.pin-bubble-card {
+  background: #FFFFFF;
+  color: #0B0B0E;
+  border-radius: 12px;
+  padding: 8px 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+
+.pin-bubble-card strong {
+  font-size: 11px;
+  font-weight: 700;
+  color: #121217;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pin-bubble-card span {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: #000000;
+}
+
+.pin-anchor-dot {
+  width: 10px;
+  height: 10px;
+  background: #FFFFFF;
+  border: 2px solid var(--accent-orange-bright);
+  border-radius: 50%;
+  box-shadow: 0 0 10px #FFFFFF;
+  margin-top: 4px;
+}
+
+/* Barra Sub-Métrica de Doble Progreso */
+.sub-metrics-dual-bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle-glow);
+}
+
+.metric-dual-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #9A9AB0;
+}
+
+.metric-bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.metric-bullet.white {
+  background: #FFFFFF;
+}
+
+.metric-bullet.green {
+  background: var(--accent-green-neon);
+}
+
+/* Columna Derecha: Tarjetas Físicas Apiladas en 3D ("My cards") */
+.card-stack-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card-mycards-perspective {
+  background: var(--bg-card-analyst);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 20px;
+  padding: 22px;
+  position: relative;
+  box-shadow: var(--shadow-card-elevated);
+}
+
+.mycards-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.mycards-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-family: 'Sora', sans-serif;
+}
+
+.btn-add-credential {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle-glow);
+  color: #FFFFFF;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-add-credential:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Apilamiento 3D de Tarjetas */
+.cards-physical-deck {
+  position: relative;
+  height: 180px;
+  margin-bottom: 16px;
+}
+
+.physical-card-item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 160px;
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/* Tarjeta 1 (Fondo) */
+.physical-card-item.card-tier-3 {
+  top: 0;
+  background: linear-gradient(135deg, #101B30 0%, #0A1220 100%);
+  border: 1px solid rgba(47, 140, 255, 0.3);
+  transform: scale(0.92) translateY(-14px);
+  z-index: 1;
+  opacity: 0.7;
+}
+
+/* Tarjeta 2 (Medio) */
+.physical-card-item.card-tier-2 {
+  top: 8px;
+  background: linear-gradient(135deg, #2A1B0E 0%, #161009 100%);
+  border: 1px solid rgba(255, 122, 0, 0.3);
+  transform: scale(0.96) translateY(-7px);
+  z-index: 2;
+  opacity: 0.85;
+}
+
+/* Tarjeta 3 (Frente / Activa - Póliza RIMAC S/ 64,000) */
+.physical-card-item.card-tier-1 {
+  top: 16px;
+  background: linear-gradient(135deg, #1E1B24 0%, #131217 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  z-index: 3;
+}
+
+.physical-card-item:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.card-top-logos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-emv-chip {
+  width: 32px;
+  height: 24px;
+  background: linear-gradient(135deg, #E6A15C 0%, #C7823B 100%);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #FFD59E;
+}
+
+.card-emv-chip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.card-balance-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-balance-title {
+  font-size: 10px;
+  color: #8E8E9E;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card-balance-num-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-balance-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-family: 'Sora', sans-serif;
+}
+
+.card-action-dual-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 10px;
+}
+
+.btn-card-action {
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-card-action.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.btn-card-action.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-card-action.btn-glow-orange {
+  background: linear-gradient(135deg, var(--accent-orange-bright) 0%, var(--accent-orange-deep) 100%);
+  border: 1px solid rgba(255, 122, 0, 0.6);
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(255, 107, 0, 0.35);
+}
+
+.btn-card-action.btn-glow-orange:hover {
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Transacciones Recientes (Telemetría en Vivo) */
+.card-recent-transactions {
+  background: var(--bg-card-analyst);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: var(--shadow-card-elevated);
+}
+
+.transactions-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.transactions-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-family: 'Sora', sans-serif;
+}
+
+.transactions-view-all {
+  font-size: 12px;
+  color: #8E8E9E;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.transactions-view-all:hover {
+  color: var(--accent-orange-bright);
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: background 0.2s;
+}
+
+.transaction-item-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tx-left-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tx-icon-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+}
+
+.tx-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.tx-timestamp {
+  font-size: 11px;
+  color: #8E8E9E;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tx-amount-badge {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.tx-amount-badge.green {
+  color: var(--accent-green-neon);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.tx-amount-badge.red {
+  color: var(--accent-ruby-alert);
+  background: rgba(240, 67, 90, 0.1);
+}
+
+.tx-amount-badge.amber {
+  color: #F5A524;
+  background: rgba(245, 165, 36, 0.1);
+}
+
+.tx-amount-badge.cyan {
+  color: var(--accent-cyan-laser);
+  background: rgba(34, 211, 238, 0.1);
+}
+
+/* Fila Inferior: Tarjeta de Mando Conjunto y Gráfico de Barras */
+.analista-lower-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-bottom: 24px;
+}
+
+.card-command-trust {
+  background: radial-gradient(ellipse at top left, #FF8A00 0%, #B84700 50%, #1A0D04 100%);
+  border: 1px solid rgba(255, 138, 0, 0.4);
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(255, 107, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-command-trust h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  font-family: 'Sora', sans-serif;
+  line-height: 1.2;
+}
+
+.card-command-trust p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.avatars-team-cluster {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.avatar-badge-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  background: #121217;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.btn-command-trust-action {
+  background: #FFFFFF;
+  color: #0B0B0E;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn-command-trust-action:hover {
+  background: #F0F0F5;
+  transform: translateY(-2px);
+}
+
+/* Gráfico de Barras con Pico Resaltado ("Investments" en referencia) */
+.card-investments-bar {
+  background: var(--bg-card-analyst);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow-card-elevated);
+}
+
+.investments-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.investments-title {
+  font-size: 15px;
+  color: #8E8E9E;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.investments-val-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.investments-val {
+  font-size: 26px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-family: 'Sora', sans-serif;
+}
+
+.investments-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.dropdown-select-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle-glow);
+  color: #FFFFFF;
+  border-radius: 10px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.bars-chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 180px;
+  padding-top: 30px;
+  box-sizing: border-box;
+}
+
+.bar-column-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.bar-tube-track {
+  width: 44px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+}
+
+.bar-tube-fill {
+  width: 100%;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255, 122, 0, 0.6) 0%, rgba(230, 81, 0, 0.8) 100%);
+  transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bar-tube-fill.highlight-peak {
+  background: linear-gradient(180deg, #10B981 0%, #059669 100%);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+}
+
+.floating-bar-badge {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent-green-neon);
+  color: #000000;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+
+.bar-label-month {
+  font-size: 11px;
+  color: #8E8E9E;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Este apartado sirve para el modelado 3D y visualización geométrica interactiva */
+.video-models-container {
+  background: var(--bg-card-analyst);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-card-elevated);
+}
+
+.video-models-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.video-tabs-row {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.video-tab-btn {
+  background: transparent;
+  border: none;
+  color: #8E8E9E;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.video-tab-btn:hover {
+  color: #FFFFFF;
+}
+
+.video-tab-btn.activo {
+  background: linear-gradient(135deg, var(--accent-orange-bright) 0%, var(--accent-orange-deep) 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.35);
+}
+
+.video-canvas-stage {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  background: radial-gradient(ellipse at center, #15151D 0%, #0A0A0D 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 20px;
+}
+
+.canvas-3d-model {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+.canvas-3d-model:active {
+  cursor: grabbing;
+}
+
+/* Overlay de Telemetría HUD sobre el Modelo */
+.canvas-hud-overlay {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(18, 18, 23, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 11px;
+  color: #EAEAF2;
+  pointer-events: none;
+}
+
+/* Modal Emergente de Incidencia (Estilo Video Frame 90s) */
+.modal-incidencia-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(18, 18, 24, 0.94);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(240, 67, 90, 0.4);
+  border-radius: 14px;
+  padding: 16px 20px;
+  width: 280px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
+  display: none;
+  z-index: 50;
+}
+
+.modal-incidencia-video.visible {
+  display: block;
+}
+
+/* DOCK ANALÍTICO DE 5 PANELES (Inferior del Video) */
+.dock-analitico-5paneles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.dock-panel-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dock-panel-title {
+  font-size: 11px;
+  color: #8E8E9E;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+/* Panel 1: Gauge Cilíndrico de Kilometraje */
+.cylinder-gauge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cylinder-dial-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent-green-neon) 0% 78%, rgba(255,255,255,0.06) 78% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+
+.cylinder-dial-inner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #121217;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+/* Panel 4: Anillos Concéntricos */
+.concentric-rings-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+}
+
+/* Modal Command Palette (⌘ + Space) */
+.command-palette-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  z-index: 10700;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+}
+
+.grid-admin-despacho {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.grid-simulador-xai {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 180px;
+  gap: 16px;
+  align-items: center;
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #modal-acta-oficial,
+  #modal-acta-oficial * {
+    visibility: visible !important;
+  }
+  #modal-acta-oficial {
+    position: static !important;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    padding: 0 !important;
+  }
+  #modal-acta-oficial .modal-notif-caja {
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border: 1px solid #333333 !important;
+    box-shadow: none !important;
+    clip-path: none !important;
+    max-width: 100% !important;
+  }
+  #modal-acta-oficial h3,
+  #modal-acta-oficial h4,
+  #modal-acta-oficial strong,
+  #modal-acta-oficial div,
+  #modal-acta-oficial li {
+    color: #111111 !important;
+    background: transparent !important;
+  }
+  #modal-acta-oficial button {
+    display: none !important;
+  }
+}
+
+.command-palette-overlay.abierto {
+  display: flex;
+}
+
+.command-palette-box {
+  background: #16161E;
+  border: 1px solid rgba(255, 122, 0, 0.35);
+  border-radius: 16px;
+  width: 580px;
+  max-width: 90vw;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 107, 0, 0.2);
+  overflow: hidden;
+}
+
+.command-search-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle-glow);
+}
+
+.command-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.command-results-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.command-result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #EAEAF2;
+  transition: all 0.15s;
+}
+
+.command-result-item:hover, .command-result-item.seleccionado {
+  background: rgba(255, 122, 0, 0.15);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+
+/* ==========================================================================
+   ESTILOS MEJORADOS: GEMELO DIGITAL GIS 3D Y DOCK ANALÍTICO DE 5 PANELES
+   ========================================================================== */
+
+.gis-camera-quick-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(6, 12, 22, 0.75);
+  border: 1px solid var(--border-subtle-glow);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.btn-gis-quick {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #EAEAF2;
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-gis-quick:hover {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: var(--accent-cyan-laser);
+  color: #FFFFFF;
+}
+
+.btn-gis-quick.alert-ticlio {
+  border-color: rgba(240, 67, 90, 0.4);
+  color: #FCA5A5;
+}
+
+.btn-gis-quick.alert-ticlio:hover {
+  background: rgba(240, 67, 90, 0.25);
+  border-color: #F0435A;
+  color: #FFFFFF;
+}
+
+.btn-gis-quick.alert-lima {
+  border-color: rgba(255, 122, 0, 0.4);
+  color: #FDBA74;
+}
+
+.btn-gis-quick.alert-lima:hover {
+  background: rgba(255, 122, 0, 0.25);
+  border-color: #FF7A00;
+  color: #FFFFFF;
+}
+
+.micro-badge-status {
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.micro-badge-status.status-conforme {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.micro-badge-status.status-critico {
+  background: rgba(240, 67, 90, 0.15);
+  color: #F87171;
+  border: 1px solid rgba(240, 67, 90, 0.35);
+}
+
+.panel-hover-glow {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.panel-hover-glow:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34, 211, 238, 0.35) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 12px rgba(34, 211, 238, 0.12);
+}

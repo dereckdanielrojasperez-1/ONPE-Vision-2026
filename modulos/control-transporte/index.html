@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Autónomo: Grafo Topológico de Transporte · ONPE Visión 2026</title>
+  <link rel="stylesheet" href="../../css/variables.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/views.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="standalone-module-body">
+  <header class="app-top-header">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="../../index.html" class="btn-ghost" style="padding:6px 12px; font-size:12px; text-decoration:none;">← Volver al Centro de Mando</a>
+      <h2 style="font-size:16px; color:#FFFFFF; margin:0; font-family:'Sora',sans-serif;">Control de Transporte: Grafo Topológico Interactivo</h2>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="badge-estado badge-conforme">Nodos Arrastrables Activos</span>
+      <span class="badge-estado badge-sla">SLA 99.94%</span>
+    </div>
+  </header>
+
+  <main style="padding: 24px 32px; flex:1;">
+    <div class="toolbar-transporte-superior">
+      <button class="btn-primario" onclick="abrirModalNuevoNodo()" style="padding:7px 14px; font-size:12px; font-weight:700;">
+        + Agregar Nuevo Nodo a la Red
+      </button>
+      <button class="btn-secundario" onclick="restablecerPosicionesGrafo()" style="padding:7px 12px; font-size:12px;">
+        Restablecer Grafo
+      </button>
+      <div style="flex:1; min-width:240px; display:flex; align-items:center; gap:8px;">
+        <input type="text" id="filtro-grafo-busqueda" class="input-ioc" placeholder="Buscar convoy (#GAL-104), ODPE o local..." oninput="filtrarGrafoRed()" style="padding:8px 12px; font-size:13px;">
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="micro-etiqueta" style="color:var(--texto-secundario);">SCORE SLA:</span>
+        <input type="range" id="slider-grafo-score" min="0" max="100" value="0" oninput="filtrarGrafoRed()" style="accent-color:var(--cian); cursor:pointer;">
+        <span id="valor-slider-score" class="texto-mono" style="font-size:12px; color:var(--cian); font-weight:700;">0 - 100</span>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-secundario activo" id="btn-modo-red" onclick="alternarModoGrafo('red')">Topología Red</button>
+        <button class="btn-secundario" id="btn-modo-calor" onclick="alternarModoGrafo('calor')">Densidad Térmica</button>
+        <button class="btn-ghost" onclick="resetGrafoCamara()">⟲</button>
+      </div>
+    </div>
+
+    <div class="layout-control-transporte" style="display:grid; grid-template-columns: 1fr 340px; gap:20px; height: 740px;">
+      <div class="contenedor-canvas-grafo" style="height: 100%; position:relative;">
+        <canvas id="canvas-grafo-red" style="width:100%; height:100%; display:block; cursor:grab;"></canvas>
+        <div class="overlay-conexiones-clusters" id="overlay-clusters-info" style="position:absolute; bottom:20px; left:20px; background:rgba(10,18,32,0.92); border:1px solid var(--borde-activo); border-radius:12px; padding:16px 20px; max-width:340px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong id="cluster-nodo-titulo" style="font-size:13px; color:#FFFFFF;">Almacén Central Lurín</strong>
+            <span class="badge-estado badge-conforme" id="cluster-nodo-badge">SCORE: 99/100</span>
+          </div>
+          <div style="font-size:11px; color:var(--texto-secundario); line-height:1.6;">
+            • Custodia Policial PNP: <strong style="color:#FFFFFF;">24 asignadas</strong><br>
+            • Enlace Troncal MPLS: <strong style="color:var(--verde-exito);">18 terminales</strong><br>
+            • Integridad Precinto QR: <strong style="color:var(--cian);">34 verificadas</strong><br>
+            • Inferencia XAI TreeSHAP: <strong style="color:var(--ambar-alerta);">12 activas</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="tarjeta-ioc" style="display:flex; flex-direction:column; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h4 style="font-size:14px; color:#FFFFFF; margin:0;">Ranking SLA Flota</h4>
+          <span class="badge-estado badge-sla">12 Unidades</span>
+        </div>
+        <div id="lista-ranking-cards" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="contenedor-toasts"></div>
+
+  <!-- Modal Nuevo Nodo -->
+  <div id="modal-nuevo-nodo" class="modal-overlay-emergente" style="display:none;" onclick="cerrarModalNodoSiFondo(event)">
+    <div class="modal-notif-caja" style="max-width:480px;">
+      <div class="modal-notif-header">
+        <h3 style="font-size:16px; color:#FFFFFF; margin:0;">+ Agregar Nuevo Nodo a la Red</h3>
+        <button class="btn-ghost" onclick="cerrarModalNuevoNodo()">&times;</button>
+      </div>
+      <form id="form-nuevo-nodo-grafo" onsubmit="guardarNuevoNodoGrafo(event)" style="padding:20px; display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <label style="font-size:12px; color:var(--texto-secundario);">Identificador de Nodo *</label>
+          <input type="text" id="nodo-nuevo-id" class="input-ioc" value="#CONVOY-99" required>
+        </div>
+        <div>
+          <label style="font-size:12px; color:var(--texto-secundario);">Nombre / Etiqueta *</label>
+          <input type="text" id="nodo-nuevo-nombre" class="input-ioc" value="Convoy Especial Contingencia" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="font-size:12px; color:var(--texto-secundario);">Tipo</label>
+            <select id="nodo-nuevo-tipo" class="select-ioc">
+              <option value="Camión">Camión Blindado</option>
+              <option value="Furgón">Furgón Ligero</option>
+              <option value="Lancha">Lancha Fluvial</option>
+              <option value="ODPE">Centro ODPE</option>
+              <option value="LOCAL">Local Votación</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; color:var(--texto-secundario);">Conectar a</label>
+            <select id="nodo-nuevo-padre" class="select-ioc">
+              <option value="HUB_LURIN">Almacén Central Lurín</option>
+              <option value="ODPE_LIMS">ODPE Lima Sur</option>
+              <option value="ODPE_HVCA">ODPE Huancavelica</option>
+              <option value="ODPE_AREQ">ODPE Arequipa</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:12px; color:var(--texto-secundario);">Score SLA Inicial (0-100)</label>
+          <input type="number" id="nodo-nuevo-score" class="input-ioc" value="95" min="0" max="100">
+        </div>
+        <div>
+          <label style="font-size:12px; color:var(--texto-secundario);">Efectivo Policial / Custodia</label>
+          <input type="text" id="nodo-nuevo-custodia" class="input-ioc" value="Suboficial PNP Asignado">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
+          <button type="button" class="btn-secundario" onclick="cerrarModalNuevoNodo()">Cancelar</button>
+          <button type="submit" class="btn-primario">Inyectar en la Red</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/grafo.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

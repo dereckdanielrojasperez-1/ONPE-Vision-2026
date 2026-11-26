@@ -1,0 +1,439 @@
+/* SISTEMA INTEGRAL RESPONSIVE MULTI-DISPOSITIVO (PC, LAPTOP, TABLET Y MÓVIL)
+   ========================================================================== */
+
+/* 1. TABLET Y LAPTOPS PEQUEÑAS (769px a 1100px) */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .analista-layout-grid { grid-template-columns: 1fr !important; gap: 18px !important; }
+  .analista-lower-grid { grid-template-columns: 1fr !important; gap: 18px !important; }
+  .dock-analitico-5paneles { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+  .sidebar-nav-rail { width: 64px !important; min-width: 64px !important; }
+  .app-main-workspace { width: calc(100% - 64px) !important; }
+  .search-bar-pill { width: 220px !important; }
+  .layout-centro-mando { grid-template-columns: 1fr !important; height: auto !important; }
+  .contenedor-mapa-operativo { height: 460px !important; }
+  .layout-control-transporte { grid-template-columns: 1fr !important; min-height: auto !important; }
+  .contenedor-canvas-grafo { height: 420px !important; }
+  .grid-gestion-top-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+  .grid-modulos-6 { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+  .grid-crisis-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+  .grid-gestion-inferior-2 { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .xai-grid-layout { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .footer-grid-info { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+}
+
+/* 2. TELÉFONOS Y DISPOSITIVOS MÓVILES (<= 768px) */
+@media (max-width: 768px) {
+  /* Envoltorio General y Barra Inferior Táctil (App-style Bottom Nav) */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+  .app-layout-wrapper {
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  .sidebar-nav-rail {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 58px !important;
+    z-index: 10400 !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    padding: 0 6px !important;
+    background: rgba(6, 11, 20, 0.98) !important;
+    border-right: none !important;
+    border-top: 1px solid var(--borde-activo) !important;
+    backdrop-filter: blur(16px) !important;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.85) !important;
+  }
+  .sidebar-brand-mark, .sidebar-brand-emblem, .sidebar-footer-actions {
+    display: none !important;
+  }
+  .sidebar-tooltip {
+    display: none !important;
+  }
+  .sidebar-nav-pills {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 4px 6px !important;
+  }
+  .sidebar-nav-pills::-webkit-scrollbar {
+    display: none !important;
+  }
+  .sidebar-pill-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    flex-shrink: 0 !important;
+    border-radius: 12px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .sidebar-pill-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .app-main-workspace {
+    padding-bottom: 74px !important; /* Margen para no tapar contenido con la barra inferior */
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Header Superior Táctil Móvil */
+  .app-top-header {
+    height: auto !important;
+    min-height: 52px !important;
+    padding: 10px 12px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    justify-content: space-between !important;
+  }
+  .top-header-right {
+    gap: 6px !important;
+  }
+  .header-clock-pill {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+  .header-network-pill {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
+  .user-role {
+    display: none !important;
+  }
+  .user-profile-badge {
+    padding: 3px 8px 3px 4px !important;
+  }
+  .search-bar-pill {
+    width: 100% !important;
+    max-width: 100% !important;
+    order: 10 !important;
+    margin-top: 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Vistas y Contenido Adaptable */
+  .seccion-vista {
+    padding: 14px 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+  .app-content-body {
+    padding: 10px 6px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Grids Adaptativos a 1 Columna en Teléfonos */
+  .analista-layout-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+  .card-analista-hero {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 18px 14px !important;
+    box-sizing: border-box !important;
+  }
+  .card-stack-column {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .analista-lower-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+  .dock-analitico-5paneles {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .grid-crisis-4 {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 20px !important;
+  }
+  .grid-modulos-6 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .grid-gestion-top-4 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .grid-gestion-inferior-2 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .xai-grid-layout {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .layout-centro-mando {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    gap: 12px !important;
+  }
+  .layout-control-transporte {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+    gap: 14px !important;
+  }
+
+  /* Canvases y Visualizaciones en Móvil */
+  .contenedor-mapa-operativo {
+    height: 380px !important;
+    width: 100% !important;
+  }
+  .contenedor-canvas-grafo {
+    height: 340px !important;
+    width: 100% !important;
+  }
+  .contenedor-globo-3d-interactivo {
+    height: 340px !important;
+    width: 100% !important;
+  }
+  .globo-hud-lateral {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+  }
+  .spline-chart-wrapper {
+    height: 190px !important;
+  }
+  .neural-shell-canvas-box {
+    height: 280px !important;
+  }
+
+  /* Tablas Fluidas con Desplazamiento Táctil Horizontal */
+  .tabla-contenedor-ioc,
+  .execution-tape-table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: var(--radio-card);
+  }
+  .tabla-ioc {
+    min-width: 620px !important; /* Asegura visualización completa de datos al deslizar */
+  }
+
+  /* Modales y Cuadros Emergentes */
+  .modal-notif-caja {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 85vh !important;
+  }
+  .modal-overlay-emergente {
+    padding: 10px !important;
+  }
+  .tarjeta-login-institucional {
+    width: 94vw !important;
+    max-width: 440px !important;
+    padding: 22px 16px !important;
+  }
+
+  /* Chatbot y Botón Flotante en Móvil */
+  #ventana-chatbot {
+    position: fixed !important;
+    bottom: 68px !important;
+    right: 8px !important;
+    left: 8px !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+    height: 72vh !important;
+    max-height: 520px !important;
+    z-index: 10600 !important;
+    border-radius: 16px !important;
+  }
+  #btn-toggle-chatbot {
+    bottom: 68px !important;
+    right: 12px !important;
+    font-size: 11px !important;
+    padding: 8px 12px !important;
+  }
+
+  /* Spotlight Tutorial en Móvil */
+  #spotlight-dialog-card {
+    position: fixed !important;
+    bottom: 74px !important;
+    top: auto !important;
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    max-width: calc(100vw - 20px) !important;
+    padding: 14px 16px !important;
+  }
+  #spotlight-dialog-card h3 {
+    font-size: 15px !important;
+  }
+  #spotlight-dialog-card p {
+    font-size: 12px !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Terminal PWA de Campo en Móvil */
+  .phone-mockup-frame {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border-radius: 16px !important;
+    padding: 6px !important;
+  }
+  .phone-screen-inner {
+    border-radius: 12px !important;
+    padding: 12px 10px !important;
+  }
+
+  /* Formulario Oficial de Despacho */
+  .despacho-grid-2cols,
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Footer Institucional en Móvil */
+  .footer-grid-info {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .autores-lista-pills {
+    gap: 6px !important;
+  }
+  .autor-pill {
+    font-size: 11px !important;
+    padding: 2px 8px !important;
+  }
+}
+
+/* 3. TELÉFONOS PEQUEÑOS (<= 480px) */
+@media (max-width: 480px) {
+  .header-clock-pill {
+    display: none !important; /* Oculta reloj en pantallas extra pequeñas para priorizar búsqueda y perfil */
+  }
+  .user-name {
+    font-size: 11px !important;
+  }
+  .hero-balance-val {
+    font-size: 26px !important;
+  }
+  .hero-balance-label {
+    font-size: 11.5px !important;
+  }
+  .time-pill-btn {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
+  .modal-notif-caja {
+    width: 98vw !important;
+    max-width: 98vw !important;
+  }
+  #ventana-chatbot {
+    bottom: 64px !important;
+    left: 4px !important;
+    right: 4px !important;
+  }
+  #btn-toggle-chatbot {
+    bottom: 64px !important;
+    right: 8px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .grid-admin-despacho,
+  .grid-simulador-xai {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Este apartado sirve para las animaciones y efectos visuales de la interfaz */
+@keyframes glitch {
+  0% { text-shadow: 2px 0 var(--blue), -2px 0 var(--red); }
+  50% { text-shadow: -2px 0 var(--blue), 2px 0 var(--gold); }
+  100% { text-shadow: none; }
+}
+
+@keyframes pulseRed {
+  0%, 100% { box-shadow: 0 0 22px rgba(255,0,51,.34); border-color: rgba(255,0,51,.4); }
+  50% { box-shadow: 0 0 44px rgba(255,0,51,.65); border-color: rgba(255,0,51,.9); }
+}
+
+@keyframes fxRing {
+  to { transform: scale(5); opacity: 0; border-width: 1px; }
+}
+
+@keyframes fxRipple {
+  to { transform: scale(1); opacity: 0; }
+}
+
+@keyframes fxSpark {
+  0% { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; }
+}
+
+@keyframes stripes {
+  to { background-position: 28px 0; }
+}
+
+@keyframes rise {
+  0% { transform: translate(0,0) scale(.5); opacity: 0; }
+  14% { opacity: .95; }
+  75% { opacity: .55; }
+  100% { transform: translate(30px, -60vh) scale(1.1); opacity: 0; }
+}
+
+@keyframes sweep {
+  0% { background-position: -60vw 0; }
+  100% { background-position: 125vw 0; }
+}
+
+@keyframes bgSweep {
+  0% { background-position: -70vw 0; }
+  100% { background-position: 130vw 0; }
+}
+
+@keyframes heroFlash {
+  0%, 88%, 100% { opacity: 0; }
+  89% { opacity: .85; }
+  90% { opacity: .15; }
+  91.5% { opacity: .7; }
+  94% { opacity: 0; }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes shineMetal {
+  0% { background-position: 150% 0; }
+  100% { background-position: -50% 0; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: .35; }
+  50% { opacity: .9; }
+}

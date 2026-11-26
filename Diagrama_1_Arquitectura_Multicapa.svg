@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 620" width="100%" height="100%" style="background:#070b14; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="gradAzul" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="gradVerde" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="gradMorado" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#9333ea" />
+    </linearGradient>
+    <linearGradient id="gradRojo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dc2626" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0284c7" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- TITULO DEL DIAGRAMA -->
+  <text x="475" y="40" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="800" letter-spacing="0.5">ONPE VISIÓN: ARQUITECTURA MULTICAPA DEL SISTEMA (PUNTO 6)</text>
+  <text x="475" y="65" text-anchor="middle" fill="#94a3b8" font-size="12">Infraestructura Tecnológica, Protocolos de Comunicación y Flujo de Inferencia XAI</text>
+
+  <!-- CAPA 1: FRONTEND (PRESENTACION) -->
+  <rect x="50" y="90" width="850" height="95" rx="10" fill="#0e1526" stroke="#0284c7" stroke-width="1.5" filter="url(#glow)"/>
+  <rect x="50" y="90" width="850" height="26" rx="10" fill="url(#gradAzul)"/>
+  <text x="70" y="108" fill="#ffffff" font-size="12" font-weight="700">6.1. CAPA DE PRESENTACIÓN (FRONTEND) · SINGLE PAGE APPLICATION &amp; PWA OFFLINE</text>
+  
+  <rect x="70" y="125" width="380" height="50" rx="6" fill="#141f36" stroke="#233554"/>
+  <text x="85" y="145" fill="#38bdf8" font-size="12" font-weight="700">Centro de Mando Nacional (Jefe de Operaciones)</text>
+  <text x="85" y="162" fill="#94a3b8" font-size="11">Google Maps API · Leaflet.js · Telemetría en Vivo · HUD</text>
+
+  <rect x="490" y="125" width="390" height="50" rx="6" fill="#141f36" stroke="#233554"/>
+  <text x="505" y="145" fill="#10b981" font-size="12" font-weight="700">Terminal Móvil de Campo (Coordinador ODPE)</text>
+  <text x="505" y="162" fill="#94a3b8" font-size="11">Flujo Táctil 3 Clics · QR Scanner · Cripto SHA-256 · Offline</text>
+
+  <!-- CANAL DE COMUNICACION MPLS -->
+  <line x1="475" y1="185" x2="475" y2="225" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,4"/>
+  <rect x="225" y="210" width="500" height="32" rx="16" fill="#1b2a4a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="475" y="231" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="700">6.5. RED PRIVADA DEDICADA MPLS (SLA &gt; 99.9%) + ENLACE SATELITAL STARLINK</text>
+
+  <!-- CAPA 2: BACKEND (LOGICA Y STREAMING) -->
+  <line x1="475" y1="242" x2="475" y2="265" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,4"/>
+  <rect x="50" y="265" width="850" height="95" rx="10" fill="#0e1526" stroke="#2563eb" stroke-width="1.5"/>
+  <rect x="50" y="265" width="850" height="26" rx="10" fill="url(#gradAzul)"/>
+  <text x="70" y="283" fill="#ffffff" font-size="12" font-weight="700">6.2. CAPA DE LÓGICA DE NEGOCIO Y STREAMING (BACKEND) · NODE.JS &amp; EXPRESS</text>
+
+  <rect x="70" y="300" width="260" height="50" rx="6" fill="#141f36" stroke="#233554"/>
+  <text x="85" y="320" fill="#ffffff" font-size="11" font-weight="700">API Gateway &amp; Auth JWT</text>
+  <text x="85" y="337" fill="#94a3b8" font-size="10">Control RBAC · Cifrado TLS 1.3</text>
+
+  <rect x="350" y="300" width="260" height="50" rx="6" fill="#141f36" stroke="#233554"/>
+  <text x="365" y="320" fill="#ffffff" font-size="11" font-weight="700">Servidor WebSockets (Socket.io)</text>
+  <text x="365" y="337" fill="#94a3b8" font-size="10">Streaming telemétrico c/ 30s</text>
+
+  <rect x="630" y="300" width="250" height="50" rx="6" fill="#141f36" stroke="#233554"/>
+  <text x="645" y="320" fill="#f59e0b" font-size="11" font-weight="700">Motor de Reglas Semafóricas</text>
+  <text x="645" y="337" fill="#94a3b8" font-size="10">Verde &lt;15m | Amarillo | Rojo &gt;30m</text>
+
+  <!-- CONEXIONES HACIA PERSISTENCIA E IA -->
+  <line x1="260" y1="360" x2="260" y2="400" stroke="#059669" stroke-width="2"/>
+  <line x1="680" y1="360" x2="680" y2="400" stroke="#9333ea" stroke-width="2"/>
+
+  <!-- CAPA 3: BASE DE DATOS GEOESPACIAL -->
+  <rect x="50" y="400" width="410" height="150" rx="10" fill="#0e1526" stroke="#10b981" stroke-width="1.5"/>
+  <rect x="50" y="400" width="410" height="26" rx="10" fill="url(#gradVerde)"/>
+  <text x="70" y="418" fill="#ffffff" font-size="12" font-weight="700">6.3. BASE DE DATOS (POSTGRESQL 16 + POSTGIS)</text>
+  <text x="70" y="445" fill="#38bdf8" font-size="11" font-weight="700">Tablas Particionadas:</text>
+  <text x="70" y="465" fill="#cbd5e1" font-size="10">• locales_votacion (10,401 locales georreferenciados)</text>
+  <text x="70" y="482" fill="#cbd5e1" font-size="10">• vehiculos_transporte (1,420 camiones blindados y lanchas)</text>
+  <text x="70" y="499" fill="#cbd5e1" font-size="10">• telemetria_gps &amp; rutas_electorales (Trazado vial)</text>
+  <text x="70" y="525" fill="#10b981" font-size="10" font-weight="700">Optimización: Índices GiST (ST_DWithin &lt; 12ms)</text>
+
+  <!-- CAPA 4: INTELIGENCIA ARTIFICIAL EXPLICABLE (XAI) -->
+  <rect x="490" y="400" width="410" height="150" rx="10" fill="#0e1526" stroke="#9333ea" stroke-width="1.5"/>
+  <rect x="490" y="400" width="410" height="26" rx="10" fill="url(#gradMorado)"/>
+  <text x="510" y="418" fill="#ffffff" font-size="12" font-weight="700">6.4. IA EXPLICABLE (SCIKIT-LEARN + SHAP)</text>
+  <text x="510" y="445" fill="#c084fc" font-size="11" font-weight="700">Descomposición Matemática de Riesgo:</text>
+  <text x="510" y="465" fill="#cbd5e1" font-size="10">• Vulnerabilidad de Ruta / Topografía (+48% impacto)</text>
+  <text x="510" y="482" fill="#cbd5e1" font-size="10">• Incumplimiento de Contrata / Mecánica (+32% impacto)</text>
+  <text x="510" y="499" fill="#cbd5e1" font-size="10">• Riesgo de Exclusión de Electores (+20% impacto)</text>
+  <text x="510" y="525" fill="#f43f5e" font-size="10" font-weight="700">Validez Jurídica: Sustento probatorio ante JNE y Contraloría</text>
+
+  <!-- PIE DE PAGINA -->
+  <text x="475" y="590" text-anchor="middle" fill="#64748b" font-size="11">Proyecto de Investigación: ONPE Visión · Curso Diseño de Productos y Servicios (100000SI67) · UTP 2026</text>
+</svg>

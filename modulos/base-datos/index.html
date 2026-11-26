@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Autónomo: Base de Datos Relacional SQL · ONPE Visión 2026</title>
+  <link rel="stylesheet" href="../../css/variables.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/views.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="standalone-module-body">
+  <header class="app-top-header">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="../../index.html" class="btn-ghost" style="padding:6px 12px; font-size:12px; text-decoration:none;">← Volver al Centro de Mando</a>
+      <h2 style="font-size:16px; color:#FFFFFF; margin:0; font-family:'Sora',sans-serif;">Base de Datos Relacional SQLite (onpe_vision.db)</h2>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="badge-estado badge-conforme">Motor SQLite 3 / PostGIS</span>
+      <span class="badge-estado badge-sla">SLA 99.94%</span>
+    </div>
+  </header>
+
+  <main style="padding: 24px 32px; flex:1;">
+    <div class="tarjeta-ioc" style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-secundario activo" id="btn-tab-vehiculos_transporte" onclick="mostrarTablaDB('vehiculos_transporte', this)">vehiculos_transporte (12)</button>
+          <button class="btn-secundario" id="btn-tab-locales_votacion" onclick="mostrarTablaDB('locales_votacion', this)">locales_votacion (8)</button>
+          <button class="btn-secundario" id="btn-tab-rutas_electorales" onclick="mostrarTablaDB('rutas_electorales', this)">rutas_electorales (4)</button>
+          <button class="btn-secundario" id="btn-tab-telemetria_gps" onclick="mostrarTablaDB('telemetria_gps', this)">telemetria_gps (3)</button>
+          <button class="btn-secundario" id="btn-tab-actas_recepcion_campo" onclick="mostrarTablaDB('actas_recepcion_campo', this)">actas_recepcion_campo (2)</button>
+          <button class="btn-secundario" id="btn-tab-alertas_xai" onclick="mostrarTablaDB('alertas_xai', this)">alertas_xai (3)</button>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-secundario" onclick="exportarTablaSQLCSV()" style="font-size:11px;">Descargar CSV</button>
+          <button class="btn-primario" onclick="exportarTablaSQLJSON()" style="font-size:11px;">Descargar JSON</button>
+        </div>
+      </div>
+
+      <div class="sql-console-editor" style="margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:11px; color:var(--cian); font-family:var(--font-mono);">TERMINAL DE CONSULTAS SQL EN VIVO:</span>
+          <button class="btn-primario" onclick="ejecutarConsultaSQLConsola()" style="padding:4px 12px; font-size:11px;">Ejecutar Query</button>
+        </div>
+        <textarea id="input-sql-consola" class="textarea-ioc texto-mono" rows="2" style="width:100%; font-size:12.5px;">SELECT id_vehiculo, placa, tipo_unidad, velocidad_kmh, estado_operativo FROM vehiculos_transporte ORDER BY velocidad_kmh DESC;</textarea>
+      </div>
+
+      <div class="contenedor-tabla-scroll" style="max-height: 480px; overflow: auto; border: 1px solid var(--borde-activo); border-radius: 8px;">
+        <table class="tabla-bd-sql" id="tabla-sql-resultados" style="width:100%; border-collapse:collapse; font-size:12px;">
+          <thead id="thead-datos-sql"></thead>
+          <tbody id="tbody-datos-sql"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <div id="contenedor-toasts"></div>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/database.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

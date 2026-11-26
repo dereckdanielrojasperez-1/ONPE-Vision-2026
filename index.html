@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+ <title>ONPE Visión · Sistema Integrado de Control y Custodia Electoral 2026</title>
+ <link rel="icon" type="image/jpeg" href="logo_onpe.jpg">
+ <link rel="manifest" href="manifest.json">
+ <!-- Google Fonts: Sora (Display), Inter (Body), JetBrains Mono (Telemetry/Mono) -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Hoja de estilos del mapa Leaflet (Local) -->
+  <link rel="stylesheet" href="leaflet.css">
+ 
+   <!-- Hojas de Estilos Modulares (Arquitectura Limpia) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/views.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Motor Gráfico 3D WebGL: Three.js y OrbitControls para el Simulador Planetario Realista -->
+  
+  
+</head>
+<body>
+
+<!-- Este apartado sirve para los efectos visuales y la barra de progreso -->
+<div id="fx-progress"></div>
+<div id="fx-layer"></div>
+<div class="embers" id="embers-container">
+  <i style="left:5%; animation-duration:9s; animation-delay:1s;"></i>
+  <i style="left:12%; animation-duration:14s; animation-delay:3s;" class="cold"></i>
+  <i style="left:22%; animation-duration:11s; animation-delay:0.5s;"></i>
+  <i style="left:34%; animation-duration:16s; animation-delay:4s;" class="cold"></i>
+  <i style="left:48%; animation-duration:10s; animation-delay:2s;"></i>
+  <i style="left:59%; animation-duration:13s; animation-delay:5s;" class="cold"></i>
+  <i style="left:72%; animation-duration:8s; animation-delay:1.5s;"></i>
+  <i style="left:85%; animation-duration:15s; animation-delay:3.5s;" class="cold"></i>
+  <i style="left:93%; animation-duration:12s; animation-delay:2.5s;"></i>
+</div>
+
+
+<div id="pantalla-login" class="pantalla-login-overlay">
+ <div class="tarjeta-login-institucional">
+ <div style="text-align:center; margin-bottom: 20px;">
+ <img src="logo_onpe.jpg" alt="Logo ONPE Visión" class="logo-emblema" style="width:56px; height:56px; margin-bottom:12px;">
+ <h2 style="font-size:24px; color:#FFFFFF;">ONPE VISIÓN 2026</h2>
+ <p style="font-size:13px; color:var(--texto-secundario);">Centro de Mando Nacional de Control y Custodia Electoral</p>
+ 
+ <div class="distintivo-mpls-grande">
+ <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+ <span><strong>CANAL PRIVADO MPLS ACTIVO</strong> · Cifrado SHA-256 · SLA 99.94%</span>
+ </div>
+ </div>
+
+ <!-- FORMULARIO PRINCIPAL CON CREDENCIALES -->
+ <form id="form-login-operador" onsubmit="procesarIngresoAdmin(event)">
+ <div style="display:grid; grid-template-columns: 1fr 2fr; gap:12px;">
+ <div class="grupo-campo">
+ <label for="login-tipo-doc">Tipo Doc <span class="req">*</span></label>
+ <select id="login-tipo-doc" class="select-ioc">
+ <option value="DNI">DNI (Perú)</option>
+ <option value="CE">C. Extranjería</option>
+ </select>
+ </div>
+ <div class="grupo-campo">
+ <label for="login-num-doc">N° Documento <span class="req">*</span></label>
+ <input type="text" id="login-num-doc" class="input-ioc texto-mono" value="72491038" maxlength="8" required>
+ </div>
+ </div>
+
+ <div class="grupo-campo">
+ <label for="login-rol-operador">Rol Institucional Autorizado</label>
+ <select id="login-rol-operador" class="select-ioc">
+ <option value="Jefe de Operaciones Logísticas">Jefe de Operaciones Logísticas (Nacional)</option>
+ <option value="Fiscalizador JNE / Auditor Contraloría">Fiscalizador JNE / Auditor Contraloría</option>
+ <option value="Coordinador de Local de Votación">Coordinador de Local (Terminal PWA)</option>
+ </select>
+ </div>
+
+ <div class="grupo-campo">
+ <label for="login-clave">Clave Operativa <span class="req">*</span></label>
+ <input type="password" id="login-clave" class="input-ioc texto-mono" value="Elecciones2026*" required>
+ <span class="micro-etiqueta" style="color:var(--cian); margin-top:2px;"> Mínimo 8 caracteres (alfanumérico + carácter especial)</span>
+ </div>
+
+ <div class="grupo-campo">
+ <label for="login-token-otp">Token OTP (6 dígitos) <a href="#" onclick="generarTokenOTP(event)" style="font-size:11px; color:var(--cian); text-decoration:none;">[Generar OTP Nuevo]</a></label>
+ <input type="text" id="login-token-otp" class="input-ioc texto-mono" value="849201" maxlength="6" style="text-align:center; font-size:18px; letter-spacing:4px; font-weight:700;">
+ </div>
+
+ <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
+          <button type="submit" id="btn-submit-login-admin" class="btn-primario" style="width:100%; padding:14px; font-size:14px; font-weight:700; letter-spacing:0.5px;">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            Acceso Directo (Iniciar Sesión)
+          </button>
+          <button type="button" id="btn-acceso-modo-prueba" class="btn-secundario" onclick="activarModoPrueba(event)" style="width:100%; padding:14px; font-size:14px; font-weight:700; letter-spacing:0.5px; border-color:var(--cian); color:var(--cian);">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Modo Prueba (Demostración Inmediata)
+          </button>
+          <button type="button" id="btn-tour-guiado-login" class="btn-ghost" onclick="iniciarSesionModoSimulacion(event)" style="width:100%; padding:10px; font-size:12px; font-weight:600; border:1px dashed var(--borde-activo); color:var(--texto-secundario);">
+            Iniciar Tour Guiado Interactivo (8 Módulos)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+ <!-- ==================== HEADER GLOBAL INSTITUCIONAL ==================== -->
+<div class="app-layout-wrapper">
+
+<aside class="sidebar-nav-rail" aria-label="Riel de Navegación Táctica">
+  <div class="sidebar-brand-emblem" onclick="cambiarVistaWeb('analista-datos')" title="ONPE Visión 2026">
+    <svg viewBox="0 0 24 24" style="width:24px;height:24px;fill:none;stroke:#10B981;stroke-width:2.2;filter:drop-shadow(0 0 6px #10B981);">
+      <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+      <polyline points="2 17 12 22 22 17"></polyline>
+      <polyline points="2 12 12 17 22 12"></polyline>
+    </svg>
+  </div>
+
+  <nav class="sidebar-nav-pills">
+    <button class="sidebar-pill-btn activo" data-seccion="analista-datos" onclick="cambiarVistaWeb('analista-datos')" title="Analista de Datos">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+      <span class="sidebar-tooltip">Analista de Datos (Flagship Studio)</span>
+    </button>
+    
+    <button class="sidebar-pill-btn" data-seccion="inicio" onclick="cambiarVistaWeb('inicio')" title="Inicio">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+      <span class="sidebar-tooltip">Inicio del Sistema</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="dashboard" onclick="cambiarVistaWeb('dashboard')" title="Centro de Mando">
+      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      <span class="sidebar-tooltip">Centro de Mando Nacional (IOC)</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="control-transporte" onclick="cambiarVistaWeb('control-transporte')" title="Control de Transporte">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <span class="sidebar-tooltip">Control Total del Transporte (Fotograma 1)</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="gestion-proyecto" onclick="cambiarVistaWeb('gestion-proyecto')" title="Gestión de Proyecto">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+      <span class="sidebar-tooltip">Gestión del Proyecto (Neural Shell 3D)</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="administracion" onclick="cambiarVistaWeb('administracion')" title="Gestión de Datos">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+      <span class="sidebar-tooltip">Gestión de Datos y Despachos</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="rutas-flota" onclick="cambiarVistaWeb('rutas-flota')" title="Flota y Rutas">
+      <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+      <span class="sidebar-tooltip">Flota y Rutas Nacionales</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="alertas-xai" onclick="cambiarVistaWeb('alertas-xai')" title="Modelo XAI">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      <span class="sidebar-tooltip">Modelo XAI (TreeSHAP)</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="mapa-cobertura" onclick="cambiarVistaWeb('mapa-cobertura')" title="Mapa Nacional">
+      <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+      <span class="sidebar-tooltip">Mapa Nacional de Cobertura</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="base-datos" onclick="cambiarVistaWeb('base-datos')" title="Base de Datos">
+      <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+      <span class="sidebar-tooltip">Base de Datos PostgreSQL 16 + PostGIS</span>
+    </button>
+
+    <button class="sidebar-pill-btn" data-seccion="terminal-campo" onclick="cambiarVistaWeb('terminal-campo')" title="Terminal Campo">
+      <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+      <span class="sidebar-tooltip">Terminal Campo (PWA)</span>
+    </button>
+
+    
+
+    <button class="sidebar-pill-btn" data-seccion="registro-incidencias" onclick="cambiarVistaWeb('registro-incidencias')" title="Auditoría">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <span class="sidebar-tooltip">Auditoría y Bitácora Oficial</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-footer-actions">
+    
+    <button class="sidebar-pill-btn" onclick="cerrarSesionUsuario()" title="Cerrar Sesión">
+      <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+      <span class="sidebar-tooltip">Cerrar Sesión</span>
+    </button>
+  </div>
+</aside>
+
+  <div class="app-main-workspace">
+
+<header class="app-top-header">
+  <div class="search-bar-pill" style="position:relative; width:340px; cursor:text;">
+  <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke:var(--cian); fill:none; stroke-width:2; margin-right:6px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+  <input type="text" id="input-busqueda-global" placeholder="Buscar convoy, local, ODPE, placa o acta..." oninput="buscarEnTodoElSistema(this.value)" onkeydown="manejarTeclasBusqueda(event)" onfocus="buscarEnTodoElSistema(this.value)" style="background:transparent; border:none; color:#FFFFFF; font-size:13px; width:100%; outline:none;">
+  <span class="kbd-pill" onclick="abrirCommandPalette()" title="Comandos avanzados" style="cursor:pointer;">Ctrl+K</span>
+  <!-- Dropdown de Resultados en Tiempo Real -->
+  <div id="dropdown-busqueda-global" class="dropdown-resultados-busqueda"></div>
+</div>
+
+  <div class="top-header-right">
+    <div class="header-clock-pill">
+      <span class="punto-pulso-rojo"></span>
+      <span id="reloj-simulado-dday" class="texto-mono">11 ABR 2026 · 06:45:00</span>
+    </div>
+
+    <div class="header-network-pill">
+      <span class="punto-dot" style="background:#10B981;"></span>
+      <span>Red MPLS: 99.94% SLA</span>
+    </div>
+
+    <button class="header-icon-btn" onclick="sincronizarTelemetriaManual(this)" title="Recargar / Sincronizar telemetría">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+    </button>
+
+    <button class="header-icon-btn" onclick="mostrarNotificacionesOverlay()" title="Notificaciones del Sistema">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span class="badge-dot-notif"></span>
+    </button>
+
+    <button class="header-icon-btn" onclick="alternarModoContraste()" title="Modo Contraste Nocturno">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <div id="badge-usuario-sesion" class="user-profile-badge" onclick="abrirPerfilUsuario()" title="Perfil Operativo">
+      <img src="logo_onpe.jpg" alt="Carlos Mendoza" class="user-avatar-circle">
+      <div class="user-info-text">
+        <span id="nombre-usuario-sesion" class="user-name">Ing. Carlos Mendoza</span>
+        <span class="user-role">@jefe_operaciones_onpe</span>
+      </div>
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#8E8E9E;fill:none;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+  </div>
+</header>
+
+    <main class="app-content-body">
+
+<!-- Este apartado sirve para la consola de analítica operativa y telemetría electoral -->
+<section id="vista-analista-datos" class="seccion-vista activa">
+  <!-- Cabecera de la Vista -->
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+    <div>
+      <div class="micro-etiqueta" style="color:var(--accent-orange-light); letter-spacing:0.08em; margin-bottom:4px;">
+        ESTUDIO DE ANÁLISIS DE DATOS · TURNO CRÍTICO D-DAY 2026
+      </div>
+      <h2 style="font-size:24px; font-weight:800; color:#FFFFFF; font-family:'Sora',sans-serif; margin:0;">
+        Consola Integral de Analítica Operativa y Telemetría
+      </h2>
+      <p style="font-size:13px; color:#8E8E9E; margin:4px 0 0 0;">
+        Modelado de flujos logísticos, auditoría criptográfica de precintos y gemelo digital de la red vial nacional.
+      </p>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <span class="badge-estado badge-conforme" style="font-size:11px; padding:4px 10px;">
+        Algoritmo Predictivo XAI Activo
+      </span>
+      <button class="btn-primario" onclick="exportarReporteAnalistaCompleto()" style="font-size:12px; padding:8px 16px;">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Exportar Telemetría CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Cuadrícula Superior Principal (Hero Spline Chart + Tarjetas Apiladas) -->
+  <div class="analista-layout-grid">
+    <!-- 1. Tarjeta Hero Spline Chart ("Total Balance" en referencia) -->
+    <div class="card-analista-hero">
+      <div class="hero-chart-topbar">
+        <div>
+          <div class="hero-balance-label">Total de Material Electoral Desplegado</div>
+          <div class="hero-balance-value-row">
+            <span class="hero-balance-val" id="hero-kpi-locales">10,401 Locales</span>
+            <span class="badge-growth-green">
+              <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+              +2.92% vs 2021
+            </span>
+          </div>
+          <div style="font-size:12px; color:#8E8E9E; margin-top:4px;" id="hero-subtitulo-tasa">
+            Tasa de Despliegue Promedio: <strong>98.7%</strong> · SLA Conforme en 91 de 93 ODPEs
+          </div>
+        </div>
+
+        <!-- Filtros de Horizonte de Tiempo (1 year, 6 month, 3 month, 1 month, Turno D-DAY) -->
+        <div class="chart-time-pills">
+          <button class="time-pill-btn" onclick="cambiarHorizonteAnalista('1year', this)">1 year</button>
+          <button class="time-pill-btn" onclick="cambiarHorizonteAnalista('6month', this)">6 month</button>
+          <button class="time-pill-btn" onclick="cambiarHorizonteAnalista('3month', this)">3 month</button>
+          <button class="time-pill-btn activo" onclick="cambiarHorizonteAnalista('1month', this)">1 month</button>
+          <button class="time-pill-btn" onclick="cambiarHorizonteAnalista('dday', this)">D-DAY</button>
+        </div>
+      </div>
+
+      <!-- Lienzo Gráfico Spline con Tooltip Pin Flotante -->
+      <div class="spline-chart-wrapper" id="contenedor-spline-analista">
+        <canvas id="canvas-spline-hero" class="spline-canvas-layer"></canvas>
+
+        <!-- Pin Flotante Interactivo (09 Abr, 2026 - 9,780 Actas Despachadas) -->
+        <div class="chart-tooltip-pin" id="tooltip-pin-spline">
+          <div class="pin-bubble-card">
+            <strong>
+              09 Abr, 2026
+              <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </strong>
+            <span>9,780 Actas Procesadas</span>
+          </div>
+          <div class="pin-anchor-dot"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Métrica de Doble Progreso (Despacho Físico ODPE / Custodia Digital PNP) -->
+      <div class="sub-metrics-dual-bar">
+        <div class="metric-dual-item">
+          <span class="metric-bullet white"></span>
+          <span>Despacho Físico ODPE: <strong style="color:#FFFFFF;" id="val-despacho-fisico">88.5%</strong></span>
+        </div>
+        <div class="metric-dual-item">
+          <span class="metric-bullet green"></span>
+          <span>Custodia Digital PNP: <strong style="color:var(--accent-green-neon);" id="val-custodia-pnp">94.2%</strong></span>
+        </div>
+        <div style="margin-left:auto; font-size:11px; color:#8E8E9E; font-family:'JetBrains Mono',monospace;">
+          Canal: MPLS Privado + Starlink Backup
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Columna Derecha: Tarjetas Físicas en Perspectiva 3D + Telemetría Reciente -->
+    <div class="card-stack-column">
+      <!-- "My cards" Perspectiva 3D -->
+      <div class="card-mycards-perspective">
+        <div class="mycards-header-row">
+          <div class="mycards-title">Garantías y Precintos</div>
+          <button class="btn-add-credential" onclick="abrirModalAuditoriaPrecinto()">+ Auditar Nuevo</button>
+        </div>
+
+        <!-- Mazo 3D de Tarjetas Apiladas -->
+        <div class="cards-physical-deck">
+          <!-- Tarjeta 3 (Fondo - Canal MPLS) -->
+          <div class="physical-card-item card-tier-3" onclick="rotarTarjetaFisica(3)">
+            <div class="card-top-logos">
+              <span style="font-size:10px; font-weight:700; color:#22D3EE; letter-spacing:0.05em;">CANAL SEGURO MPLS</span>
+              <span style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#FFFFFF;">S/ 6,150.00</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta 2 (Medio - Precinto Criptográfico SHA-256) -->
+          <div class="physical-card-item card-tier-2" onclick="rotarTarjetaFisica(2)">
+            <div class="card-top-logos">
+              <span style="font-size:10px; font-weight:700; color:var(--accent-orange-bright); letter-spacing:0.05em;">PRECINTO SHA-256</span>
+              <span style="font-size:11px; font-family:'JetBrains Mono',monospace; color:#FFFFFF;">S/ 3,140.00</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta 1 (Frente - Póliza RIMAC S/ 64,000) -->
+          <div class="physical-card-item card-tier-1" onclick="rotarTarjetaFisica(1)">
+            <div class="card-top-logos">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:12px; font-weight:800; color:#FFFFFF; letter-spacing:0.05em;">RIMAC SEGUROS</span>
+                <span class="badge-estado badge-conforme" style="font-size:9px; padding:1px 6px;">CARTA FIANZA</span>
+              </div>
+              <div class="card-emv-chip"></div>
+            </div>
+
+            <div class="card-balance-section">
+              <div class="card-balance-title">Póliza de Seguro de Carga N° 84920</div>
+              <div class="card-balance-num-row">
+                <span class="card-balance-num">S/ 64,000.00</span>
+                <span class="badge-growth-green">
+                  <svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                  +3.52% Cobertura
+                </span>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#8E8E9E; font-family:'JetBrains Mono',monospace;">
+              <span>TITULAR: CONSORCIO ELECTORAL</span>
+              <span>EXP: 04/26</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de Acción Rápida (Auditar / Transferir Custodia) -->
+        <div class="card-action-dual-buttons">
+          <button class="btn-card-action btn-outline" onclick="abrirModalAuditoriaPrecinto()">
+            <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            Auditar Precinto
+          </button>
+          <button class="btn-card-action btn-glow-orange" onclick="activarProtocoloAuxilioPNP()">
+            <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            Transferir Custodia
+          </button>
+        </div>
+      </div>
+
+      <!-- Transacciones y Telemetría Recientes en Vivo -->
+      <div class="card-recent-transactions">
+        <div class="transactions-header-row">
+          <div class="transactions-title">Telemetría en Vivo</div>
+          <span class="transactions-view-all" onclick="cambiarVistaWeb('registro-incidencias')">Ver Todas</span>
+        </div>
+
+        <div class="transactions-list">
+          <div class="transaction-item-row" onclick="centrarVehiculoEnMapa('#DEZ-528')">
+            <div class="tx-left-info">
+              <div class="tx-icon-avatar">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#10B981;fill:none;stroke-width:2;"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon></svg>
+              </div>
+              <div class="tx-text-group">
+                <span class="tx-title">Unidad #DEZ-528 (Arequipa)</span>
+                <span class="tx-timestamp">11 Abr, 06:40 AM · Ruta Sur</span>
+              </div>
+            </div>
+            <span class="tx-amount-badge green">+24 Actas</span>
+          </div>
+
+          <div class="transaction-item-row" onclick="centrarVehiculoEnMapa('#DEZ-641')">
+            <div class="tx-left-info">
+              <div class="tx-icon-avatar">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#22D3EE;fill:none;stroke-width:2;"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline></svg>
+              </div>
+              <div class="tx-text-group">
+                <span class="tx-title">Enlace Starlink Puno #DEZ-641</span>
+                <span class="tx-timestamp">11 Abr, 06:38 AM · Latencia 42ms</span>
+              </div>
+            </div>
+            <span class="tx-amount-badge cyan">99.8% SLA</span>
+          </div>
+
+          <div class="transaction-item-row" onclick="centrarVehiculoEnMapa('#GAL-104')">
+            <div class="tx-left-info">
+              <div class="tx-icon-avatar">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#F0435A;fill:none;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              </div>
+              <div class="tx-text-group">
+                <span class="tx-title">Convoy #GAL-104 (Lima Sur)</span>
+                <span class="tx-timestamp">11 Abr, 06:30 AM · Detenido SJM</span>
+              </div>
+            </div>
+            <span class="tx-amount-badge red">-1.5h Retraso</span>
+          </div>
+
+          <div class="transaction-item-row" onclick="centrarVehiculoEnMapa('#DEZ-782')">
+            <div class="tx-left-info">
+              <div class="tx-icon-avatar">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#F5A524;fill:none;stroke-width:2;"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+              </div>
+              <div class="tx-text-group">
+                <span class="tx-title">Paso de Ticlio #DEZ-782</span>
+                <span class="tx-timestamp">11 Abr, 06:15 AM · 4,818 msnm</span>
+              </div>
+            </div>
+            <span class="tx-amount-badge amber">-2.4°C Falla</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fila Inferior: Tarjeta de Mando Conjunto y Gráfico de Barras con Pico Resaltado -->
+  <div class="analista-lower-grid">
+    <!-- Tarjeta Izquierda: Mando Conjunto ("Trusted by Thousands" en referencia) -->
+    <div class="card-command-trust">
+      <div>
+        <div class="micro-etiqueta" style="color:rgba(255,255,255,0.8); margin-bottom:6px;">CONFIANZA Y CUSTODIA INSTITUCIONAL</div>
+        <h3>Centro de Mando Conjunto ONPE · PNP · JNE</h3>
+        <p>
+          Supervisión simultánea de 1,420 Unidades Blindadas con enlace satelital Starlink y canal privado MPLS dedicado con encriptación militar.
+        </p>
+
+        <div class="avatars-team-cluster">
+          <div class="avatar-badge-circle" title="ONPE Logística">ON</div>
+          <div class="avatar-badge-circle" title="Policía Nacional del Perú">PNP</div>
+          <div class="avatar-badge-circle" title="Jurado Nacional de Elecciones">JNE</div>
+          <div class="avatar-badge-circle" title="Transparencia Electoral">TE</div>
+          <div class="avatar-badge-circle" style="background:var(--accent-orange-bright);" title="Fiscalía de la Nación">+3</div>
+        </div>
+      </div>
+
+      <button class="btn-command-trust-action" onclick="activarComiteCrisis()">
+        Activar Protocolo de Intervención Rápida PNP
+      </button>
+    </div>
+
+    <!-- Tarjeta Derecha: Gráfico de Barras con Pico Resaltado ("Investments" en referencia) -->
+    <div class="card-investments-bar">
+      <div class="investments-header-row">
+        <div>
+          <div class="investments-title">Distribución Horaria de Despachos</div>
+          <div class="investments-val-row">
+            <span class="investments-val">1,420 Convoyes</span>
+            <span class="badge-growth-green">+1.52% SLA</span>
+          </div>
+        </div>
+
+        <div class="investments-controls">
+          <select class="dropdown-select-pill" onchange="filtrarBarrasDespacho(this.value)">
+            <option value="todos">Todos los Ejes Viales</option>
+            <option value="sur">Panamericana Sur</option>
+            <option value="centro">Carretera Central</option>
+            <option value="fluvial">Eje Fluvial Loreto</option>
+          </select>
+          <span class="shortcut-badge">Turno D-DAY</span>
+        </div>
+      </div>
+
+      <!-- Contenedor de Columnas de Barras -->
+      <div class="bars-chart-container" id="contenedor-barras-despacho">
+        <div class="bar-column-item">
+          <span style="font-size:10px; color:#8E8E9E; font-family:'JetBrains Mono',monospace;">200 unid.</span>
+          <div class="bar-tube-track">
+            <div class="bar-tube-fill" style="height: 38%;"></div>
+          </div>
+          <span class="bar-label-month">02:00</span>
+        </div>
+
+        <div class="bar-column-item">
+          <span style="font-size:10px; color:#8E8E9E; font-family:'JetBrains Mono',monospace;">300 unid.</span>
+          <div class="bar-tube-track">
+            <div class="bar-tube-fill" style="height: 58%;"></div>
+          </div>
+          <span class="bar-label-month">04:00</span>
+        </div>
+
+        <div class="bar-column-item">
+          <span style="font-size:10px; color:#8E8E9E; font-family:'JetBrains Mono',monospace;">400 unid.</span>
+          <div class="bar-tube-track">
+            <div class="bar-tube-fill" style="height: 75%;"></div>
+          </div>
+          <span class="bar-label-month">06:00</span>
+        </div>
+
+        <!-- Barra Resaltada de Pico Máximo (08:00 - 500 Unidades) -->
+        <div class="bar-column-item">
+          <div class="bar-tube-track">
+            <span class="floating-bar-badge">500 Pico</span>
+            <div class="bar-tube-fill highlight-peak" style="height: 95%;"></div>
+          </div>
+          <span class="bar-label-month" style="color:var(--accent-green-neon); font-weight:700;">08:00</span>
+        </div>
+
+        <div class="bar-column-item">
+          <span style="font-size:10px; color:#8E8E9E; font-family:'JetBrains Mono',monospace;">400 unid.</span>
+          <div class="bar-tube-track">
+            <div class="bar-tube-fill" style="height: 72%;"></div>
+          </div>
+          <span class="bar-label-month">10:00</span>
+        </div>
+
+        <div class="bar-column-item">
+          <span style="font-size:10px; color:#8E8E9E; font-family:'JetBrains Mono',monospace;">350 unid.</span>
+          <div class="bar-tube-track">
+            <div class="bar-tube-fill" style="height: 52%;"></div>
+          </div>
+          <span class="bar-label-month">12:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Este apartado sirve para el visor interactivo de telemetría y gemelo digital -->
+  <div class="video-models-container">
+    <div class="video-models-header">
+      <div>
+        <div class="micro-etiqueta" style="color:var(--accent-cyan-laser); letter-spacing:0.08em; margin-bottom:4px;">
+          MODELO 3D EXTRAÍDO DEL VIDEO OFICIAL · GEMELO DIGITAL GIS
+        </div>
+        <h3 style="font-size:18px; font-weight:800; color:#FFFFFF; margin:0; font-family:'Sora',sans-serif;">
+          Supervisión Tridimensional de Corredores y Telemetría Andina
+        </h3>
+        <p style="font-size:12px; color:#8E8E9E; margin:4px 0 0 0;">
+          Representación volumétrica de cintas viales, conos holográficos de incidentes y gemelo digital de Ticlio (4,818 msnm).
+        </p>
+      </div>
+
+            <!-- Selector de Modelos del Video y Controles GIS -->
+      <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+        <div class="video-tabs-row">
+          <button type="button" class="video-tab-btn activo" onclick="cambiarModeloVideo('corredores_gis', this)">
+            Corredores GIS y Conos 3D (Video 15s)
+          </button>
+          <button type="button" class="video-tab-btn" onclick="cambiarModeloVideo('paso_ticlio', this)">
+            Paso Andino Ticlio 4,818 msnm (Video 210s)
+          </button>
+        </div>
+        
+        <!-- Barra de Botones Rápidos de Cámara 3D -->
+        <div class="gis-camera-quick-bar">
+          <span style="font-size:10px; color:#8E8E9E; font-family:'JetBrains Mono',monospace; margin-right:4px;">Cámara GIS:</span>
+          <button type="button" class="btn-gis-quick" onclick="centrarTerritorioGIS()">Centrar Territorio</button>
+          <button type="button" class="btn-gis-quick alert-ticlio" onclick="enfocarTiclio3D()">Enfocar Ticlio (4,818m)</button>
+          <button type="button" class="btn-gis-quick alert-lima" onclick="enfocarLimaSur3D()">Lima Sur (#GAL-104)</button>
+          <button type="button" class="btn-gis-quick" id="btn-pausar-gis" onclick="toggleRotacionGIS()">Pausar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Escenario Interactivo 3D Canvas -->
+    <div class="video-canvas-stage" id="escenario-canvas-video">
+      <canvas id="canvas-video-modelos-3d" class="canvas-3d-model"></canvas>
+
+      <!-- Overlay HUD de Telemetría sobre el Canvas -->
+      <div class="canvas-hud-overlay" id="hud-telemetria-video">
+        <strong style="color:var(--accent-cyan-laser); font-family:'JetBrains Mono',monospace;">MODELO: CORREDORES VIALES Y CONOS HOLOGRÁFICOS (GEMELO DIGITAL GIS)</strong><br>
+        <span style="font-size:10px; color:#8E8E9E;">4 Arterias: Panamericana Sur, Carretera Central, Fluvial Loreto y Enlace Puno · Relieve Andino 3D</span>
+      </div>
+
+      <!-- Modal Emergente de Incidencia (Estilo Video Frame 90s) -->
+      <div class="modal-incidencia-video" id="modal-popup-incidencia-video">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="color:#F0435A; font-size:12px; font-family:'JetBrains Mono',monospace;">ALERTA CRÍTICA #DEZ-782</strong>
+          <button type="button" onclick="cerrarPopupIncidenciaVideo()" style="background:transparent; border:none; color:#FFFFFF; cursor:pointer; font-size:14px;">&times;</button>
+        </div>
+        <div style="font-size:11px; color:#EAEAF2; line-height:1.45;">
+          <strong>Ubicación:</strong> Paso de Ticlio (4,818 msnm) · KM 132<br>
+          <strong>Causa:</strong> Caída presión de frenos a -4.0°C (Helada Severa)<br>
+          <strong>Estatus:</strong> Vía bloqueada · Auxilio Mecánico PNP en ruta.<br>
+          <strong>Material:</strong> 35 ánforas intactas con precinto verificado al 98%.
+        </div>
+        <div style="display:flex; gap:6px; margin-top:10px;">
+          <button type="button" class="btn-primario" onclick="activarProtocoloAuxilioPNP()" style="flex:1; font-size:11px; padding:6px 0;">
+            Despachar Auxilio Provías
+          </button>
+          <button type="button" class="btn-secundario" onclick="if(typeof consultarPinEnChatbot==='function') consultarPinEnChatbot('TICLIO');" style="padding:6px 10px; font-size:11px; border-color:var(--cian); color:var(--cian);">
+            Copiloto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCK ANALÍTICO DE 5 PANELES (Inferior de las pantallas del Video) -->
+    <div class="dock-analitico-5paneles">
+      <!-- Panel 1: Kilometraje e Infraestructura (Gauge Cilíndrico y Curvas) -->
+      <div class="dock-panel-item panel-hover-glow">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="dock-panel-title" style="margin-bottom:0;">1. Red Vial y Obras de Arte</div>
+          <span class="micro-badge-status status-conforme">98.2% Óptimo</span>
+        </div>
+        
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+          <div style="position:relative; width:58px; height:58px; flex-shrink:0;">
+            <svg viewBox="0 0 60 60" style="width:100%; height:100%; transform:rotate(-90deg);">
+              <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"></circle>
+              <circle cx="30" cy="30" r="24" fill="none" stroke="#10B981" stroke-width="5" stroke-dasharray="150" stroke-dashoffset="12" stroke-linecap="round"></circle>
+              <circle cx="30" cy="30" r="17" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"></circle>
+              <circle cx="30" cy="30" r="17" fill="none" stroke="#22D3EE" stroke-width="4" stroke-dasharray="106" stroke-dashoffset="15" stroke-linecap="round"></circle>
+            </svg>
+            <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <span style="font-size:13px; font-weight:800; color:#FFFFFF; font-family:'Sora',sans-serif; line-height:1;">4,528</span>
+              <span style="font-size:8px; color:#8E8E9E; text-transform:uppercase;">km tot</span>
+            </div>
+          </div>
+
+          <div style="flex:1; display:flex; flex-direction:column; gap:3px; font-size:10px; font-family:'JetBrains Mono',monospace;">
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#22D3EE;">● Puentes:</span>
+              <span style="color:#FFFFFF; font-weight:700;">1,202 km</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#10B981;">● Túneles:</span>
+              <span style="color:#FFFFFF; font-weight:700;">1,102 km</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#FFA043;">● Troncal:</span>
+              <span style="color:#FFFFFF; font-weight:700;">1,035 km</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#F0435A;">● Alturas:</span>
+              <span style="color:#F0435A; font-weight:700;">1,189 km</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border-radius:6px; padding:4px 8px; font-size:9.5px; color:#8E8E9E; display:flex; justify-content:space-between;">
+          <span>SLA Pavimento:</span>
+          <strong style="color:var(--verde-exito);">99.4% Conforme</strong>
+        </div>
+      </div>
+
+      <!-- Panel 2: Velocidad Promedio por Eje y Dinámica de Convoys -->
+      <div class="dock-panel-item panel-hover-glow">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="dock-panel-title" style="margin-bottom:0;">2. Velocidad de Convoys</div>
+          <span class="micro-badge-status status-critico">1 Alerta</span>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:7px; font-size:10px; font-family:'JetBrains Mono',monospace;">
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span style="color:#8E8E9E;">Panam. Sur (#DEZ-528):</span>
+              <span style="color:#10B981; font-weight:700;">74 km/h · FLUIDO</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.06); height:5px; border-radius:3px; overflow:hidden;">
+              <div style="width:74%; height:100%; background:linear-gradient(90deg, #10B981, #34D399); border-radius:3px;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span style="color:#8E8E9E;">Carr. Central (#DEZ-782):</span>
+              <span style="color:#F0435A; font-weight:700;">32 km/h · HELADA</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.06); height:5px; border-radius:3px; overflow:hidden;">
+              <div style="width:32%; height:100%; background:linear-gradient(90deg, #F0435A, #FB7185); border-radius:3px;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span style="color:#8E8E9E;">Fluvial Loreto (#DEZ-365):</span>
+              <span style="color:#22D3EE; font-weight:700;">22 km/h · NORMAL</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.06); height:5px; border-radius:3px; overflow:hidden;">
+              <div style="width:22%; height:100%; background:linear-gradient(90deg, #22D3EE, #38BDF8); border-radius:3px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:6px; background:rgba(255,255,255,0.04); border-radius:6px; padding:4px 8px; font-size:9.5px; color:#8E8E9E; display:flex; justify-content:space-between;">
+          <span>Flota Monitoreada:</span>
+          <strong style="color:var(--cian);">12 / 12 Unidades</strong>
+        </div>
+      </div>
+
+      <!-- Panel 3: Censo de Nodos y ODPEs -->
+      <div class="dock-panel-item panel-hover-glow">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="dock-panel-title" style="margin-bottom:0;">3. Censo de Nodos Clave</div>
+          <span class="micro-badge-status status-conforme">100% Red</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:6px 8px; border-radius:8px; text-align:center;">
+            <strong style="color:#FFFFFF; font-size:15px; font-family:'Sora',sans-serif; display:block;">93</strong>
+            <span style="font-size:9px; color:#8E8E9E; text-transform:uppercase;">ODPEs Activas</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(16,185,129,0.2); padding:6px 8px; border-radius:8px; text-align:center;">
+            <strong style="color:var(--accent-green-neon); font-size:15px; font-family:'Sora',sans-serif; display:block;">10,401</strong>
+            <span style="font-size:9px; color:#8E8E9E; text-transform:uppercase;">Locales Votación</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,160,67,0.2); padding:6px 8px; border-radius:8px; text-align:center;">
+            <strong style="color:var(--accent-orange-bright); font-size:15px; font-family:'Sora',sans-serif; display:block;">12</strong>
+            <span style="font-size:9px; color:#8E8E9E; text-transform:uppercase;">Convoys Ruta</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(34,211,238,0.2); padding:6px 8px; border-radius:8px; text-align:center;">
+            <strong style="color:var(--accent-cyan-laser); font-size:15px; font-family:'Sora',sans-serif; display:block;">14,280</strong>
+            <span style="font-size:9px; color:#8E8E9E; text-transform:uppercase;">PNP & FF.AA.</span>
+          </div>
+        </div>
+
+        <div style="margin-top:6px; background:rgba(255,255,255,0.04); border-radius:6px; padding:4px 8px; font-size:9.5px; color:#8E8E9E; display:flex; justify-content:space-between;">
+          <span>Despliegue Nacional:</span>
+          <strong style="color:var(--verde-exito);">98.7% Completo</strong>
+        </div>
+      </div>
+
+      <!-- Panel 4: Topología de Sensores (Anillos Concéntricos) -->
+      <div class="dock-panel-item panel-hover-glow">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="dock-panel-title" style="margin-bottom:0;">4. Sensores y Enlace MPLS</div>
+          <span class="micro-badge-status status-conforme">SHA-256</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+          <div style="width:58px; height:58px; flex-shrink:0;">
+            <svg viewBox="0 0 100 100" style="width:100%; height:100%;">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"></circle>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#10B981" stroke-width="6" stroke-dasharray="264" stroke-dashoffset="10" stroke-linecap="round"></circle>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"></circle>
+              <circle cx="50" cy="50" r="30" fill="none" stroke="#22D3EE" stroke-width="6" stroke-dasharray="188" stroke-dashoffset="14" stroke-linecap="round"></circle>
+              <circle cx="50" cy="50" r="18" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"></circle>
+              <circle cx="50" cy="50" r="18" fill="none" stroke="#FFA043" stroke-width="6" stroke-dasharray="113" stroke-dashoffset="18" stroke-linecap="round"></circle>
+            </svg>
+          </div>
+
+          <div style="flex:1; font-size:10px; font-family:'JetBrains Mono',monospace; line-height:1.45;">
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#10B981;">● GPS Glonass:</span>
+              <strong style="color:#FFFFFF;">99.9%</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#22D3EE;">● Precinto IoT:</span>
+              <strong style="color:#FFFFFF;">98.4%</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#FFA043;">● Starlink:</span>
+              <strong style="color:#FFFFFF;">100%</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border-radius:6px; padding:4px 8px; font-size:9.5px; color:#8E8E9E; display:flex; justify-content:space-between;">
+          <span>Latencia Promedio:</span>
+          <strong style="color:var(--cian);">11.4 ms (MPLS)</strong>
+        </div>
+      </div>
+
+      <!-- Panel 5: Flujo de Despacho y Actas Recepcionadas -->
+      <div class="dock-panel-item panel-hover-glow">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="dock-panel-title" style="margin-bottom:0;">5. Flujo de Despacho D-DAY</div>
+          <span class="micro-badge-status status-conforme">En Horario</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+          <div>
+            <span style="font-size:17px; font-weight:800; color:#FFFFFF; font-family:'Sora',sans-serif;">2,253</span>
+            <span style="font-size:10px; color:#8E8E9E;">/ 10,401</span>
+          </div>
+          <span style="font-size:11px; font-weight:700; color:var(--accent-green-neon); font-family:'JetBrains Mono',monospace;">21.6% Actas</span>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:3px; font-size:9.5px; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:#8E8E9E;">Lima Sur:</span>
+            <span style="color:#FFFFFF;">2,253 actas (100%)</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:#8E8E9E;">Arequipa:</span>
+            <span style="color:#FFFFFF;">1,854 actas (92%)</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:#8E8E9E;">Loreto:</span>
+            <span style="color:#22D3EE;">3,781 actas (Fluvial)</span>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border-radius:6px; padding:4px 8px; font-size:9.5px; color:#8E8E9E; display:flex; justify-content:space-between;">
+          <span>Meta 08:00 AM:</span>
+          <strong style="color:var(--verde-exito);">99.4% Probabilidad</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="vista-inicio" class="seccion-vista">
+ <div class="hero-inicio">
+ <div class="badge-hero-onpe">
+ <span class="punto-dot" style="background:var(--cian); box-shadow:0 0 8px var(--cian);"></span>
+ ELECCIONES GENERALES 2026 · SISTEMA NACIONAL DE CUSTODIA LOGÍSTICA
+ </div>
+ <h2>Monitoreo Predictivo y Trazabilidad en Tiempo Real de la Cadena Electoral</h2>
+ <p>
+ Plataforma de inteligencia operacional con Inteligencia Artificial Explicable (XAI), geolocalización satelital y red privada MPLS para blindar el despacho a más de 10,400 locales de votación.
+ </p>
+ <div class="hero-cta-grupo">
+ <button class="btn-primario" onclick="cambiarVistaWeb('dashboard')">
+ <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+ Ver Centro de Mando en Vivo
+ </button>
+ 
+ <button class="btn-secundario" onclick="cambiarVistaWeb('terminal-campo')">
+ <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+ Simular App de Campo (3 Clics)
+ </button>
+ </div>
+ </div>
+
+ 
+ <!-- MAPA OPERATIVO DE NAVEGACIÓN Y PIPELINE DEL SISTEMA (Flujo Integral) -->
+ <div class="tarjeta-ioc" style="margin-bottom:30px; border:1px solid var(--borde-activo); background:linear-gradient(180deg, rgba(16,27,48,0.95) 0%, rgba(10,18,32,0.98) 100%);">
+ <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--borde-sutil); padding-bottom:12px; margin-bottom:16px;">
+ <div>
+ <span class="micro-etiqueta" style="color:var(--cian); font-weight:700;">ARQUITECTURA DE PROCESOS DEL PRODUCTO ELECTORAL</span>
+ <h3 style="font-size:18px; color:#FFFFFF; margin-top:4px;">Mapa de Navegación del Sistema y Pipeline Operativo</h3>
+ </div>
+ <span class="badge-estado badge-sla">SLA Troncal 99.94%</span>
+ </div>
+ <p style="font-size:13px; color:var(--texto-secundario); margin-bottom:20px;">
+ Estructura de trazabilidad extremo a extremo: desde la salida del material en el almacén central hasta la fiscalización final por los organismos de control.
+ </p>
+
+ <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; position:relative;">
+ <div class="tarjeta-ioc" style="padding:16px; background:rgba(4,7,15,0.7); border-top:3px solid var(--azul-electrico); cursor:pointer;" onclick="cambiarVistaWeb('administracion')">
+ <span class="micro-etiqueta" style="color:var(--azul-electrico);">FASE 01 · DESPACHO</span>
+ <h4 style="font-size:14px; color:#FFFFFF; margin:6px 0;">Gestión de Datos</h4>
+ <p style="font-size:12px; color:var(--texto-secundario);">Asignación de unidades, custodia PNP y foliado de precintos QR.</p>
+ <span class="modulo-link-cta" style="margin-top:10px;">Abrir Módulo →</span>
+ </div>
+
+ <div class="tarjeta-ioc" style="padding:16px; background:rgba(4,7,15,0.7); border-top:3px solid var(--cian); cursor:pointer;" onclick="cambiarVistaWeb('rutas-flota')">
+ <span class="micro-etiqueta" style="color:var(--cian);">FASE 02 · TRÁNSITO</span>
+ <h4 style="font-size:14px; color:#FFFFFF; margin:6px 0;">Flota y Geocercas</h4>
+ <p style="font-size:12px; color:var(--texto-secundario);">Supervisión de 12 convoyes con buffer vial de 300m e ingesta GPS 30s.</p>
+ <span class="modulo-link-cta" style="margin-top:10px;">Abrir Módulo →</span>
+ </div>
+
+ <div class="tarjeta-ioc" style="padding:16px; background:rgba(4,7,15,0.7); border-top:3px solid var(--verde-exito); cursor:pointer;" onclick="cambiarVistaWeb('dashboard')">
+ <span class="micro-etiqueta" style="color:var(--verde-exito);">FASE 03 · CENTRO DE MANDO</span>
+ <h4 style="font-size:14px; color:#FFFFFF; margin:6px 0;">Supervisión Cartográfica</h4>
+ <p style="font-size:12px; color:var(--texto-secundario);">Visualización en vivo de alertas, telemetría satelital y curvas de retraso.</p>
+ <span class="modulo-link-cta" style="margin-top:10px;">Abrir Módulo →</span>
+ </div>
+
+ <div class="tarjeta-ioc" style="padding:16px; background:rgba(4,7,15,0.7); border-top:3px solid var(--violeta-ia); cursor:pointer;" onclick="cambiarVistaWeb('alertas-xai')">
+ <span class="micro-etiqueta" style="color:var(--violeta-ia);">FASE 04 · INTELIGENCIA XAI</span>
+ <h4 style="font-size:14px; color:#FFFFFF; margin:6px 0;">Inferencia TreeSHAP</h4>
+ <p style="font-size:12px; color:var(--texto-secundario);">Descomposición aditiva matemática de causas y activación de auxilio.</p>
+ <span class="modulo-link-cta" style="margin-top:10px;">Abrir Módulo →</span>
+ </div>
+
+ <div class="tarjeta-ioc" style="padding:16px; background:rgba(4,7,15,0.7); border-top:3px solid #EC4899; cursor:pointer;" onclick="cambiarVistaWeb('terminal-campo')">
+ <span class="micro-etiqueta" style="color:#EC4899;">FASE 05 · LOCAL DE VOTACIÓN</span>
+ <h4 style="font-size:14px; color:#FFFFFF; margin:6px 0;">Terminal Móvil PWA</h4>
+ <p style="font-size:12px; color:var(--texto-secundario);">Recepción en 3 toques táctiles con firma criptográfica SHA-256 offline.</p>
+ <span class="modulo-link-cta" style="margin-top:10px;">Abrir Módulo →</span>
+ </div>
+
+ <div class="tarjeta-ioc" style="padding:16px; background:rgba(4,7,15,0.7); border-top:3px solid var(--ambar-alerta); cursor:pointer;" onclick="cambiarVistaWeb('registro-incidencias')">
+ <span class="micro-etiqueta" style="color:var(--ambar-alerta);">FASE 06 · FISCALIZACIÓN</span>
+ <h4 style="font-size:14px; color:#FFFFFF; margin:6px 0;">Auditoría Inmutable</h4>
+ <p style="font-size:12px; color:var(--texto-secundario);">Registro para JNE y Contraloría con exportación dinámica CSV.</p>
+ <span class="modulo-link-cta" style="margin-top:10px;">Abrir Módulo →</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- 4 Tarjetas de Crisis Logística 2026 -->
+ <h3 style="font-size:18px; margin-bottom:16px; color:var(--texto-resaltado); display:flex; align-items:center; gap:8px;">
+ <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--rojo-critico);fill:none;stroke-width:2;"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+ Impacto Crítico: El Caso Galaga SAC (Elecciones 12 de Abril 2026)
+ </h3>
+ <div class="grid-crisis-4">
+ <div class="tarjeta-crisis">
+ <div class="crisis-cifra">211</div>
+ <div class="crisis-titulo">Mesas No Instaladas</div>
+ <span class="crisis-subtitulo-linea" title="Mesas de sufragio clausuradas en 15 colegios de Lima Sur por falta de material electoral">15 locales afectados en SJM, Lurín y Pachacámac </span>
+ </div>
+ <div class="tarjeta-crisis">
+ <div class="crisis-cifra">63,300</div>
+ <div class="crisis-titulo">Electores Excluidos</div>
+ <span class="crisis-subtitulo-linea" title="Ciudadanos peruanos que no pudieron ejercer su derecho al voto por la demora del transporte">Vulneración directa al sufragio ciudadano en Lima Sur </span>
+ </div>
+ <div class="tarjeta-crisis">
+ <div class="crisis-cifra alerta">S/ 64,000</div>
+ <div class="crisis-titulo">Penalidades Acumuladas</div>
+ <span class="crisis-subtitulo-linea" title="Multas previas impuestas a Galaga SAC sin sistema preventivo de alerta para la ONPE">Historial crítico de incumplimiento no detectado a tiempo </span>
+ </div>
+ <div class="tarjeta-crisis">
+ <div class="crisis-cifra neutro">10,401</div>
+ <div class="crisis-titulo">Locales Nacionales</div>
+ <span class="crisis-subtitulo-linea" title="Puntos de votación a nivel nacional monitoreados por la plataforma ONPE Visión">Despliegue integral cubierto en las 93 ODPEs del país </span>
+ </div>
+ </div>
+
+ <!-- 6 Módulos con Miniaturas Visuales -->
+ <h3 style="font-size:18px; margin-bottom:16px; color:var(--texto-resaltado);">Módulos Operativos del Sistema ONPE Visión</h3>
+ <div class="grid-modulos-6">
+ <div class="card-modulo-preview" onclick="cambiarVistaWeb('dashboard')">
+ <div class="modulo-header">
+ <div class="icono-modulo-circulo">
+ <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+ </div>
+ <span class="badge-estado badge-conforme">En Vivo</span>
+ </div>
+ <h4 style="font-size:16px; margin-bottom:6px;">Centro de Mando Nacional (IOC)</h4>
+ <p style="font-size:13px; color:var(--texto-secundario);">Cartografía interactiva en Leaflet, telemetría activa de convoyes y semaforización en tiempo real.</p>
+ <div class="mini-preview-grafico">
+ <span class="texto-mono" style="font-size:11px; color:var(--cian);"> Mapa GPS + HUD de Telemetría Activa</span>
+ </div>
+ <div class="modulo-link-cta">Abrir Centro de Mando →</div>
+ </div>
+
+ <div class="card-modulo-preview" onclick="cambiarVistaWeb('alertas-xai')">
+ <div class="modulo-header">
+ <div class="icono-modulo-circulo">
+ <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path></svg>
+ </div>
+ <span class="badge-estado badge-alerta-roja">Motor SHAP</span>
+ </div>
+ <h4 style="font-size:16px; margin-bottom:6px;">Inteligencia Explicable (XAI)</h4>
+ <p style="font-size:13px; color:var(--texto-secundario);">Auditoría transparente de factores de riesgo logístico con valores TreeSHAP y activación PNP.</p>
+ <div class="mini-preview-grafico">
+ <span class="texto-mono" style="font-size:11px; color:var(--rojo-critico);"> Galaga SAC: Contratista +40%, Retraso +27%</span>
+ </div>
+ <div class="modulo-link-cta">Explorar Inferencia XAI →</div>
+ </div>
+
+ <div class="card-modulo-preview" onclick="cambiarVistaWeb('terminal-campo')">
+ <div class="modulo-header">
+ <div class="icono-modulo-circulo">
+ <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+ </div>
+ <span class="badge-estado badge-sla">3 Clics</span>
+ </div>
+ <h4 style="font-size:16px; margin-bottom:6px;">Terminal PWA de Campo</h4>
+ <p style="font-size:13px; color:var(--texto-secundario);">Recepción táctil de actas con escaneo de precintos QR y firma digital sin fatiga cognitiva.</p>
+ <div class="mini-preview-grafico">
+ <span class="texto-mono" style="font-size:11px; color:var(--verde-exito);"> Lectura QR · Verificación · Firma Criptográfica</span>
+ </div>
+ <div class="modulo-link-cta">Probar Terminal PWA →</div>
+ </div>
+
+ <div class="card-modulo-preview" onclick="cambiarVistaWeb('rutas-flota')">
+ <div class="modulo-header">
+ <div class="icono-modulo-circulo">
+ <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon></svg>
+ </div>
+ <span class="badge-estado badge-conforme">12 Convoys</span>
+ </div>
+ <h4 style="font-size:16px; margin-bottom:6px;">Gestión de Flota y Rutas</h4>
+ <p style="font-size:13px; color:var(--texto-secundario);">Seguimiento de camiones blindados y lanchas fluviales con geocercas y tolerancias viales.</p>
+ <div class="mini-preview-grafico">
+ <span class="texto-mono" style="font-size:11px; color:var(--cian);"> 1,420 Vehículos · Red MPLS + Starlink</span>
+ </div>
+ <div class="modulo-link-cta">Ver Tabla de Flota →</div>
+ </div>
+
+ <div class="card-modulo-preview" onclick="cambiarVistaWeb('registro-incidencias')">
+ <div class="modulo-header">
+ <div class="icono-modulo-circulo">
+ <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><line x1="12" y1="18" x2="12" y2="12"></line></svg>
+ </div>
+ <span class="badge-estado badge-alerta-amarilla">14 Eventos</span>
+ </div>
+ <h4 style="font-size:16px; margin-bottom:6px;">Auditoría y Exportación CSV</h4>
+ <p style="font-size:13px; color:var(--texto-secundario);">Bitácora inmutable de eventos electorales, filtros por jurisdicción y descarga oficial de datos.</p>
+ <div class="mini-preview-grafico">
+ <span class="texto-mono" style="font-size:11px; color:var(--ambar-alerta);"> 14 Incidencias Sembradas · Filtros Dinámicos</span>
+ </div>
+ <div class="modulo-link-cta">Revisar Auditoría →</div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== VISTA 2: GESTIÓN DE DATOS ==================== -->
+ <section id="vista-administracion" class="seccion-vista">
+ <div class="admin-header-operador">
+ <div class="operador-info-bloque">
+ <div class="avatar-cm">CM</div>
+ <div>
+ <h4 style="font-size:16px; color:#FFFFFF;">Ing. Carlos Mendoza (DNI: 72491038)</h4>
+ <p style="font-size:13px; color:var(--texto-secundario);">
+ Jefe de Operaciones Logísticas · Sede Central Jr. Washington, Lima · 
+ <strong style="color:var(--verde-exito);">Canal Cifrado MPLS Activo</strong>
+ </p>
+ </div>
+ </div>
+ <div style="display:flex; gap:12px;">
+ <button class="btn-primario" onclick="cambiarVistaWeb('dashboard')">
+ <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+ Ir al Centro de Mando
+ </button>
+ </div>
+ </div>
+
+ <div class="grid-admin-despacho">
+ <!-- Formulario de Despacho en 2 Pasos -->
+ <div class="tarjeta-ioc">
+ <h3 style="font-size:18px; margin-bottom:16px; color:#FFFFFF;">Formulario Oficial de Despacho Logístico</h3>
+ 
+ <!-- Stepper -->
+ <div class="stepper-despacho">
+ <div class="paso-item activo" id="stepper-paso-1" onclick="irAPasoDespacho(1)">
+ <div class="paso-num">1</div>
+ <span>Vehículo y Custodia PNP</span>
+ </div>
+ <div class="stepper-linea" id="stepper-linea-1"></div>
+ <div class="paso-item" id="stepper-paso-2" onclick="irAPasoDespacho(2)">
+ <div class="paso-num">2</div>
+ <span>Carga y Precintos Electorales</span>
+ </div>
+ </div>
+
+ <form id="form-despacho-operativo" onsubmit="registrarNuevoDespacho(event)">
+ <!-- PASO 1: ASIGNACIÓN DE VEHÍCULO Y CUSTODIA -->
+ <div id="bloque-paso-1">
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+ <div class="grupo-campo">
+ <label for="despacho-placa">Placa de la Unidad <span class="req">*</span></label>
+ <input type="text" id="despacho-placa" class="input-ioc texto-mono" value="DEZ-950" required placeholder="Ej. DEZ-950">
+ </div>
+ <div class="grupo-campo">
+ <label for="despacho-tipo">Tipo de Unidad</label>
+ <select id="despacho-tipo" class="select-ioc">
+ <option value="Camión Blindado Scania R450">Camión Blindado Scania R450</option>
+ <option value="Volvo FH Classic 15T">Volvo FH Classic 15T</option>
+ <option value="Furgón Reparto Pesado">Furgón Reparto Pesado</option>
+ <option value="Lancha Fluvial de Alta Capacidad">Lancha Fluvial de Alta Capacidad</option>
+ </select>
+ </div>
+ </div>
+
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+ <div class="grupo-campo">
+ <label for="despacho-conductor">Conductor Asignado <span class="req">*</span></label>
+ <input type="text" id="despacho-conductor" class="input-ioc" value="Alejandro Morales Rivera" required>
+ </div>
+ <div class="grupo-campo">
+ <label for="despacho-pnp">Efectivo PNP de Custodia <span class="req">*</span></label>
+ <input type="text" id="despacho-pnp" class="input-ioc" value="Cmdte. PNP Roberto Vílchez" required>
+ </div>
+ </div>
+
+ <div class="grupo-campo">
+ <label for="despacho-odpe">ODPE Destino <span class="req">*</span></label>
+ <select id="despacho-odpe" class="select-ioc">
+ <option value="ODPE Lima Sur (San Juan de Miraflores)">ODPE Lima Sur (San Juan de Miraflores)</option>
+ <option value="ODPE Huancavelica">ODPE Huancavelica</option>
+ <option value="ODPE Maynas (Loreto)">ODPE Maynas (Loreto)</option>
+ <option value="ODPE Arequipa">ODPE Arequipa</option>
+ <option value="ODPE Piura">ODPE Piura</option>
+ <option value="ODPE Cusco">ODPE Cusco</option>
+ </select>
+ </div>
+
+ <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+ <button type="button" class="btn-primario" onclick="irAPasoDespacho(2)">
+ Siguiente: Carga y Precintos →
+ </button>
+ </div>
+ </div>
+
+ <!-- PASO 2: CARGA Y PRECINTOS CON VALIDACIÓN -->
+ <div id="bloque-paso-2" style="display:none;">
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+ <div class="grupo-campo">
+ <label for="despacho-anforas">Cantidad de Ánforas <span class="req">*</span></label>
+ <input type="number" id="despacho-anforas" class="input-ioc texto-mono" value="120" min="1" max="500" required>
+ </div>
+ <div class="grupo-campo">
+ <label for="despacho-precinto">Precinto de Seguridad QR <a href="#" onclick="generarPrecintoAleatorio(event)" style="font-size:11px; color:var(--cian);">[Generar QR]</a></label>
+ <input type="text" id="despacho-precinto" class="input-ioc texto-mono" value="QR-ONPE-2026-994821" required>
+ </div>
+ </div>
+
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+ <div class="grupo-campo">
+ <label for="despacho-rango-inicio">Cédula Inicial (000001)</label>
+ <input type="text" id="despacho-rango-inicio" class="input-ioc texto-mono" value="045001" oninput="validarRangoCedulas()">
+ </div>
+ <div class="grupo-campo">
+ <label for="despacho-rango-fin">Cédula Final</label>
+ <input type="text" id="despacho-rango-fin" class="input-ioc texto-mono" value="048600" oninput="validarRangoCedulas()">
+ </div>
+ </div>
+ <div id="msg-rango-cedulas" class="msg-validacion msg-val-ok" style="margin-bottom:14px;">
+ OK Lote de cédulas válido: 3,600 cédulas electorales foliadas.
+ </div>
+
+ <div class="grupo-campo">
+ <label for="despacho-dni-coord">DNI del Coordinador Receptor (8 dígitos)</label>
+ <input type="text" id="despacho-dni-coord" class="input-ioc texto-mono" maxlength="8" value="48201948" oninput="validarDniCoordinador()">
+ <div id="msg-dni-coord" class="msg-validacion msg-val-ok">OK DNI válido de funcionario ONPE registrado.</div>
+ </div>
+
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
+ <button type="button" class="btn-secundario" onclick="irAPasoDespacho(1)">
+ ← Volver a Vehículo
+ </button>
+ <div style="display:flex; gap:12px;">
+ <button type="reset" class="btn-ghost" style="color:var(--texto-apagado);">
+ Limpiar
+ </button>
+ <button type="submit" class="btn-primario" style="padding:12px 28px; font-size:15px;">
+ <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+ Registrar Despacho Oficial
+ </button>
+ </div>
+ </div>
+ </div>
+ </form>
+ </div>
+
+ <!-- Bitácora de Turno -->
+ <div class="tarjeta-ioc">
+ <h4 style="font-size:16px; margin-bottom:12px; color:#FFFFFF;">Cuaderno Oficial de Novedades</h4>
+ <p style="font-size:12px; color:var(--texto-secundario); margin-bottom:14px;">
+ Anotaciones auditables en tiempo real para el turno crítico D-DAY (11 Abr 2026).
+ </p>
+ <div class="grupo-campo">
+ <textarea id="texto-nueva-nota" class="input-ioc" rows="3" placeholder="Ingresa observación operativa (ej. relevo policial completado)..."></textarea>
+ </div>
+ <button type="button" class="btn-secundario" onclick="agregarNotaTurno()" style="width:100%; margin-bottom:16px;">
+ + Registrar Anotación en Bitácora
+ </button>
+ <div id="lista-anotaciones-bitacora" style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;">
+ <div style="background:var(--bg-base); padding:10px 14px; border-radius:var(--radio-sm); border:1px solid var(--borde-sutil); font-size:12px;">
+ <span class="texto-mono" style="color:var(--cian); font-size:11px;">06:15 UTC-5</span><br>
+ "Se completó la verificación del precinto de la unidad #DEZ-528 rumbo a ODPE Arequipa. Salida sin novedad."
+ </div>
+ <div style="background:var(--bg-base); padding:10px 14px; border-radius:var(--radio-sm); border:1px solid var(--borde-sutil); font-size:12px;">
+ <span class="texto-mono" style="color:var(--rojo-critico); font-size:11px;">05:40 UTC-5</span><br>
+ "ALERTA GALAGA SAC: Furgón #GAL-104 no reportó salida de Almacén Lurín a las 05:00. Se activó protocolo con PNP."
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== VISTA 3: CENTRO DE MANDO ==================== -->
+ <section id="vista-dashboard" class="seccion-vista">
+ <div class="layout-centro-mando">
+ <!-- MAPA LEAFLET PRINCIPAL -->
+ <div class="contenedor-mapa-operativo">
+ <div id="mapa-operativo"></div>
+ <!-- CONTROL FLOTANTE DE ESTILOS VISUALES -->
+ <div class="control-estilos-flotante">
+ <span class="micro-etiqueta" style="color:var(--cian); margin:0 4px; font-size:10px; font-weight:700;">ESTILO:</span>
+ <button class="btn-estilo-mini activo" data-estilo="nocturno" title="Nocturno Táctico" onclick="cambiarEstiloMapa('nocturno')">Nocturno</button>
+ <button class="btn-estilo-mini" data-estilo="satelital" title="Satelital HD" onclick="cambiarEstiloMapa('satelital')">Satelital</button>
+ <button class="btn-estilo-mini" data-estilo="calles" title="Rutas Viales" onclick="cambiarEstiloMapa('calles')">Vial</button>
+ <button class="btn-estilo-mini" data-estilo="topografico" title="Relieve Topográfico" onclick="cambiarEstiloMapa('topografico')">Topográfico</button>
+ <button class="btn-estilo-mini" data-estilo="cyberpunk" title="Alto Contraste" onclick="cambiarEstiloMapa('cyberpunk')">Alto Contraste</button>
+ </div>
+
+
+ <!-- HUD POPUP DE TELEMETRÍA (CERRABLE) -->
+ <div id="hud-telemetria" class="hud-telemetria-popup">
+ <div class="hud-header">
+ <div style="display:flex; align-items:center; gap:8px;">
+ <span class="punto-dot" style="background:var(--cian); box-shadow:0 0 8px var(--cian);"></span>
+ <span class="micro-etiqueta" style="color:var(--cian);">Telemetría Satelital Activa</span>
+ </div>
+ <button class="hud-cerrar-btn" onclick="cerrarHudTelemetria()" title="Cerrar panel de telemetría">X</button>
+ </div>
+ <div style="display:flex; flex-direction:column; gap:6px; font-size:13px;">
+ <div><span style="color:var(--texto-secundario);">Unidad:</span> <strong id="hud-unidad" class="texto-mono" style="color:#FFFFFF;">#DEZ-782 (Scania R450)</strong></div>
+ <div><span style="color:var(--texto-secundario);">Ruta:</span> <span id="hud-ruta">Ticlio - Huancavelica</span></div>
+ <div><span style="color:var(--texto-secundario);">Coordenadas:</span> <span id="hud-coords" class="texto-mono" style="color:var(--cian);">-12.7865, -74.9754</span></div>
+ <div><span style="color:var(--texto-secundario);">Velocidad:</span> <strong id="hud-velocidad" class="texto-mono" style="color:var(--rojo-critico);">0 km/h (Detenido)</strong></div>
+ </div>
+ </div>
+
+ <!-- LEYENDA INTEGRADA DEL MAPA -->
+ <div class="leyenda-mapa-flotante">
+ <h5>Estado de Convoys</h5>
+ <div class="leyenda-fila"><span class="punto-dot" style="background:var(--verde-exito);"></span><span>Conforme (En horario)</span></div>
+ <div class="leyenda-fila"><span class="punto-dot" style="background:var(--ambar-alerta);"></span><span>Alerta Preventiva (Retraso)</span></div>
+ <div class="leyenda-fila"><span class="punto-dot" style="background:var(--rojo-critico);"></span><span>Alerta Crítica (Incumplimiento/Avería)</span></div>
+ </div>
+ </div>
+
+ <!-- 3 PANELES LATERALES ESTIRADOS -->
+ <div class="panel-lateral-mando">
+ <!-- Panel 1: Monitor de Flota -->
+ <div class="panel-sub-card flex-grow-1">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+ <h4 style="font-size:15px; color:#FFFFFF;">Monitoreo de Flota Activa</h4>
+ <button id="btn-iniciar-simulacion" class="btn-primario" style="padding:6px 12px; font-size:12px;">
+ <span id="texto-simulacion">Iniciar Simulación GPS</span>
+ </button>
+ </div>
+ <div id="lista-vehiculos-mando" style="display:flex; flex-direction:column; gap:8px;">
+ <!-- Se llena dinámicamente con JS -->
+ </div>
+ </div>
+
+ <!-- Panel 2: Sparkline de Anomalías con Ejes -->
+ <div class="panel-sub-card">
+ <div style="display:flex; justify-content:space-between; align-items:center;">
+ <h4 style="font-size:14px; color:#FFFFFF;">Curva de Retrasos en Ruta</h4>
+ <span class="micro-etiqueta" style="color:var(--rojo-critico);">Pico: 14.2%</span>
+ </div>
+ <div class="sparkline-box">
+ <svg class="sparkline-svg" viewBox="0 0 300 80">
+ <!-- Ejes -->
+ <line x1="20" y1="70" x2="290" y2="70" stroke="var(--borde-sutil)" stroke-width="1"></line>
+ <line x1="20" y1="10" x2="20" y2="70" stroke="var(--borde-sutil)" stroke-width="1"></line>
+ <!-- Etiquetas Eje Y -->
+ <text x="5" y="73" fill="var(--texto-apagado)" font-size="9" font-family="monospace">0%</text>
+ <text x="5" y="15" fill="var(--texto-apagado)" font-size="9" font-family="monospace">15%</text>
+ <!-- Área bajo la curva -->
+ <polygon points="20,65 60,60 100,55 140,58 180,30 220,15 260,25 290,20 290,70 20,70" fill="rgba(240, 67, 90, 0.15)"></polygon>
+ <!-- Línea de tendencia -->
+ <polyline points="20,65 60,60 100,55 140,58 180,30 220,15 260,25 290,20" fill="none" stroke="var(--rojo-critico)" stroke-width="2.5" stroke-linecap="round"></polyline>
+ <!-- Punto crítico -->
+ <circle cx="220" cy="15" r="4" fill="var(--rojo-critico)"></circle>
+ <text x="210" y="10" fill="var(--rojo-critico)" font-size="10" font-family="monospace" font-weight="700">14.2% (Galaga)</text>
+ <!-- Etiquetas Eje X -->
+ <text x="30" y="79" fill="var(--texto-apagado)" font-size="8" font-family="monospace">04:00</text>
+ <text x="130" y="79" fill="var(--texto-apagado)" font-size="8" font-family="monospace">06:00</text>
+ <text x="230" y="79" fill="var(--texto-apagado)" font-size="8" font-family="monospace">07:00</text>
+ </svg>
+ </div>
+ </div>
+
+ <!-- Panel 3: Barra de Entrega ODPE Engrosada -->
+ <div class="panel-sub-card">
+ <div style="display:flex; justify-content:space-between; align-items:baseline;">
+ <h4 style="font-size:14px; color:#FFFFFF;">Avance de Entrega a ODPE</h4>
+ <span class="texto-mono" style="font-size:18px; font-weight:800; color:var(--cian);">88.5%</span>
+ </div>
+ <div class="barra-odpe-gruesa">
+ <div class="barra-odpe-progreso"></div>
+ </div>
+ <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--texto-secundario);">
+ <span>82 / 93 ODPE recepcionadas</span>
+ <span style="color:var(--rojo-critico);">11 pendientes (Lima Sur / Selva)</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== VISTA 4: MAPA NACIONAL ==================== -->
+ <section id="vista-mapa-cobertura" class="seccion-vista">
+ <div class="toolbar-mapa-nacional" style="flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;">
+ <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+ <h3 style="font-size:18px; color:#FFFFFF; margin-right:8px;">Cartografía Nacional de Despliegue</h3>
+ <button class="btn-secundario" onclick="enfocarRegionMapa([-12.0464, -77.0428], 11)">
+ Lima y Callao
+ </button>
+ <button class="btn-secundario" onclick="enfocarRegionMapa([-12.7865, -74.9754], 10)">
+ Huancavelica
+ </button>
+ <button class="btn-secundario" onclick="enfocarRegionMapa([-3.7437, -73.2516], 10)">
+ Iquitos / Loreto
+ </button>
+ <button class="btn-secundario" onclick="enfocarRegionMapa([-9.19, -75.01], 5)">
+ Nacional (Perú)
+ </button>
+ </div>
+
+ <!-- SELECTOR DE ESTILOS VISUALES DE MAPA -->
+ <div class="selector-estilos-mapa">
+ <span class="micro-etiqueta" style="color:var(--cian); margin-right:4px;">ESTILO CARTOGRÁFICO:</span>
+ <button class="btn-estilo-mapa activo" data-estilo="nocturno" onclick="cambiarEstiloMapa('nocturno')">
+ Nocturno Táctico
+ </button>
+ <button class="btn-estilo-mapa" data-estilo="satelital" onclick="cambiarEstiloMapa('satelital')">
+ Satelital HD
+ </button>
+ <button class="btn-estilo-mapa" data-estilo="calles" onclick="cambiarEstiloMapa('calles')">
+ Rutas Viales
+ </button>
+ <button class="btn-estilo-mapa" data-estilo="topografico" onclick="cambiarEstiloMapa('topografico')">
+ Topográfico
+ </button>
+ <button class="btn-estilo-mapa" data-estilo="cyberpunk" onclick="cambiarEstiloMapa('cyberpunk')">
+ Alto Contraste
+ </button>
+ </div>
+ </div>
+
+ <div class="mapa-nacional-box">
+ <div id="mapa-cobertura-completo"></div>
+ <!-- Leyenda Flotante -->
+ <div class="leyenda-mapa-flotante">
+ <h5>Despliegue Nacional</h5>
+ <div class="leyenda-fila"><span class="punto-dot" style="background:var(--verde-exito);"></span><span>10,386 Locales Conformados</span></div>
+ <div class="leyenda-fila"><span class="punto-dot" style="background:var(--rojo-critico);"></span><span>15 Locales en Riesgo (Lima Sur)</span></div>
+ <div class="leyenda-fila"><span class="punto-dot" style="background:var(--cian);"></span><span>93 ODPEs Conectadas por MPLS</span></div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== VISTA 5: FLOTA Y RUTAS ==================== -->
+ <section id="vista-rutas-flota" class="seccion-vista">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+ <div>
+ <h3 style="font-size:20px; color:#FFFFFF;">Monitoreo de la Flota Nacional de Transporte</h3>
+ <p style="font-size:13px; color:var(--texto-secundario);">Supervisión de 12 convoyes estratégicos en tiempo real bajo enlace MPLS y satelital.</p>
+ </div>
+ <div class="badge-estado badge-sla">SLA 99.94% · RED PRIVADA MPLS DEDICADA</div>
+ </div>
+
+ <!-- Toolbar de Filtros y Búsqueda -->
+ <div style="background:var(--bg-surface); border:1px solid var(--borde-sutil); border-radius:var(--radio-card); padding:16px 20px; margin-bottom:20px; display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+ <div style="flex:1; min-width:240px;">
+ <input type="text" id="filtro-flota-texto" class="input-ioc" placeholder="Buscar por placa, conductor, ODPE o estado..." oninput="filtrarTablaFlota()">
+ </div>
+ <div style="width:200px;">
+ <select id="filtro-flota-estado" class="select-ioc" onchange="filtrarTablaFlota()">
+ <option value="TODOS">Todos los Estados</option>
+ <option value="ROJO">Alerta Roja / Incumplimiento</option>
+ <option value="AMARILLO">Alerta Amarilla / Retraso</option>
+ <option value="VERDE">Conforme / En Horario</option>
+ </select>
+ </div>
+ <div style="width:200px;">
+ <select id="ordenar-flota" class="select-ioc" onchange="ordenarTablaFlota()">
+ <option value="id">Ordenar por Unidad</option>
+ <option value="odpe">Ordenar por ODPE</option>
+ <option value="vel">Ordenar por Velocidad</option>
+ </select>
+ </div>
+ </div>
+
+ <!-- Tabla Completa de 12 Convoys -->
+ <div class="tabla-contenedor-ioc">
+ <table class="tabla-ioc" id="tabla-completa-rutas">
+ <thead>
+ <tr>
+ <th>Unidad / Placa</th>
+ <th>Tipo de Transporte</th>
+ <th>ODPE Jurisdicción</th>
+ <th>Conductor / Custodia</th>
+ <th>Velocidad</th>
+ <th>Estado Logístico</th>
+ <th>Enlace Satelital</th>
+ <th>Acción</th>
+ </tr>
+ </thead>
+ <tbody id="tbody-flota-12">
+ <!-- Se llena con JS con los 12 convoyes -->
+ </tbody>
+ </table>
+ </div>
+ </section>
+
+ <!-- ==================== VISTA 6: MODELO XAI ==================== -->
+ <section id="vista-alertas-xai" class="seccion-vista">
+ <div style="margin-bottom:24px;">
+ <div class="badge-hero-onpe" style="margin-bottom:8px;">
+ <span class="punto-dot" style="background:var(--violeta-ia); box-shadow:0 0 8px var(--violeta-ia);"></span>
+ EXPLAINABLE ARTIFICIAL INTELLIGENCE · ALGORITMO TREESHAP
+ </div>
+ <h3 style="font-size:22px; color:#FFFFFF;">Motor de Confianza Digital e Inferencia de Riesgo Logístico</h3>
+ <p style="font-size:14px; color:var(--texto-secundario);">
+ Descomposición matemática aditiva que justifica ante Contraloría y el JNE las causas exactas de cada alerta semafórica.
+ </p>
+ </div>
+
+ 
+ <!-- FORMULACIÓN MATEMÁTICA Y MATRIZ DE CONFUSIÓN ANALÍTICA -->
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:24px;">
+ <!-- Formulación Matemática de TreeSHAP -->
+ <div class="tarjeta-ioc" style="border-left:3px solid var(--violeta-ia);">
+ <div class="micro-etiqueta" style="color:var(--violeta-ia);">FUNDAMENTACIÓN TEÓRICA · LUNDBERG ET AL. (2020)</div>
+ <h4 style="font-size:15px; color:#FFFFFF; margin:6px 0;">Ecuación de Descomposición Aditiva SHAP</h4>
+ <div style="background:rgba(4,7,15,0.7); border:1px solid var(--borde-sutil); border-radius:6px; padding:12px; margin:10px 0; font-family:var(--font-mono); font-size:12px; color:var(--cian); text-align:center;">
+ &phi;<sub>i</sub>(x) = &sum;<sub>S &sube; F \ {i}</sub> [ |S|! (|F| - |S| - 1)! / |F|! ] &middot; [ f<sub>x</sub>(S &cup; {i}) - f<sub>x</sub>(S) ]
+ </div>
+ <p style="font-size:12px; color:var(--texto-secundario); line-height:1.5;">
+ Garantiza las propiedades formales de <strong>Eficiencia</strong>, <strong>Simetría</strong> y <strong>Monotonía</strong> exigidas por las directrices de auditoría forense electoral del JNE y la Contraloría.
+ </p>
+ </div>
+
+ <!-- Matriz de Confusión del Modelo Predictivo -->
+ <div class="tarjeta-ioc" style="border-left:3px solid var(--verde-exito);">
+ <div style="display:flex; justify-content:space-between; align-items:center;">
+ <div class="micro-etiqueta" style="color:var(--verde-exito);">VALIDACIÓN EXPERIMENTAL · 1,420 CONVOYES</div>
+ <span class="badge-estado badge-conforme">Precisión 95.9%</span>
+ </div>
+ <h4 style="font-size:15px; color:#FFFFFF; margin:6px 0;">Matriz de Confusión y Tasas de Clasificación</h4>
+ 
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px; font-family:var(--font-mono); font-size:12px;">
+ <div style="background:rgba(16,185,129,0.12); border:1px solid var(--borde-exito); border-radius:6px; padding:8px; text-align:center;">
+ <span style="color:var(--texto-secundario); font-size:10px;">VERDADEROS POSITIVOS (VP)</span><br>
+ <strong style="color:var(--verde-exito); font-size:16px;">142 alertas</strong>
+ </div>
+ <div style="background:rgba(240,67,90,0.12); border:1px solid var(--borde-peligro); border-radius:6px; padding:8px; text-align:center;">
+ <span style="color:var(--texto-secundario); font-size:10px;">FALSOS POSITIVOS (FP)</span><br>
+ <strong style="color:var(--rojo-critico); font-size:16px;">6 falsos</strong>
+ </div>
+ <div style="background:rgba(245,165,36,0.12); border:1px solid var(--borde-alerta); border-radius:6px; padding:8px; text-align:center;">
+ <span style="color:var(--texto-secundario); font-size:10px;">FALSOS NEGATIVOS (FN)</span><br>
+ <strong style="color:var(--ambar-alerta); font-size:16px;">8 omitidos</strong>
+ </div>
+ <div style="background:rgba(47,140,255,0.12); border:1px solid var(--borde-activo); border-radius:6px; padding:8px; text-align:center;">
+ <span style="color:var(--texto-secundario); font-size:10px;">VERDADEROS NEGATIVOS (VN)</span><br>
+ <strong style="color:var(--azul-electrico); font-size:16px;">1,264 conformes</strong>
+ </div>
+ </div>
+ </div>
+ </div>
+
+  <!-- SIMULADOR INTERACTIVO DE CONTINGENCIA XAI · AUDITORÍA EN TIEMPO REAL -->
+  <div id="card-simulador-xai-completo" class="tarjeta-ioc" style="margin-bottom:24px; border:1px solid var(--violeta-ia); background:rgba(15,23,42,0.85); clip-path:var(--cut-sm);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+      <div>
+        <span class="micro-etiqueta" style="color:var(--violeta-ia);">SIMULADOR INTERACTIVO DE CONTINGENCIA XAI · AUDITORÍA EN TIEMPO REAL</span>
+        <h4 style="font-size:16px; color:#FFFFFF; margin-top:2px;">Simulación Dinámica de Factores de Riesgo y Descomposición TreeSHAP</h4>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span style="font-size:12px; color:var(--texto-secundario);">Seleccionar Unidad:</span>
+        <select id="select-vehiculo-xai" class="select-ioc" onchange="cambiarVehiculoXAI(this.value)" style="width:230px; font-weight:700;">
+          <option value="#GAL-104">#GAL-104 (Galaga SAC - Lima Sur)</option>
+          <option value="#DEZ-782">#DEZ-782 (Scania R450 - Ticlio)</option>
+          <option value="#DEZ-365">#DEZ-365 (Lancha Fluvial - Maynas)</option>
+          <option value="#DEZ-528">#DEZ-528 (Volvo FH - Arequipa)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-simulador-xai">
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+          <span>Retraso en Despacho:</span>
+          <strong id="sim-txt-retraso" class="texto-mono" style="color:var(--ambar-alerta);">105 min</strong>
+        </div>
+        <input type="range" id="sim-slider-retraso" min="0" max="180" value="105" oninput="simularRiesgoXAI()" style="width:100%; accent-color:var(--ambar-alerta); cursor:pointer;">
+      </div>
+
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+          <span>Historial Penalidades:</span>
+          <strong id="sim-txt-penalidades" class="texto-mono" style="color:var(--rojo-critico);">40%</strong>
+        </div>
+        <input type="range" id="sim-slider-penalidades" min="0" max="50" value="40" oninput="simularRiesgoXAI()" style="width:100%; accent-color:var(--rojo-critico); cursor:pointer;">
+      </div>
+
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+          <span>Vulnerabilidad de Ruta:</span>
+          <strong id="sim-txt-ruta" class="texto-mono" style="color:var(--azul-electrico);">16%</strong>
+        </div>
+        <input type="range" id="sim-slider-ruta" min="0" max="30" value="16" oninput="simularRiesgoXAI()" style="width:100%; accent-color:var(--azul-electrico); cursor:pointer;">
+      </div>
+
+      <div style="text-align:center; background:#070C16; border:1px solid var(--borde-activo); border-radius:6px; padding:10px;">
+        <div style="font-size:10px; color:var(--texto-secundario);">PROBABILIDAD P(X):</div>
+        <div id="sim-score-total" class="texto-mono" style="font-size:22px; font-weight:700; color:var(--rojo-critico);">0.942</div>
+        <div id="sim-estado-badge" style="font-size:10px; color:var(--rojo-critico); font-weight:700;">RIESGO EXTREMO</div>
+      </div>
+    </div>
+  </div>
+
+<div class="xai-grid-layout">
+ <!-- Caso 1: Galaga SAC (Lima Sur) -->
+ <div class="tarjeta-ioc" style="border-top:4px solid var(--rojo-critico);">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+ <h4 style="font-size:16px; color:#FFFFFF;">Incidencia #GAL-104 (Lima Sur)</h4>
+ <span class="badge-estado badge-incumplimiento">Crítico</span>
+ </div>
+ <p style="font-size:13px; color:var(--texto-secundario); margin-bottom:16px;">
+ Furgón detenido sin autorización en SJM. 211 mesas y 63,300 electores en riesgo de exclusión.
+ </p>
+
+ <!-- Escala SHAP 0-100% -->
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Historial Penalidades Contratista (Galaga SAC)</span>
+ <strong class="texto-mono" style="color:var(--rojo-critico);">+40%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-contratista" style="width:40%;"></div>
+ </div>
+ </div>
+
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Retraso Horario Crítico (&gt;1.5h de ventana)</span>
+ <strong class="texto-mono" style="color:var(--ambar-alerta);">+27%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-retraso" style="width:27%;"></div>
+ </div>
+ </div>
+
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Vulnerabilidad de Ruta Urbana (SJM / Lurín)</span>
+ <strong class="texto-mono" style="color:var(--azul-electrico);">+16%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-ruta" style="width:16%;"></div>
+ </div>
+ </div>
+
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Riesgo de Exclusión Electoral Directa</span>
+ <strong class="texto-mono" style="color:#EC4899;">+15%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-exclusion" style="width:15%;"></div>
+ </div>
+ </div>
+
+ <div class="escala-shap-eje">
+ <span>0% (Sin Impacto)</span>
+ <span>25%</span>
+ <span>50% (Umbral Alerta)</span>
+ <span>75%</span>
+ <span>100% (Crítico)</span>
+ </div>
+
+ <!-- Caja de Acción Recomendada Alto Contraste -->
+ <div class="caja-accion-recomendada-xai critico">
+ <strong style="color:#FFFFFF; font-size:14px; display:block; margin-bottom:4px;"> PROTOCOLO INSTITUCIONAL INMEDIATO:</strong>
+ Despachar convoy de contingencia desde Almacén Central Lurín con resguardo policial PNP y remitir informe técnico a Procuraduría para ejecución de cartas fianza por S/ 64,000.
+ </div>
+ </div>
+
+ <!-- Caso 2: Scania #DEZ-782 (Huancavelica) -->
+ <div class="tarjeta-ioc" style="border-top:4px solid var(--ambar-alerta);">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+ <h4 style="font-size:16px; color:#FFFFFF;">Incidencia #DEZ-782 (Huancavelica)</h4>
+ <span class="badge-estado badge-alerta-roja">Avería Andina</span>
+ </div>
+ <p style="font-size:13px; color:var(--texto-secundario); margin-bottom:16px;">
+ Camión blindado detenido en Ticlio por falla mecánica en sistema de frenos.
+ </p>
+
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Vulnerabilidad Geográfica Andina (Paso 4,800 msnm)</span>
+ <strong class="texto-mono" style="color:var(--violeta-ia);">+38%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-ruta" style="width:38%;"></div>
+ </div>
+ </div>
+
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Retraso Horario Frente a Apertura</span>
+ <strong class="texto-mono" style="color:var(--ambar-alerta);">+24%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-retraso" style="width:24%;"></div>
+ </div>
+ </div>
+
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Falla Mecánica de Unidad Blindada</span>
+ <strong class="texto-mono" style="color:var(--rojo-critico);">+18%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-contratista" style="width:18%;"></div>
+ </div>
+ </div>
+
+ <div class="barra-shap-wrapper">
+ <div class="barra-shap-label">
+ <span>Condiciones Meteorológicas (Neblina / Helada)</span>
+ <strong class="texto-mono" style="color:var(--cian);">+17%</strong>
+ </div>
+ <div class="barra-shap-track">
+ <div class="barra-shap-fill fill-clima" style="width:17%;"></div>
+ </div>
+ </div>
+
+ <div class="escala-shap-eje">
+ <span>0% (Sin Impacto)</span>
+ <span>25%</span>
+ <span>50% (Umbral Alerta)</span>
+ <span>75%</span>
+ <span>100% (Crítico)</span>
+ </div>
+
+ <div class="caja-accion-recomendada-xai">
+ <strong style="color:#FFFFFF; font-size:14px; display:block; margin-bottom:4px;"> PROTOCOLO DE AUXILIO MECÁNICO:</strong>
+ Coordinar con Región Policial Huancavelica y Provías Nacional para envío de remolque autorizado y transbordo seguro de ánforas manteniendo la cadena de custodia intacta.
+ </div>
+ </div>
+ </div>
+
+ <!-- 3er Panel: Matriz de Confianza del Modelo y Registro Histórico -->
+ <div class="tarjeta-ioc">
+ <h4 style="font-size:16px; margin-bottom:14px; color:#FFFFFF;">Rendimiento del Modelo y Métricas de Confianza Predictiva</h4>
+ <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:20px;">
+ <div style="background:var(--bg-base); padding:14px; border-radius:var(--radio-sm); border:1px solid var(--borde-sutil); text-align:center;">
+ <span class="micro-etiqueta">Precisión Global (Accuracy)</span>
+ <div class="texto-mono" style="font-size:26px; font-weight:800; color:var(--verde-exito);">91.4%</div>
+ </div>
+ <div style="background:var(--bg-base); padding:14px; border-radius:var(--radio-sm); border:1px solid var(--borde-sutil); text-align:center;">
+ <span class="micro-etiqueta">Área ROC-AUC</span>
+ <div class="texto-mono" style="font-size:26px; font-weight:800; color:var(--cian);">0.942</div>
+ </div>
+ <div style="background:var(--bg-base); padding:14px; border-radius:var(--radio-sm); border:1px solid var(--borde-sutil); text-align:center;">
+ <span class="micro-etiqueta">Sensibilidad (Recall Crítico)</span>
+ <div class="texto-mono" style="font-size:26px; font-weight:800; color:var(--azul-electrico);">0.930</div>
+ </div>
+ <div style="background:var(--bg-base); padding:14px; border-radius:var(--radio-sm); border:1px solid var(--borde-sutil); text-align:center;">
+ <span class="micro-etiqueta">Detección Anticipada</span>
+ <div class="texto-mono" style="font-size:26px; font-weight:800; color:var(--ambar-alerta);">&lt; 12 min</div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==================== VISTA 7: TERMINAL DE CAMPO ==================== -->
+ <section id="vista-terminal-campo" class="seccion-vista">
+  <div style="text-align:center; margin-bottom:16px;">
+    <span class="badge-estado badge-sla">INTERFAZ MÓVIL PWA DE CAMPO · 3 CLICS</span>
+    <h3 style="font-size:22px; color:#FFFFFF; margin-top:6px;">Terminal Táctico de Recepción y Conformidad Electoral</h3>
+    <p style="font-size:13px; color:var(--texto-secundario);">Recepción simplificada para miembros de mesa sin fatiga cognitiva, con verificación criptográfica y firma digital offline.</p>
+  </div>
+
+  <!-- FRAME DEL SMARTPHONE TÁCTICO -->
+  <div class="phone-mockup-frame">
+    <div class="phone-camera-island"></div>
+    <div class="phone-status-bar">
+      <span>06:45</span>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <span style="font-size:10px; color:var(--verde-exito);">5G MPLS</span>
+        <span style="font-size:10px; color:var(--cian);">Starlink 94%</span>
+        <span style="font-size:10px; color:#FFFFFF;">98% Bat</span>
+      </div>
+    </div>
+    <div class="phone-screen-inner">
+      <!-- Encabezado de Mesa Oficial -->
+      <div class="pwa-card-header">
+        <div>
+          <div class="micro-etiqueta" style="color:var(--cian);">LOCAL DE VOTACIÓN // LIMA SUR</div>
+          <strong style="font-size:14px; color:#FFFFFF;">I.E. 6050 Juana Alarco de Dammert</strong>
+          <div style="font-size:11px; color:var(--texto-secundario);">Mesa N° 045120 · Distrito SJM</div>
+        </div>
+        <span class="badge-estado badge-conforme" id="badge-pwa-red">Offline Sync</span>
+      </div>
+
+      <!-- Barra de Progreso de 3 Clics -->
+      <div style="margin:12px 0;">
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--texto-secundario); margin-bottom:4px;">
+          <span>PROGRESO DE RECEPCIÓN:</span>
+          <strong id="txt-progreso-pwa" style="color:var(--cian);">Paso 1 de 3 (0%)</strong>
+        </div>
+        <div style="background:rgba(255,255,255,0.08); height:6px; border-radius:3px; overflow:hidden;">
+          <div id="barra-progreso-pwa" style="background:linear-gradient(90deg, var(--cian), var(--verde-exito)); width:0%; height:100%; transition:width 0.4s ease;"></div>
+        </div>
+      </div>
+
+      <!-- PASO 1: ESCANEO DE PRECINTO QR CON LÁSER ACTIVO -->
+      <div class="pwa-step-card" id="pwa-paso-1">
+        <div class="pwa-step-title">
+          <span class="pwa-step-num">1</span>
+          <strong>Escaneo de Precinto Criptográfico QR</strong>
+        </div>
+        <div class="pwa-qr-viewfinder" id="pwa-qr-box">
+          <div class="qr-laser-scanner" id="qr-laser-line"></div>
+          <svg viewBox="0 0 24 24" style="width:50px;height:50px;stroke:var(--cian);fill:none;stroke-width:1.5;margin-bottom:6px;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <div id="pwa-qr-status" class="texto-mono" style="font-size:12px; color:#FFFFFF;">Esperando lectura de código...</div>
+          <div id="pwa-qr-subtext" style="font-size:10px; color:var(--texto-secundario);">Alinea el precinto de seguridad del convoy</div>
+        </div>
+        <button type="button" class="btn-primario" id="btn-escanear-qr" onclick="simularEscaneoQR()" style="width:100%; padding:9px; font-size:12px; margin-top:8px;">
+          Simular Lectura de Precinto QR (#GAL-104)
+        </button>
+      </div>
+
+      <!-- PASO 2: CHECKLIST DE INTEGRIDAD OPERATIVA -->
+      <div class="pwa-step-card" id="pwa-paso-2" style="margin-top:10px;">
+        <div class="pwa-step-title">
+          <span class="pwa-step-num">2</span>
+          <strong>Verificación de Integridad de Material</strong>
+        </div>
+        <div class="pwa-checklist-box">
+          <label class="pwa-check-row">
+            <input type="checkbox" id="chk-pwa-1" onchange="actualizarProgresoPWA()" style="accent-color:var(--cian);">
+            <span>Ánfora electoral sellada sin vulneración</span>
+          </label>
+          <label class="pwa-check-row">
+            <input type="checkbox" id="chk-pwa-2" onchange="actualizarProgresoPWA()" style="accent-color:var(--cian);">
+            <span>Padrón electoral y cédulas de sufragio completas</span>
+          </label>
+          <label class="pwa-check-row">
+            <input type="checkbox" id="chk-pwa-3" onchange="actualizarProgresoPWA()" style="accent-color:var(--cian);">
+            <span>Cabinas de votación y actas padrón presentes</span>
+          </label>
+          <label class="pwa-check-row">
+            <input type="checkbox" id="chk-pwa-4" onchange="actualizarProgresoPWA()" style="accent-color:var(--cian);">
+            <span>Custodia policial PNP presente en recepción</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- PASO 3: FIRMA DIGITAL TÁCTIL Y HASH SHA-256 -->
+      <div class="pwa-step-card" id="pwa-paso-3" style="margin-top:10px;">
+        <div class="pwa-step-title">
+          <span class="pwa-step-num">3</span>
+          <strong>Firma Digital del Coordinador de Mesa</strong>
+        </div>
+        <div style="background:rgba(4,7,15,0.7); border:1px solid var(--borde-activo); border-radius:6px; padding:6px; position:relative;">
+          <canvas id="canvas-firma-pwa" width="300" height="90" style="width:100%; height:90px; background:#04070F; border-radius:4px; cursor:crosshair;"></canvas>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <span style="font-size:9px; color:var(--texto-secundario);">Dibuja tu firma con el ratón o pantalla táctil</span>
+            <button type="button" class="btn-ghost" onclick="limpiarFirmaDigital()" style="padding:2px 8px; font-size:10px;">Limpiar</button>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-size:9px; font-family:var(--font-mono); color:var(--cian);">
+          <span>HASH CUSTODIA SHA-256:</span>
+          <span id="txt-hash-firma">a89f3c91e028b8d4f7...910b</span>
+        </div>
+      </div>
+
+      <!-- BOTÓN PRINCIPAL DE EMISIÓN DE ACTA -->
+      <button type="button" id="btn-emitir-acta-pwa" class="btn-primario" onclick="emitirActaOficialPWA()" disabled style="width:100%; padding:12px; font-size:13px; font-weight:700; margin-top:12px; background:linear-gradient(135deg, var(--verde-exito), #059669); border-color:var(--verde-exito); opacity:0.5;">
+        Emitir y Firmar Acta Oficial de Recepción
+      </button>
+    </div>
+  </div>
+</section>
+
+ <!-- VISTA ARQUITECTURA RETIRADA POR REQUERIMIENTO -->
+
+ <!-- ==================== VISTA 10: AUDITORÍA ==================== -->
+ <section id="vista-registro-incidencias" class="seccion-vista">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+ <div>
+ <h3 style="font-size:20px; color:#FFFFFF;">Auditoría Oficial de Incidencias y Bitácora Electoral</h3>
+ <p style="font-size:13px; color:var(--texto-secundario);">Registro inmutable de eventos telemétricos fiscalizables por JNE y Contraloría.</p>
+ </div>
+ <button class="btn-primario" onclick="exportarIncidenciasCSV()" id="btn-exportar-csv">
+ <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+ Exportar CSV (<span id="contador-csv-btn">14</span> registros)
+ </button>
+ </div>
+
+ <!-- Filtros de Incidencias -->
+ <div style="background:var(--bg-surface); border:1px solid var(--borde-sutil); border-radius:var(--radio-card); padding:16px 20px; margin-bottom:20px; display:flex; gap:16px; flex-wrap:wrap;">
+ <div style="width:200px;">
+ <label class="micro-etiqueta" style="margin-bottom:4px; display:block;">Filtrar Gravedad</label>
+ <select id="filtro-inc-gravedad" class="select-ioc" onchange="filtrarIncidencias()">
+ <option value="TODAS">Todas las Gravedades</option>
+ <option value="CRÍTICA">Crítica</option>
+ <option value="ALTA">Alta</option>
+ <option value="MEDIA">Media</option>
+ </select>
+ </div>
+ <div style="width:200px;">
+ <label class="micro-etiqueta" style="margin-bottom:4px; display:block;">Filtrar ODPE</label>
+ <select id="filtro-inc-odpe" class="select-ioc" onchange="filtrarIncidencias()">
+ <option value="TODAS">Todas las ODPEs</option>
+ <option value="Lima Sur">Lima Sur</option>
+ <option value="Huancavelica">Huancavelica</option>
+ <option value="Loreto">Loreto</option>
+ <option value="Arequipa">Arequipa</option>
+ <option value="Puno">Puno</option>
+ <option value="Ucayali">Ucayali</option>
+ <option value="Piura">Piura</option>
+ <option value="Cusco">Cusco</option>
+ <option value="Junín">Junín</option>
+ <option value="Ayacucho">Ayacucho</option>
+ <option value="San Martín">San Martín</option>
+ </select>
+ </div>
+ </div>
+
+ <!-- Tabla con 14 Incidencias y Tooltips -->
+ <div class="tabla-contenedor-ioc">
+ <table class="tabla-ioc" id="tabla-incidencias">
+ <thead>
+ <tr>
+ <th>Código</th>
+ <th>ODPE</th>
+ <th>Incidencia Reportada</th>
+ <th>Gravedad</th>
+ <th>Hora</th>
+ <th>Estado Resolución</th>
+ </tr>
+ </thead>
+ <tbody id="tbody-incidencias">
+ <!-- Se llena dinámicamente con JS -->
+ </tbody>
+ </table>
+ </div>
+
+ <!-- Paginación de Incidencias -->
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; font-size:13px; color:var(--texto-secundario);">
+ <span id="info-paginacion-inc">Mostrando registros 1 al 14 de 14</span>
+ <div style="display:flex; gap:8px;">
+ <button class="btn-ghost" onclick="cambiarPaginaInc(-1)" id="btn-pag-ant" disabled>← Anterior</button>
+ <button class="btn-ghost" onclick="cambiarPaginaInc(1)" id="btn-pag-sig" disabled>Siguiente →</button>
+ </div>
+ </div>
+ </section>
+
+ 
+ <!-- ==========================================================================
+ VISTA NUEVA 1: CONTROL TOTAL DEL TRANSPORTE (FOTOGRAMA 1: videoframe_6147.png)
+ ========================================================================== -->
+ <section id="vista-control-transporte" class="seccion-vista">
+ <div class="toolbar-transporte-superior">
+<button class="btn-primario" onclick="abrirModalNuevoNodo()" style="padding:7px 14px; font-size:12px; font-weight:700; white-space:nowrap;">
+  <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+  + Agregar Nuevo Nodo a la Red
+</button>
+<button class="btn-secundario" onclick="restablecerPosicionesGrafo()" style="padding:7px 12px; font-size:12px; white-space:nowrap;" title="Restablecer Posiciones por Defecto">
+  Restablecer Grafo
+</button>
+ <div style="flex:1; min-width:240px; display:flex; align-items:center; gap:8px;">
+ <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--cian);fill:none;stroke-width:2;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+ <input type="text" id="filtro-grafo-busqueda" class="input-ioc" placeholder="Buscar convoy (#GAL-104), ODPE o local..." oninput="filtrarGrafoRed()" style="padding:8px 12px; font-size:13px;">
+ </div>
+ 
+ <div style="display:flex; align-items:center; gap:8px;">
+ <span class="micro-etiqueta" style="color:var(--texto-secundario);">SCORE SLA:</span>
+ <input type="range" id="slider-grafo-score" min="0" max="100" value="40" oninput="filtrarGrafoRed()" style="accent-color:var(--cian); cursor:pointer;">
+ <span id="valor-slider-score" class="texto-mono" style="font-size:12px; color:var(--cian); font-weight:700;">40 - 100</span>
+ </div>
+
+ <select id="filtro-grafo-actor" class="select-ioc" onchange="filtrarGrafoRed()" style="width:160px; padding:6px 10px; font-size:12px;">
+ <option value="TODOS">Todos los Actores</option>
+ <option value="Furgón">Furgones Ligeros</option>
+ <option value="Camión">Camiones Blindados</option>
+ <option value="Lancha">Lanchas Fluviales</option>
+ <option value="ODPE">Centros ODPE</option>
+ </select>
+
+ <select id="filtro-grafo-region" class="select-ioc" onchange="filtrarGrafoRed()" style="width:170px; padding:6px 10px; font-size:12px;">
+ <option value="TODOS">Jurisdicción: Nacional</option>
+ <option value="Lima Sur">Lima Sur (Galaga)</option>
+ <option value="Huancavelica">Huancavelica (Andes)</option>
+ <option value="Loreto">Loreto (Fluvial)</option>
+ <option value="Arequipa">Arequipa</option>
+ </select>
+
+ <div style="display:flex; gap:6px; margin-left:auto;">
+ <button class="btn-secundario activo" id="btn-modo-red" onclick="alternarModoGrafo('red')" style="padding:6px 12px; font-size:12px;">Topología Red</button>
+ <button class="btn-secundario" id="btn-modo-calor" onclick="alternarModoGrafo('calor')" style="padding:6px 12px; font-size:12px;">Densidad Térmica</button>
+ <button class="btn-ghost" onclick="resetGrafoCamara()" style="padding:6px 10px; font-size:12px;" title="Restablecer vista">⟲</button>
+ </div>
+ </div>
+
+ <div class="layout-control-transporte">
+ <!-- LIENZO CENTRAL DEL GRAFO DE TRANSPORTE (HTML5 Canvas) -->
+ <div class="contenedor-canvas-grafo">
+ <canvas id="canvas-grafo-red"></canvas>
+
+ <!-- Overlay Flotante de Conexiones por Clúster (Fotograma 1) -->
+ <div class="overlay-conexiones-clusters" id="overlay-clusters-info">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+ <strong id="cluster-nodo-titulo" style="font-size:13px; color:#FFFFFF;">Almacén Central Lurín</strong>
+ <span class="badge-estado badge-conforme" id="cluster-nodo-badge">Troncal</span>
+ </div>
+ <div class="micro-etiqueta" style="color:var(--cian); margin-bottom:10px;">CONEXIONES POR CUSTODIA Y CLÚSTER:</div>
+ <div class="cluster-item-fila">
+ <span><span class="cluster-dot" style="background:var(--azul-electrico);"></span>Custodia Policial PNP</span>
+ <strong class="texto-mono" style="color:#FFFFFF;">24 asignadas</strong>
+ </div>
+ <div class="cluster-item-fila">
+ <span><span class="cluster-dot" style="background:var(--verde-exito);"></span>Enlace Troncal MPLS</span>
+ <strong class="texto-mono" style="color:#FFFFFF;">18 terminales</strong>
+ </div>
+ <div class="cluster-item-fila">
+ <span><span class="cluster-dot" style="background:var(--ambar-alerta);"></span>Integridad Precinto QR</span>
+ <strong class="texto-mono" style="color:#FFFFFF;">34 verificadas</strong>
+ </div>
+ <div class="cluster-item-fila">
+ <span><span class="cluster-dot" style="background:var(--violeta-ia);"></span>Inferencia XAI TreeSHAP</span>
+ <strong class="texto-mono" style="color:var(--cian);">12 activas</strong>
+ </div>
+ <div class="cluster-item-fila">
+ <span><span class="cluster-dot" style="background:var(--rojo-critico);"></span>Cláusula Penal Contractual</span>
+ <strong class="texto-mono" style="color:var(--rojo-critico);">S/ 64,000</strong>
+ </div>
+ <div class="cluster-item-fila">
+ <span><span class="cluster-dot" style="background:#EC4899;"></span>Auxilio Mecánico Provías</span>
+ <strong class="texto-mono" style="color:#FFFFFF;">Ticlio km 132</strong>
+ </div>
+ </div>
+ </div>
+
+ <!-- PANEL LATERAL: INFLUENCE RANKING DE TRANSPORTE (Fotograma 1) -->
+ <div class="panel-ranking-transporte">
+ <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--borde-sutil); padding-bottom:10px;">
+ <div>
+ <h4 style="font-size:15px; color:#FFFFFF;">Ranking SLA Flota</h4>
+ <span class="micro-etiqueta" style="color:var(--texto-secundario);">Ordenado por Criticidad</span>
+ </div>
+ <span class="badge-estado badge-sla">12 Unidades</span>
+ </div>
+
+ <div class="ranking-tabla-scroll" id="lista-ranking-cards">
+ <!-- Se llena dinámicamente con JS -->
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==========================================================================
+ VISTA NUEVA 2: GESTIÓN COMPLETA DEL PROYECTO (FOTOGRAMA 2: videoframe_8678.png)
+ ========================================================================== -->
+ <section id="vista-gestion-proyecto" class="seccion-vista">
+ <!-- Live Ticker Superior en Streaming -->
+ <div class="ticker-streaming-algoritmico">
+ <span> <strong>LIVE STREAM</strong> // CENTRO DE MANDO D-DAY</span>
+ <span>BUFFER ELECTORAL: 10,401 LOCALES</span>
+ <span>MODELO TREESHAP P: 0.942</span>
+ <span>LATENCIA MPLS: 11.4 ms</span>
+ <span>DISPONIBILIDAD: 99.94%</span>
+ <span>HASH BLOQUE: 0x8b32...c082</span>
+ <span>TURNO: 11 ABR 2026 06:45:00 UTC-5</span>
+ </div>
+
+ <!-- Grid Superior de 4 Paneles Modular -->
+ <div class="grid-gestion-top-4">
+ <!-- Card 1: Métricas Financieras y Contractuales -->
+ <div class="tarjeta-ioc" style="border-left: 3px solid var(--verde-exito);">
+ <span class="micro-etiqueta" style="color:var(--texto-secundario);">PRESUPUESTO CUSTODIA ASIGNADO</span>
+ <div class="crisis-cifra" style="color:var(--verde-exito); font-size:32px; margin:6px 0;">S/ 4,820,000</div>
+ <div style="display:flex; justify-content:space-between; font-size:12px;">
+ <span>Penalidad Galaga SAC:</span>
+ <strong class="texto-mono" style="color:var(--rojo-critico);">S/ 64,000 (Fianza)</strong>
+ </div>
+ <div style="display:flex; justify-content:space-between; font-size:12px; margin-top:4px;">
+ <span>Tasa de Cumplimiento:</span>
+ <strong class="texto-mono" style="color:var(--cian);">98.6% (Meta &gt;98%)</strong>
+ </div>
+ </div>
+
+ <!-- Card 2: Candlestick de Flujo Electoral -->
+ <div class="tarjeta-ioc" style="border-left: 3px solid var(--cian);">
+ <div style="display:flex; justify-content:space-between;">
+ <span class="micro-etiqueta" style="color:var(--cian);">FLUJO DE ACTAS (TEMPORAL)</span>
+ <span class="texto-mono" style="font-size:11px; color:var(--verde-exito);">+3.94%</span>
+ </div>
+ <div style="font-size:22px; font-weight:700; color:#FFFFFF; margin:4px 0;">10,386 / 10,401</div>
+ <!-- Mini gráfico de velas SVG -->
+ <svg viewBox="0 0 200 45" style="width:100%; height:45px;">
+ <line x1="20" y1="5" x2="20" y2="40" stroke="#10B981" stroke-width="1.5"></line>
+ <rect x="15" y="10" width="10" height="20" fill="#10B981"></rect>
+ 
+ <line x1="60" y1="2" x2="60" y2="35" stroke="#10B981" stroke-width="1.5"></line>
+ <rect x="55" y="8" width="10" height="18" fill="#10B981"></rect>
+
+ <line x1="100" y1="8" x2="100" y2="42" stroke="#F0435A" stroke-width="1.5"></line>
+ <rect x="95" y="15" width="10" height="22" fill="#F0435A"></rect>
+
+ <line x1="140" y1="5" x2="140" y2="38" stroke="#10B981" stroke-width="1.5"></line>
+ <rect x="135" y="12" width="10" height="15" fill="#10B981"></rect>
+
+ <line x1="180" y1="2" x2="180" y2="40" stroke="#10B981" stroke-width="1.5"></line>
+ <rect x="175" y="6" width="10" height="25" fill="#10B981"></rect>
+ </svg>
+ <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--texto-apagado);">
+ <span>04:00</span><span>05:00</span><span>06:00 (Pico)</span><span>07:00</span>
+ </div>
+ </div>
+
+ <!-- Card 3: Feed Latency & Network Basis -->
+ <div class="tarjeta-ioc" style="border-left: 3px solid var(--azul-electrico);">
+ <div style="display:flex; justify-content:space-between;">
+ <span class="micro-etiqueta" style="color:var(--azul-electrico);">LATENCIA DE ENLACES</span>
+ <span class="texto-mono" style="font-size:11px; color:var(--cian);">11.4 ms MPLS</span>
+ </div>
+ <div style="font-size:22px; font-weight:700; color:#FFFFFF; margin:4px 0;">99.94% Uptime</div>
+ <div style="display:flex; flex-direction:column; gap:4px; font-size:11px; font-family:var(--font-mono); margin-top:8px;">
+ <div style="display:flex; justify-content:space-between;">
+ <span>Troncal MPLS Dedicada:</span>
+ <strong style="color:var(--verde-exito);">11.4 ms (0.2 bp)</strong>
+ </div>
+ <div style="display:flex; justify-content:space-between;">
+ <span>Enlace Starlink Selva:</span>
+ <strong style="color:var(--cian);">64.0 ms</strong>
+ </div>
+ <div style="display:flex; justify-content:space-between;">
+ <span>Contingencia Celular 4G:</span>
+ <strong style="color:var(--ambar-alerta);">148.0 ms</strong>
+ </div>
+ </div>
+ </div>
+
+ <!-- Card 4: Wire Inspector (Paquetes Criptográficos) -->
+ <div class="tarjeta-ioc" style="border-left: 3px solid var(--violeta-ia);">
+ <div style="display:flex; justify-content:space-between;">
+ <span class="micro-etiqueta" style="color:var(--violeta-ia);">WIRE INSPECTOR (IoT GPS)</span>
+ <span class="badge-estado badge-conforme" style="font-size:10px;">177 pkts/s</span>
+ </div>
+ <div class="texto-mono" style="font-size:11px; color:var(--texto-secundario); height:75px; overflow-y:hidden; line-height:1.4; margin-top:8px;">
+ <div>06:45:00.12 [0x8a9f] PKT_GPS_GAL104: -12.161,-76.968</div>
+ <div>06:45:00.14 [0x7c21] PKT_XAI_DEZ782: TICLIO_4818M_WARN</div>
+ <div>06:45:00.16 [0x3d44] PKT_MPLS_ODPE_LS: SHA256_HASH_OK</div>
+ <div>06:45:00.18 [0x9b12] PKT_PWA_HERAUD: 3_CLICS_CONFIRM</div>
+ </div>
+ <div style="font-size:10px; color:var(--cian); text-align:right;">Buffer Inmutable: 9.1 KB</div>
+ </div>
+ </div>
+
+ <!-- PANEL CENTRAL: NEURAL SHELL / TOPOLOGÍA 3D DE INFERENCIA XAI (Fotograma 2) -->
+ <div class="panel-neural-shell-3d">
+ <div class="neural-shell-header">
+ <div>
+ <span class="micro-etiqueta" style="color:var(--violeta-ia);">NEURAL SHELL // MODEL P(X) 0.942 · TREESHAP TOPOLOGY</span>
+ <h4 style="font-size:16px; color:#FFFFFF; margin-top:4px;">Globo Terrestre Interactivo 3D · Monitoreo y Telemetría Nacional D-DAY</h4>
+ </div>
+ <div style="display:flex; gap:8px;">
+ <span class="badge-estado badge-incumplimiento">Caso Galaga SAC</span>
+ <span class="badge-estado badge-sla">SLA 99.94%</span>
+ </div>
+ </div>
+ <!-- Barra de Selección Rápida de Puntos Tácticos en el Globo 3D -->
+ <div class="globo-puntos-selector-strip" id="globo-puntos-selector-strip">
+   <span class="globo-strip-label">
+     <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+     Puntos Tácticos:
+   </span>
+   <button type="button" class="btn-punto-globo critico" data-punto-id="LIMA_SUR" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')">
+     <span class="punto-indicador-dot" style="background:var(--rojo-critico);"></span>
+     Lima Sur (#GAL-104)
+   </button>
+   <button type="button" class="btn-punto-globo preventivo" data-punto-id="TICLIO" onclick="seleccionarPuntoGloboPorId('TICLIO')">
+     <span class="punto-indicador-dot" style="background:var(--ambar-alerta);"></span>
+     Ticlio 4,818m (#DEZ-782)
+   </button>
+   <button type="button" class="btn-punto-globo satelital" data-punto-id="LORETO" onclick="seleccionarPuntoGloboPorId('LORETO')">
+     <span class="punto-indicador-dot" style="background:var(--cian);"></span>
+     Loreto (#DEZ-365)
+   </button>
+   <button type="button" class="btn-punto-globo satelital" data-punto-id="PUNO" onclick="seleccionarPuntoGloboPorId('PUNO')">
+     <span class="punto-indicador-dot" style="background:var(--cian);"></span>
+     Puno (Starlink 64ms)
+   </button>
+   <button type="button" class="btn-punto-globo conforme" data-punto-id="AREQUIPA" onclick="seleccionarPuntoGloboPorId('AREQUIPA')">
+     <span class="punto-indicador-dot" style="background:var(--verde-exito);"></span>
+     Arequipa (#DEZ-528)
+   </button>
+   <button type="button" class="btn-punto-globo internacional" data-punto-id="COLOMBIA" onclick="seleccionarPuntoGloboPorId('COLOMBIA')">
+     <span class="punto-indicador-dot" style="background:#2F8CFF;"></span>
+     Colombia (DTS)
+   </button>
+   <button type="button" class="btn-punto-globo internacional" data-punto-id="BRASIL" onclick="seleccionarPuntoGloboPorId('BRASIL')">
+     <span class="punto-indicador-dot" style="background:#2F8CFF;"></span>
+     Brasil (TSE)
+   </button>
+ </div>
+
+
+ <div class="neural-shell-canvas-box">
+ <!-- Inputs Tensores Izquierda -->
+ <div class="neural-inputs-col">
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')" style="cursor:pointer;" title="Enfocar Lima Sur en Globo 3D">
+ <span style="color:var(--rojo-critico);">• Historial Penalidades</span><br>
+ <strong class="texto-mono">+40% (Galaga SAC)</strong>
+ </div>
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('TICLIO')" style="cursor:pointer;" title="Enfocar Ticlio en Globo 3D">
+ <span style="color:var(--ambar-alerta);">• Retraso Despacho</span><br>
+ <strong class="texto-mono">+27% (&gt;105 min)</strong>
+ </div>
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')" style="cursor:pointer;" title="Enfocar Lima Sur en Globo 3D">
+ <span style="color:var(--azul-electrico);">• Vulnerabilidad Ruta</span><br>
+ <strong class="texto-mono">+16% (SJM / Lurín)</strong>
+ </div>
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')" style="cursor:pointer;" title="Enfocar Lima Sur en Globo 3D">
+ <span style="color:#EC4899;">• Riesgo Exclusión</span><br>
+ <strong class="texto-mono">+15% (63,300 electores)</strong>
+ </div>
+ </div>
+
+ <!-- Canvas de la Nube de Partículas 3D -->
+ <!-- GLOBO TERRESTRE INTERACTIVO 3D CON INCIDENCIAS EN TIEMPO REAL -->
+<div class="contenedor-globo-3d-interactivo">
+  <canvas id="canvas-globo-3d"></canvas>
+
+  <!-- Controles Tácticos del Globo 3D -->
+  <div class="controles-globo-hud">
+    <button type="button" class="btn-control-globo activo" id="btn-globo-rotar" onclick="toggleRotacionGlobo()" title="Pausar o Reanudar Rotación Automática">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+      <span id="txt-btn-rotar">Pausar</span>
+    </button>
+    <button type="button" class="btn-control-globo" onclick="centrarGloboEnPeru()" title="Centrar foco táctico en la República del Perú">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 16 12 12 8"></polygon></svg>
+      Centrar Perú
+    </button>
+    <button type="button" class="btn-control-globo" id="btn-globo-modo-textura" onclick="alternarModoTexturaGlobo()" title="Alternar entre Vista Nocturna y Vista Diurna Satelital">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line></svg>
+      <span id="txt-btn-textura">Modo Noche</span>
+    </button>
+    <button type="button" class="btn-control-globo activo" id="btn-globo-nubes" onclick="toggleNubesGlobo()" title="Activar o Desactivar Capa de Nubes Atmosféricas">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+      <span id="txt-btn-nubes">Nubes</span>
+    </button>
+    <button type="button" class="btn-control-globo activo" id="btn-globo-rutas" onclick="toggleRutasGlobo()" title="Activar o Desactivar Corredores Logísticos 3D">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+      <span id="txt-btn-rutas">Rutas 3D</span>
+    </button>
+    <button type="button" class="btn-control-globo" onclick="reiniciarZoomGlobo()" title="Restablecer Nivel de Zoom">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Reiniciar
+    </button>
+  </div>
+
+  <!-- Popover Flotante de Incidencia al interactuar con el Globo -->
+  <div id="card-globo-pin-info" class="card-globo-pin-info">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <span id="pin-globo-tipo" class="badge-estado badge-incumplimiento">ALERTA CRÍTICA</span>
+      <button type="button" onclick="cerrarCardGloboPin()" style="background:transparent; border:none; color:var(--texto-secundario); cursor:pointer; font-size:14px;">&times;</button>
+    </div>
+    <h5 id="pin-globo-titulo" style="font-size:14px; color:#FFFFFF; margin-bottom:4px;">Desvío Vial Lima Sur</h5>
+    <div id="pin-globo-desc" style="font-size:11.5px; color:var(--texto-secundario); line-height:1.45; margin-bottom:8px;">Furgón #GAL-104 desvió geocerca en Lurín. Retención de fianza ejecutada.</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; font-family:var(--font-mono); color:var(--cian); margin-bottom:8px;">
+      <span id="pin-globo-coords">Lat: -12.161, Lng: -76.968</span>
+      <span id="pin-globo-hora">06:45:00 UTC-5</span>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <button type="button" id="btn-globo-accion" class="btn-primario" style="flex:1; padding:7px 8px; font-size:11px;" onclick="ejecutarAccionPinGlobo()">
+        Auditar Solución
+      </button>
+      <button type="button" class="btn-secundario" style="padding:7px 8px; font-size:11px; border-color:var(--cian); color:var(--cian);" onclick="consultarPinEnChatbot()" title="Preguntar al Copiloto sobre este evento">
+        Copiloto
+      </button>
+    </div>
+  </div>
+</div>
+
+ <!-- Outputs Decisión Derecha -->
+ <div class="neural-outputs-col">
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')" style="border-color:var(--rojo-critico); cursor:pointer;" title="Enfocar Lima Sur en Globo 3D">
+ <span style="color:var(--rojo-critico);">• Fianza Ejecutable</span><br>
+ <strong class="texto-mono" style="color:#FFFFFF; font-size:13px;">S/ 64,000.00</strong>
+ </div>
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')" style="border-color:var(--cian); cursor:pointer;" title="Enfocar Lima Sur en Globo 3D">
+ <span style="color:var(--cian);">• Convoy Contingencia</span><br>
+ <strong class="texto-mono" style="color:#FFFFFF;">#DEZ-950 (Lurín)</strong>
+ </div>
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('TICLIO')" style="border-color:var(--verde-exito); cursor:pointer;" title="Enfocar Ticlio en Globo 3D">
+ <span style="color:var(--verde-exito);">• Custodia PNP</span><br>
+ <strong class="texto-mono" style="color:#FFFFFF;">Patrulla Asignada</strong>
+ </div>
+ <div class="neural-pill-tag clickable" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')" style="border-color:var(--texto-secundario); cursor:pointer;" title="Enfocar Lima Sur en Globo 3D">
+ <span style="color:var(--texto-secundario);">• SLA Proyectado</span><br>
+ <strong class="texto-mono" style="color:var(--verde-exito);">98.6% Resuelto</strong>
+ </div>
+ </div>
+ </div>
+ </div>
+
+  <!-- Grid Inferior: Execution Tape & Embudo de Resolución -->
+  <div class="grid-gestion-inferior-2">
+ <!-- Execution Tape (Libro de Transacciones Inmutable) -->
+ <div class="tarjeta-ioc">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+ <h4 style="font-size:15px; color:#FFFFFF;">Execution Tape (Ledger Criptográfico en Streaming)</h4>
+ <span class="micro-etiqueta" style="color:var(--cian);">Hash SHA-256 Verificado</span>
+ </div>
+ <div class="execution-tape-table-wrapper">
+ <table class="tabla-ioc">
+ <thead>
+ <tr>
+ <th>Timestamp</th>
+ <th>Unidad</th>
+ <th>Evento Logístico</th>
+ <th>Hash Cripto</th>
+ <th>Delta XAI</th>
+ </tr>
+ </thead>
+ <tbody id="tbody-execution-tape">
+ <!-- Se actualiza con JS -->
+ </tbody>
+ </table>
+ </div>
+ </div>
+
+ <!-- Embudo de Resolución 3D (Resolution Funnel) -->
+ <div class="tarjeta-ioc">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+ <h4 style="font-size:15px; color:#FFFFFF;">Embudo de Arribo (Meta 08:00 AM)</h4>
+ <span class="badge-estado badge-conforme">95% Confianza</span>
+ </div>
+ <p style="font-size:12px; color:var(--texto-secundario); margin-bottom:12px;">
+ Proyección probabilística de cierre de brecha antes de la apertura oficial de mesas.
+ </p>
+ <div style="position:relative; height:140px; display:flex; align-items:center; justify-content:center;">
+ <svg viewBox="0 0 300 120" style="width:100%; height:100%;">
+ <polygon points="20,15 280,45 280,75 20,105" fill="rgba(47, 140, 255, 0.12)" stroke="var(--azul-electrico)" stroke-width="1.5"></polygon>
+ <line x1="20" y1="60" x2="280" y2="60" stroke="var(--cian)" stroke-dasharray="4,4"></line>
+ <ellipse cx="200" cy="60" rx="30" ry="18" fill="none" stroke="var(--verde-exito)" stroke-width="2"></ellipse>
+ <circle cx="200" cy="60" r="4" fill="var(--verde-exito)"></circle>
+ <text x="30" y="40" fill="var(--texto-secundario)" font-size="10" font-family="monospace">Inicio Despacho (04:00)</text>
+ <text x="210" y="55" fill="var(--verde-exito)" font-size="11" font-weight="700" font-family="monospace">07:35 AM Conforme</text>
+ <text x="210" y="90" fill="var(--texto-apagado)" font-size="9" font-family="monospace">Límite: 08:00 AM</text>
+ </svg>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ==========================================================================
+ VISTA NUEVA 3: EXPLORADOR Y CONSOLA DE BASE DE DATOS SQL (onpe_vision.db)
+ ========================================================================== -->
+ <section id="vista-base-datos" class="seccion-vista">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+ <div>
+ <span class="badge-estado badge-sla">SISTEMA RELACIONAL Y GEOESPACIAL</span>
+ <h3 style="font-size:22px; color:#FFFFFF; margin-top:8px;">Explorador Oficial de Base de Datos y Consola SQL</h3>
+ <p style="font-size:14px; color:var(--texto-secundario);">
+ Motor SQLite 3 nativo compatible con PostgreSQL 16 + PostGIS (<code style="color:var(--cian);">onpe_vision.db</code> en ejecución activa).
+ </p>
+ </div>
+ <div id="badge-estado-bd" class="badge-estado badge-conforme" style="font-size:13px;">
+ • Base de Datos Operativa (6 Tablas)
+ </div>
+ </div>
+
+ <!-- Selector de Tablas del Repositorio -->
+ <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+ <button class="btn-secundario activo" onclick="mostrarTablaDB('vehiculos_transporte', this)"> vehiculos_transporte (12)</button>
+ <button class="btn-secundario" onclick="mostrarTablaDB('locales_votacion', this)"> locales_votacion (8)</button>
+ <button class="btn-secundario" onclick="mostrarTablaDB('alertas_xai', this)"> alertas_xai (3)</button>
+ <button class="btn-secundario" onclick="mostrarTablaDB('rutas_electorales', this)"> rutas_electorales (4)</button>
+ <button class="btn-secundario" onclick="mostrarTablaDB('telemetria_gps', this)"> telemetria_gps (3)</button>
+ <button class="btn-secundario" onclick="mostrarTablaDB('actas_recepcion_campo', this)"> actas_recepcion_campo (2)</button>
+ </div>
+
+ <!-- Consola de Consulta SQL Interactiva -->
+ <div class="tarjeta-ioc" style="margin-bottom:20px;">
+ <h4 style="font-size:15px; color:#FFFFFF; margin-bottom:10px;">Consola de Ejecución SQL en Vivo</h4>
+ <textarea id="input-sql-consola" class="sql-console-editor" rows="3">SELECT id_vehiculo, placa, tipo_unidad, empresa_contratista, estado_operativo, velocidad_kmh FROM vehiculos_transporte;</textarea>
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+ <span class="micro-etiqueta" style="color:var(--texto-secundario);">Consultas seguras de solo lectura (SELECT)</span>
+ <div style="display:flex; gap:10px;">
+ <button class="btn-ghost" onclick="document.getElementById('input-sql-consola').value='SELECT * FROM alertas_xai WHERE nivel_severidad = \'CRÍTICA\' OR nivel_severidad = \'CRITICA\';'">Cargar Alertas Críticas</button>
+ <button class="btn-primario" onclick="ejecutarConsultaSQLConsola()">
+ <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+ Ejecutar Consulta SQL
+ </button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Tabla de Resultados SQL -->
+ <div class="tabla-contenedor-ioc">
+ <table class="tabla-ioc" id="tabla-datos-sql">
+ <thead id="thead-datos-sql"></thead>
+ <tbody id="tbody-datos-sql"></tbody>
+ </table>
+ </div>
+ </section>
+
+ <!-- ==========================================================================
+ WIDGET FLOTANTE: CHATBOT COPILOTO OPERATIVO CON MÉTODO DE SOLUCIÓN
+ ========================================================================== -->
+ <button id="btn-toggle-chatbot" class="btn-chatbot-flotante" onclick="toggleVentanaChatbot()">
+ <span class="punto-dot" style="background:#FFFFFF; box-shadow:0 0 8px #FFFFFF;"></span>
+ Copiloto ONPE (Soluciones)
+ </button>
+
+ <div id="ventana-chatbot" class="ventana-chatbot-box oculto">
+ <div class="chatbot-header">
+   <div>
+     <div style="display:flex; align-items:center; gap:8px;">
+       <strong style="font-size:14px; color:#FFFFFF;">Copiloto ONPE Visión 2026</strong>
+       <div id="indicador-voz-hablando" class="onda-voz-anim" style="display:none;" title="Hablando...">
+         <span class="onda-barra" style="animation-delay:0s;"></span>
+         <span class="onda-barra" style="animation-delay:0.2s;"></span>
+         <span class="onda-barra" style="animation-delay:0.4s;"></span>
+       </div>
+     </div>
+     <div id="chatbot-badge-seccion" class="chatbot-active-section-badge">
+       <span class="punto-dot" style="background:#10B981;"></span>
+       <span id="chatbot-seccion-nombre">Ventana: Analista de Datos</span>
+     </div>
+   </div>
+   <div style="display:flex; align-items:center; gap:8px;">
+     <button id="btn-toggle-voz-chatbot" class="btn-voz-toggle activo" onclick="alternarVozChatbot()" title="Activar/Desactivar lectura en voz alta">
+       <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+       <span>Voz: ON</span>
+     </button>
+     <button id="btn-stop-audio-chatbot" class="btn-voz-stop" onclick="detenerVozChatbot()" title="Silenciar audio">
+       <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;"><rect x="6" y="6" width="12" height="12"></rect></svg>
+     </button>
+     <button class="hud-cerrar-btn" onclick="toggleVentanaChatbot()" title="Cerrar chat">&times;</button>
+   </div>
+ </div>
+
+ <div class="chatbot-mensajes-lista" id="contenedor-mensajes-chat">
+   <!-- Mensaje de Bienvenida del Bot -->
+   <div class="msg-chatbot-item bot">
+     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+       <strong style="color:#FFFFFF; font-size:13.5px;">Copiloto ONPE Visión 2026 · Asistente Táctico Electoral</strong>
+       <span class="micro-etiqueta" style="color:var(--cian); font-size:10px;">EN LÍNEA</span>
+     </div>
+     <div class="chat-conversational-text">
+       ¡Hola! Soy tu <strong>Copiloto Inteligente de ONPE Visión 2026</strong>. Estoy supervisando el despliegue electoral nacional en las 93 ODPEs y 10,401 locales.<br><br>
+       Puedes pedirme que consulte la base de datos oficial SQLite y descargue los registros a tu dispositivo, auditar incidentes viales en tiempo real o preguntarme sobre cualquier ventana del sistema.<br><br>
+       <strong>Elige una acción inmediata para comenzar o escríbeme abajo:</strong>
+     </div>
+     <div class="chat-action-chips">
+       <button type="button" class="chat-chip-btn destacado" onclick="enviarMensajeChat('Muéstrame todos los datos')">Consultar y Descargar Base de Datos</button>
+       <button type="button" class="chat-chip-btn" onclick="enviarMensajeChat('Dame un listado de los reportes de última hora')">Reportes de Última Hora</button>
+       <button type="button" class="chat-chip-btn" onclick="enviarMensajeChat('¿Qué hace este apartado?')">¿Qué hace este apartado?</button>
+       <button type="button" class="chat-chip-btn" onclick="enviarMensajeChat('¿Cómo ejecutar la fianza de S/ 64,000?')">Ejecutar Fianza S/ 64,000</button>
+       <button type="button" class="chat-chip-btn" onclick="enviarMensajeChat('Estado de los 12 camiones y lanchas')">Estado de la Flota</button>
+     </div>
+   </div>
+ </div>
+
+ <!-- Botones de Consulta Rápida Dinámicos -->
+ <div class="chatbot-quick-pills" id="contenedor-quick-pills-chatbot">
+   <!-- Se pueblan dinámicamente según la ventana activa -->
+ </div>
+
+ <form class="chatbot-input-footer" onsubmit="enviarMensajeUsuario(event)">
+   <input type="text" id="input-texto-chat" class="input-ioc" placeholder="Escribe tu consulta o pide una solución..." style="font-size:13px;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMensajeUsuario(event);}">
+   <button type="submit" class="btn-primario" style="padding:8px 16px;">Enviar</button>
+ </form>
+ </div>
+
+ <!-- ==================== FOOTER INSTITUCIONAL UTP ==================== -->
+    </main>
+<footer class="footer-creditos-utp">
+ <div class="footer-grid-info">
+ <div>
+ <strong style="color:#FFFFFF; font-size:14px;">ONPE VISIÓN · Sistema Inteligente de Monitoreo Electoral 2026</strong><br>
+ <span>Universidad Tecnológica del Perú (UTP) · Ingeniería de Sistemas e Informática</span>
+ <div class="autores-lista-pills">
+ <span class="autor-pill">Sebastian Alejandro Farfán Espinoza</span>
+ <span class="autor-pill">Dereck Daniel Rojas Perez</span>
+ <span class="autor-pill">Diego Alexander Janampa Jaulis</span>
+ <span class="autor-pill">Victor Manuel Rojas Taco</span>
+ <span class="autor-pill">Keyden Andrew Navarro Caysahuana</span>
+ </div>
+ </div>
+ <div style="text-align:right;">
+ <span class="micro-etiqueta" style="color:var(--cian);">PLATAFORMA OPERATIVA D-DAY</span><br>
+ <span style="font-size:11px; color:var(--texto-apagado);">Canal Seguro MPLS Cifrado SHA-256 · Respaldo Satelital Starlink · Base de Datos Auditada</span>
+ </div>
+ </div>
+ </footer>
+
+ <!-- Contenedor de Toasts -->
+ <div id="contenedor-toasts" aria-live="polite"></div>
+
+ <!-- Leaflet JS -->
+  </div>
+</div>
+
+<!-- Modal Command Palette (⌘ + Space o Ctrl + K) -->
+<div id="modal-command-palette" class="command-palette-overlay" onclick="cerrarCommandPalette(event)">
+  <div class="command-palette-box" onclick="event.stopPropagation()">
+    <div class="command-search-header">
+      <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:var(--accent-orange-bright);fill:none;stroke-width:2;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="input-command-palette" class="command-search-input" placeholder="Buscar vista, vehículo, ODPE o ejecutar protocolo..." oninput="filtrarCommandPalette(this.value)">
+      <span class="shortcut-badge">ESC para salir</span>
+    </div>
+    <div class="command-results-list" id="lista-resultados-palette">
+      <div class="command-result-item" onclick="ejecutarAccionPalette('vista', 'analista-datos')">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#FF7A00;fill:none;stroke-width:2;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          <span>Ir a: <strong>Analista de Datos (Flagship Studio)</strong></span>
+        </div>
+        <span class="shortcut-badge">Vista Principal</span>
+      </div>
+
+      <div class="command-result-item" onclick="ejecutarAccionPalette('vista', 'dashboard')">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#22D3EE;fill:none;stroke-width:2;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <span>Ir a: <strong>Centro de Mando Nacional (IOC)</strong></span>
+        </div>
+        <span class="shortcut-badge">Mapa Leaflet</span>
+      </div>
+
+      <div class="command-result-item" onclick="ejecutarAccionPalette('vehiculo', '#GAL-104')">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#F0435A;fill:none;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle></svg>
+          <span>Auditar: <strong>Furgón #GAL-104 (Lima Sur - Detenido)</strong></span>
+        </div>
+        <span class="badge-estado badge-critica" style="font-size:10px;">ALERTA ROJA</span>
+      </div>
+
+      <div class="command-result-item" onclick="ejecutarAccionPalette('vehiculo', '#DEZ-782')">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#F5A524;fill:none;stroke-width:2;"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg>
+          <span>Auditar: <strong>Camión #DEZ-782 (Paso de Ticlio - Falla Frenos)</strong></span>
+        </div>
+        <span class="badge-estado badge-alerta" style="font-size:10px;">AVERÍA ANDINA</span>
+      </div>
+
+      <div class="command-result-item" onclick="ejecutarAccionPalette('protocolo', 'pnp')">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#10B981;fill:none;stroke-width:2;"><polyline points="7 17 17 7 17 17"></polyline></svg>
+          <span>Protocolo: <strong>Despachar Auxilio Mecánico y Remolque PNP</strong></span>
+        </div>
+        <span class="shortcut-badge">Acción Rápida</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Librerías de Motor Gráfico 3D -->
+  
+  
+
+  <!-- Este apartado sirve para la ventana emergente de notificaciones y reportes en tiempo real -->
+<div id="modal-notificaciones-overlay" class="modal-overlay-emergente" style="display:none;" onclick="cerrarNotificacionesSiFondo(event)">
+  <div class="modal-notif-caja">
+    <div class="modal-notif-header">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="badge-alerta-dot-box">
+          <span class="punto-dot" style="background:#FF7A45; box-shadow:0 0 10px #FF7A45;"></span>
+        </div>
+        <div>
+          <span class="micro-etiqueta" style="color:var(--ambar-alerta);">CENTRO DE MANDO // NOTIFICACIONES AUDITADAS</span>
+          <h3 style="font-size:18px; color:#FFFFFF; margin-top:2px;">Centro Táctico de Novedades y Alertas D-DAY</h3>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn-secundario" onclick="marcarNotificacionesLeidas()" style="padding:6px 12px; font-size:11px;">
+          Marcar Todas Leídas
+        </button>
+        <button class="btn-ghost" onclick="cerrarNotificacionesOverlay()" style="padding:6px 10px; font-size:16px;" title="Cerrar ventana">
+          &times;
+        </button>
+      </div>
+    </div>
+
+    <!-- Pestañas de Filtro Rápido -->
+    <div style="padding:10px 24px; background:rgba(6,11,20,0.8); border-bottom:1px solid var(--borde-sutil); display:flex; gap:8px;">
+      <button class="btn-notif-tab activo" id="tab-notif-todas" onclick="filtrarNotificacionesTipo('TODAS')">Todas las Novedades (4)</button>
+      <button class="btn-notif-tab" id="tab-notif-criticas" onclick="filtrarNotificacionesTipo('CRITICA')">Críticas (1)</button>
+      <button class="btn-notif-tab" id="tab-notif-preventivas" onclick="filtrarNotificacionesTipo('PREVENTIVA')">Preventivas (1)</button>
+      <button class="btn-notif-tab" id="tab-notif-satelital" onclick="filtrarNotificacionesTipo('SATELITAL')">Satelital / Logística (2)</button>
+    </div>
+
+    <div class="modal-notif-body" id="lista-notificaciones-body">
+      <!-- Informe 1: Crítica Galaga SAC -->
+      <div class="tarjeta-reporte-item critico" data-tipo="CRITICA">
+        <div class="reporte-thumb-img">
+          <img src="img/notif_desvio_lima_sur.jpg" alt="Custodia PNP y Convoy Electoral Panamericana Sur" style="width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.08) brightness(0.95);">
+          <span class="thumb-tag red">CUSTODIA PNP</span>
+        </div>
+        <div class="reporte-info-col">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <span class="badge-estado badge-incumplimiento">CRÍTICA - PROTOCOLO ACTIVADO</span>
+              <h4 style="font-size:15px; color:#FFFFFF; margin:4px 0 2px;">Desvío de Corredor Vial y Ruptura de Geocerca en Lima Sur</h4>
+            </div>
+            <span class="texto-mono" style="font-size:11px; color:var(--texto-secundario);">06:48:12 UTC-5</span>
+          </div>
+          <p style="font-size:12px; color:var(--texto-secundario); margin:6px 0;">
+            <strong>Emisor:</strong> Ing. Carlos Mendoza (Jefe de Operaciones) / Suboficial 2da PNP J. Valdivia.<br>
+            Furgón <strong class="texto-mono" style="color:var(--cian);">#GAL-104</strong> (Galaga SAC) se apartó 3.4 km de la ruta troncal en Panamericana Sur (Lurín hacia SJM). Precinto digital emitió advertencia por pérdida de señal. Se procedió con retención de fianza contractual por S/ 64,000 y despacho de convoy de contingencia #DEZ-950 con custodia policial asignada.
+          </p>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn-primario" onclick="cerrarNotificacionesOverlay(); cambiarVistaWeb('dashboard'); setTimeout(() => inspeccionarVehiculo('#GAL-104'), 300);" style="padding:5px 12px; font-size:11px;">
+              Ver en Mapa Leaflet
+            </button>
+            <button class="btn-secundario" onclick="cerrarNotificacionesOverlay(); cambiarVistaWeb('alertas-xai');" style="padding:5px 12px; font-size:11px;">
+              Ver Inferencia XAI
+            </button>
+            <button class="btn-ghost" onclick="cerrarNotificacionesOverlay(); cambiarVistaWeb('registro-incidencias');" style="padding:5px 12px; font-size:11px;">
+              Auditar Bitácora
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informe 2: Preventiva Ticlio -->
+      <div class="tarjeta-reporte-item preventiva" data-tipo="PREVENTIVA">
+        <div class="reporte-thumb-img">
+          <img src="img/notif_auxilio_ticlio.jpg" alt="Nevada en Carretera Central Ticlio 4818 msnm" style="width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.08) brightness(0.95);">
+          <span class="thumb-tag amber">TICLIO 4,818 msnm</span>
+        </div>
+        <div class="reporte-info-col">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <span class="badge-estado badge-alerta-amarilla">PREVENTIVA - EN SUBSANACIÓN</span>
+              <h4 style="font-size:15px; color:#FFFFFF; margin:4px 0 2px;">Auxilio Mecánico en Ticlio (4,818 msnm) - Unidad #DEZ-782</h4>
+            </div>
+            <span class="texto-mono" style="font-size:11px; color:var(--texto-secundario);">06:42:05 UTC-5</span>
+          </div>
+          <p style="font-size:12px; color:var(--texto-secundario); margin:6px 0;">
+            <strong>Emisor:</strong> Patrulla de Carreteras PNP Ticlio / Supervisor Provías Nacional.<br>
+            Camión Scania R450 <strong class="texto-mono" style="color:var(--cian);">#DEZ-782</strong> reportó caída de presión de aire en frenos secundarios a -4°C. Precinto de seguridad digital intacto con batería al 98%. Camión taller arribó en auxilio en el km 132 de la Carretera Central. Despacho reanuda marcha estimada en 20 minutos.
+          </p>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn-secundario" onclick="cerrarNotificacionesOverlay(); cambiarVistaWeb('rutas-flota');" style="padding:5px 12px; font-size:11px;">
+              Ver Telemetría Flota
+            </button>
+            <button class="btn-ghost" onclick="cerrarNotificacionesOverlay(); cambiarVistaWeb('dashboard'); setTimeout(() => inspeccionarVehiculo('#DEZ-782'), 300);" style="padding:5px 12px; font-size:11px;">
+              Ubicar en Mapa
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informe 3: Lancha Loreto Conforme -->
+      <div class="tarjeta-reporte-item conforme" data-tipo="SATELITAL">
+        <div class="reporte-thumb-img">
+          <img src="img/notif_lancha_loreto.jpg" alt="Lancha Fluvial Amazonas Iquitos Bellavista Nanay" style="width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.08) brightness(0.95);">
+          <span class="thumb-tag green">RÍO AMAZONAS</span>
+        </div>
+        <div class="reporte-info-col">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <span class="badge-estado badge-conforme">CONFORME - DESPACHO EXITOSO</span>
+              <h4 style="font-size:15px; color:#FFFFFF; margin:4px 0 2px;">Arribo Conforme de Lancha Fluvial a ODPE Maynas (Loreto)</h4>
+            </div>
+            <span class="texto-mono" style="font-size:11px; color:var(--texto-secundario);">06:35:40 UTC-5</span>
+          </div>
+          <p style="font-size:12px; color:var(--texto-secundario); margin:6px 0;">
+            <strong>Emisor:</strong> Capitán de Corbeta MGP D. Arana / Coordinador ODPE Iquitos.<br>
+            Lancha fluvial <strong class="texto-mono" style="color:var(--cian);">#DEZ-365</strong> arribó con total conformidad al puerto Bellavista Nanay. Entrega de 42 paquetes electorales y material sensible para comunidades nativas bajo resguardo de la Marina de Guerra del Perú y fiscalización del JNE.
+          </p>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn-secundario" onclick="cerrarNotificacionesOverlay(); cambiarVistaWeb('terminal-campo');" style="padding:5px 12px; font-size:11px;">
+              Ver Acta en Terminal PWA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informe 4: Starlink Puno -->
+      <div class="tarjeta-reporte-item satelital" data-tipo="SATELITAL">
+        <div class="reporte-thumb-img">
+          <img src="img/notif_starlink_puno.jpg" alt="Terminal Satelital Starlink Puno Carabaya" style="width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.08) brightness(0.95);">
+          <span class="thumb-tag cyan">STARLINK 64 MS</span>
+        </div>
+        <div class="reporte-info-col">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <span class="badge-estado badge-sla">RESILIENTE - ENLACE ACTIVO</span>
+              <h4 style="font-size:15px; color:#FFFFFF; margin:4px 0 2px;">Conmutación Satelital Starlink Automática en ODPE Puno - Carabaya</h4>
+            </div>
+            <span class="texto-mono" style="font-size:11px; color:var(--texto-secundario);">06:20:15 UTC-5</span>
+          </div>
+          <p style="font-size:12px; color:var(--texto-secundario); margin:6px 0;">
+            <strong>Emisor:</strong> Operador de Redes Cifradas ONPE Centro Cómputo Macusani.<br>
+            Corte de fibra comercial mitigado en 1.2 segundos mediante conmutación automática al enlace Starlink de alta velocidad. Ancho de banda verificado en 94 Mbps con latencia de 64 ms y cifrado SHA-256 habilitado de extremo a extremo.
+          </p>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn-secundario" onclick="cerrarNotificacionesOverlay(); cambiarVistaWeb('gestion-proyecto');" style="padding:5px 12px; font-size:11px;">
+              Ver Latencias en Gestión
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- SPOTLIGHT GUIDED TOUR OVERLAY (MODO SIMULACIÓN CON INSTRUCCIONES) -->
+<!-- ========================================================================= -->
+<div id="spotlight-tour-overlay" style="display:none;">
+  <div class="spotlight-backdrop" onclick="detenerInstruccionesTour()"></div>
+  <div id="spotlight-focus-box"></div>
+  <div id="spotlight-dialog-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; cursor:grab; user-select:none;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="badge-estado badge-sla" id="spotlight-step-tag">TUTORIAL PASO 1 DE 8</span>
+        <span style="font-size:10px; color:var(--cian); font-family:var(--font-mono); opacity:0.8;">(Arrastrable)</span>
+      </div>
+      <button onclick="detenerInstruccionesTour()" style="background:transparent; border:none; color:var(--texto-secundario); cursor:pointer; font-size:14px;" title="Detener Instrucciones">&times;</button>
+    </div>
+    <h4 id="spotlight-step-title" style="font-size:16px; color:#FFFFFF; margin-bottom:6px;">Módulo de Gestión</h4>
+    <div id="spotlight-step-desc" style="font-size:12px; color:var(--texto-secundario); line-height:1.5; margin-bottom:14px;">
+      Explicación detallada del módulo.
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <button class="btn-secundario" onclick="detenerInstruccionesTour()" style="padding:7px 12px; font-size:11px; color:var(--rojo-critico); border-color:var(--rojo-critico);">
+        Detener Instrucciones
+      </button>
+      <button class="btn-primario" id="btn-spotlight-sig" onclick="avanzarSpotlightTour()" style="padding:7px 16px; font-size:12px; font-weight:700;">
+        Siguiente / OK
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- TOOLTIP FLOTANTE DE TELEMETRÍA EN TIEMPO REAL PARA VEHÍCULOS / NODOS -->
+<!-- ========================================================================= -->
+<div id="tooltip-vehiculo-flotante">
+  <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--borde-sutil); padding-bottom:6px; margin-bottom:8px;">
+    <div>
+      <strong id="tt-veh-id" class="texto-mono" style="color:var(--cian); font-size:13px;">#GAL-104</strong>
+      <span id="tt-veh-placa" style="font-size:11px; color:var(--texto-secundario); margin-left:4px;">(GAL-104)</span>
+    </div>
+    <span id="tt-veh-badge" class="badge-estado badge-incumplimiento">ROJO CRÍTICO</span>
+  </div>
+  <div style="font-size:12px; font-weight:600; color:#FFFFFF; margin-bottom:4px;" id="tt-veh-tipo">Furgón Ligero - Galaga SAC</div>
+  <div style="font-size:11px; color:var(--texto-secundario); margin-bottom:8px;" id="tt-veh-ruta">Ruta: Lurín &rarr; ODPE Lima Sur (SJM)</div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:10px; font-family:var(--font-mono); margin-bottom:8px;">
+    <div>Combustible: <strong id="tt-veh-fuel" style="color:var(--cian);">78% (390 km)</strong></div>
+    <div>Presión Neum.: <strong id="tt-veh-psi" style="color:#FFFFFF;">110 PSI</strong></div>
+    <div>Batería Precinto: <strong id="tt-veh-bat" style="color:var(--verde-exito);">98% OK</strong></div>
+    <div>Temp Carga: <strong id="tt-veh-temp" style="color:#FFFFFF;">18.5 °C</strong></div>
+    <div>Velocidad: <strong id="tt-veh-vel" style="color:var(--ambar-alerta);">0 km/h (Detenido)</strong></div>
+    <div>Custodia: <strong id="tt-veh-pnp" style="color:var(--rojo-critico);">Sin Custodia PNP</strong></div>
+  </div>
+  <div style="font-size:9px; color:var(--texto-apagado); border-top:1px dashed var(--borde-sutil); padding-top:4px;" id="tt-veh-gps">
+    GPS: -12.1611, -76.9682 · Enlace: 4G Contingencia
+  </div>
+</div>
+
+<!-- Este apartado sirve para la ventana emergente que permite registrar nuevos convoyes a la red -->
+<div id="modal-nuevo-nodo" class="modal-overlay-emergente" style="display:none;" onclick="cerrarModalNodoSiFondo(event)">
+  <div class="modal-notif-caja" style="max-width:540px;">
+    <div class="modal-notif-header">
+      <div>
+        <span class="micro-etiqueta" style="color:var(--cian);">CONTROL DE TRANSPORTE // INYECCIÓN DINÁMICA</span>
+        <h3 style="font-size:17px; color:#FFFFFF; margin-top:2px;">Agregar Nuevo Nodo a la Red de Telemetría</h3>
+      </div>
+      <button class="btn-ghost" onclick="cerrarModalNuevoNodo()" style="padding:4px 8px; font-size:16px;">&times;</button>
+    </div>
+    <form id="form-nuevo-nodo" onsubmit="guardarNuevoNodoGrafo(event)" style="padding:20px 24px; display:flex; flex-direction:column; gap:12px;">
+      <div style="display:grid; grid-template-columns: 1fr 2fr; gap:12px;">
+        <div class="grupo-campo">
+          <label>Identificador / Placa <span class="req">*</span></label>
+          <input type="text" id="nodo-nuevo-id" class="input-ioc texto-mono" placeholder="#DEZ-888" required>
+        </div>
+        <div class="grupo-campo">
+          <label>Nombre / Destino <span class="req">*</span></label>
+          <input type="text" id="nodo-nuevo-nombre" class="input-ioc" placeholder="ODPE Chachapoyas - Scania" required>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="grupo-campo">
+          <label>Tipo de Nodo / Vehículo</label>
+          <select id="nodo-nuevo-tipo" class="select-ioc">
+            <option value="Camión">Camión Blindado Scania R450</option>
+            <option value="Volvo">Camión Blindado Volvo FH</option>
+            <option value="Furgón">Furgón Ligero Urbano</option>
+            <option value="Lancha">Lancha Rápida Fluvial Selva</option>
+            <option value="ODPE">Centro Regional ODPE</option>
+          </select>
+        </div>
+        <div class="grupo-campo">
+          <label>Nodo Troncal al que Conecta</label>
+          <select id="nodo-nuevo-padre" class="select-ioc">
+            <option value="HUB_LURIN">Almacén Central Lurín</option>
+            <option value="ODPE_LIMS">ODPE Lima Sur</option>
+            <option value="ODPE_HVCA">ODPE Huancavelica</option>
+            <option value="ODPE_AREQ">ODPE Arequipa</option>
+            <option value="ODPE_CUSC">ODPE Cusco</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grupo-campo">
+        <div style="display:flex; justify-content:space-between;">
+          <label>Score SLA Inicial (0 a 100)</label>
+          <strong id="nodo-score-val" class="texto-mono" style="color:var(--cian);">85/100</strong>
+        </div>
+        <input type="range" id="nodo-nuevo-score" min="10" max="100" value="85" oninput="document.getElementById('nodo-score-val').textContent = this.value + '/100'" style="accent-color:var(--cian); width:100%;">
+      </div>
+
+      <div class="grupo-campo">
+        <label>Custodia Asignada</label>
+        <input type="text" id="nodo-nuevo-custodia" class="input-ioc" placeholder="Patrulla PNP Carreteras #22">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+        <button type="button" class="btn-secundario" onclick="cerrarModalNuevoNodo()">Cancelar</button>
+        <button type="submit" class="btn-primario">Inyectar Nodo a la Red</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- Este apartado sirve para la ventana emergente del acta oficial de recepción con firma digital -->
+<!-- ========================================================================= -->
+<div id="modal-acta-oficial" class="modal-overlay-emergente" style="display:none;" onclick="cerrarModalActaSiFondo(event)">
+  <div class="modal-notif-caja" style="max-width:680px;">
+    <div class="modal-notif-header" style="background:linear-gradient(90deg, rgba(16,185,129,0.15), transparent);">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:var(--verde-exito);fill:none;stroke-width:2;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <div>
+          <span class="micro-etiqueta" style="color:var(--verde-exito);">CERTIFICADO OFICIAL // JURISDICCIÓN ONPE</span>
+          <h3 style="font-size:16px; color:#FFFFFF; margin-top:2px;">Acta de Recepción y Conformidad de Material Electoral</h3>
+        </div>
+      </div>
+      <button class="btn-ghost" onclick="cerrarModalActaOficial()" style="padding:4px 8px; font-size:16px;">&times;</button>
+    </div>
+    <div style="padding:20px 24px; overflow-y:auto; max-height:75vh;">
+      <!-- Documento Estilo Oficial -->
+      <div style="background:#060A12; border:1px solid var(--borde-activo); padding:20px; font-family:var(--font-sans); position:relative;">
+        <div style="text-align:center; border-bottom:2px solid var(--borde-sutil); padding-bottom:12px; margin-bottom:14px;">
+          <h4 style="font-size:16px; color:#FFFFFF; letter-spacing:1px; margin-bottom:2px;">OFICINA NACIONAL DE PROCESOS ELECTORALES - ONPE</h4>
+          <div style="font-size:12px; color:var(--cian); font-weight:700;">SISTEMA INTELIGENTE ONPE VISIÓN 2026 · ELECCIONES GENERALES</div>
+          <div style="font-size:11px; color:var(--texto-secundario); margin-top:4px;">ACTA N° ONPE-2026-REC-045120-LIMS</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:12px; margin-bottom:14px;">
+          <div><strong>Local:</strong> I.E. Javier Heraud (Caso Galaga)</div>
+          <div><strong>ODPE:</strong> Lima Sur (San Juan de Miraflores)</div>
+          <div><strong>Mesa de Sufragio:</strong> N° 045120</div>
+          <div><strong>Fecha y Hora:</strong> <span id="acta-fecha-hora">11 Abr 2026 - 06:49:15 UTC-5</span></div>
+          <div><strong>Precinto QR:</strong> <span id="acta-precinto-qr">QR-ELECC-2026-LIMS-045120</span></div>
+          <div><strong>Estado Cripto:</strong> SHA-256 Verificado Intacto</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--borde-sutil); padding:10px; margin-bottom:14px; font-size:11px;">
+          <strong style="color:var(--verde-exito);">MATERIALES RECEPCIONADOS Y CONFORMES:</strong>
+          <ul style="margin:4px 0 0 16px; padding:0; color:var(--texto-secundario);">
+            <li>1 Ánfora de sufragio con precinto de seguridad sellado</li>
+            <li>35 Cédulas de votación verificadas en padrón oficial</li>
+            <li>2 Cabinas electorales plegables</li>
+            <li>1 Sobre de actas padrón y hologramas de seguridad</li>
+          </ul>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:14px; align-items:center;">
+          <div>
+            <div style="font-size:11px; color:var(--texto-secundario); margin-bottom:4px;">Firma Digital Registrada del Coordinador:</div>
+            <div style="background:#03060C; border:1px solid var(--borde-activo); height:60px; display:flex; align-items:center; justify-content:center;">
+              <span id="acta-preview-firma" style="font-family:'Courier New', monospace; color:var(--cian); font-size:14px; letter-spacing:2px;">[ FIRMA DIGITAL VALIDADA ]</span>
+            </div>
+          </div>
+          <div style="text-align:center;">
+            <svg viewBox="0 0 60 60" style="width:60px; height:60px; stroke:var(--verde-exito); fill:none;">
+              <rect x="5" y="5" width="50" height="50" stroke-width="2"></rect>
+              <rect x="15" y="15" width="10" height="10" fill="var(--verde-exito)"></rect>
+              <rect x="35" y="15" width="10" height="10" fill="var(--verde-exito)"></rect>
+              <rect x="15" y="35" width="10" height="10" fill="var(--verde-exito)"></rect>
+            </svg>
+            <div style="font-size:9px; color:var(--verde-exito); font-family:var(--font-mono); margin-top:2px;">SELLO DIGITAL OK</div>
+          </div>
+        </div>
+
+        <div style="font-size:9px; font-family:var(--font-mono); color:var(--texto-apagado); margin-top:12px; border-top:1px dashed var(--borde-sutil); padding-top:6px; word-break:break-all;">
+          HASH LEDGER: 8f3a948b812f019c4de39112837bc0294112e84d720b64f33190ab74912cd310
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px;">
+        <button class="btn-secundario" onclick="imprimirActaOficial()">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Imprimir / Descargar Acta (PDF)
+        </button>
+        <button class="btn-primario" onclick="cerrarModalActaOficial()">
+          Finalizar y Guardar en Bitácora
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Dependencias Externas (Three.js WebGL & OrbitControls) -->
+
+  <!-- Bibliotecas Externas (Three.js WebGL, OrbitControls, Leaflet) -->
+  <script src="three.min.js"></script>
+  <script src="OrbitControls.js"></script>
+  <script src="leaflet.js"></script>
+
+  <!-- Módulos de Lógica JavaScript Desacoplados (Arquitectura Limpia) -->
+  <script src="js/app.js"></script>
+  <script src="js/telemetria.js"></script>
+  <script src="js/analista.js"></script>
+  <script src="js/grafo.js"></script>
+  <script src="js/texturas_globo.js"></script>
+  <script src="js/globo3d.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/notificaciones.js"></script>
+  <script src="js/tutorial.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

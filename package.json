@@ -1,0 +1,24 @@
+{
+  "name": "onpe-vision-2026",
+  "version": "1.0.0",
+  "description": "ONPE Visión 2026 - Plataforma de Monitoreo Electoral, Telemetría Satelital y Custodia D-DAY",
+  "main": "simulador_backend.js",
+  "scripts": {
+    "start": "node simulador_backend.js",
+    "db:init": "node crear_base_datos.js",
+    "test": "node tests/verify_all.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "keywords": [
+    "onpe",
+    "electoral",
+    "telemetria",
+    "gis",
+    "sqlite",
+    "threejs"
+  ],
+  "author": "Equipo ONPE Visión 2026",
+  "license": "ISC"
+}

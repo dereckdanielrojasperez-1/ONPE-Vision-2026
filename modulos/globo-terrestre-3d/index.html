@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Autónomo: Globo Terrestre Interactivo 3D · ONPE Visión 2026</title>
+  <link rel="stylesheet" href="../../css/variables.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/views.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="standalone-module-body">
+  <header class="app-top-header">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="../../index.html" class="btn-ghost" style="padding:6px 12px; font-size:12px; text-decoration:none;">← Volver al Centro de Mando</a>
+      <h2 style="font-size:16px; color:#FFFFFF; margin:0; font-family:'Sora',sans-serif;">Globo Terrestre Interactivo 3D (WebGL / Three.js)</h2>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="badge-estado badge-conforme">Motor Three.js Activo</span>
+      <span class="badge-estado badge-sla">SLA 99.94%</span>
+    </div>
+  </header>
+
+  <main style="padding: 24px 32px; flex:1;">
+    <div class="tarjeta-ioc" style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <span class="micro-etiqueta" style="color:var(--cian);">TELEMETRÍA PLANETARIA · TURNO D-DAY 2026</span>
+          <h3 style="font-size:18px; color:#FFFFFF; margin:2px 0 0 0;">Gemelo Digital Geoespacial de Monitoreo Electoral</h3>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button id="btn-globo-rotar" class="btn-secundario activo" onclick="toggleRotacionGlobo()"><span id="txt-btn-rotar">Pausar</span></button>
+          <button id="btn-globo-modo-textura" class="btn-secundario activo" onclick="alternarModoTexturaGlobo()"><span id="txt-btn-textura">Modo Noche</span></button>
+          <button class="btn-ghost" onclick="centrarGloboEnPeru()">Centrar Perú</button>
+        </div>
+      </div>
+
+      <div class="contenedor-globo-3d-interactivo" style="height: 640px; position:relative; background:#010308; border-radius:14px; overflow:hidden;">
+        <canvas id="canvas-globo-3d" style="width:100%; height:100%; display:block;"></canvas>
+        <div id="card-globo-pin-info" style="display:none; position:absolute; top:16px; right:16px; max-width:340px; background:rgba(6,11,20,0.94); border:1px solid var(--borde-activo); border-radius:10px; padding:14px; z-index:20;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span id="pin-globo-tipo" class="badge-estado badge-conforme">CONFORME</span>
+            <button class="btn-ghost" onclick="cerrarCardGloboPin()" style="padding:2px 6px;">&times;</button>
+          </div>
+          <h4 id="pin-globo-titulo" style="font-size:14px; color:#FFFFFF; margin:0 0 6px 0;">Punto Táctico</h4>
+          <p id="pin-globo-desc" style="font-size:12px; color:var(--texto-secundario); margin:0 0 8px 0;"></p>
+          <div id="pin-globo-coords" class="texto-mono" style="font-size:10px; color:var(--cian);"></div>
+          <div id="pin-globo-hora" class="texto-mono" style="font-size:10px; color:var(--texto-apagado); margin-top:2px;"></div>
+        </div>
+        <div class="controles-globo-hud" style="position:absolute; bottom:16px; left:16px; background:rgba(6,11,20,0.85); padding:8px 14px; border-radius:8px; border:1px solid var(--borde-activo); display:flex; gap:10px;">
+          <button class="btn-ghost btn-punto-globo" data-punto-id="LIMA_SUR" onclick="seleccionarPuntoGloboPorId('LIMA_SUR')" style="font-size:11px;">Lima Sur (Galaga)</button>
+          <button class="btn-ghost btn-punto-globo" data-punto-id="TICLIO" onclick="seleccionarPuntoGloboPorId('TICLIO')" style="font-size:11px;">Ticlio (4,818m)</button>
+          <button class="btn-ghost btn-punto-globo" data-punto-id="LORETO" onclick="seleccionarPuntoGloboPorId('LORETO')" style="font-size:11px;">Loreto (Fluvial)</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="contenedor-toasts"></div>
+
+  <script src="../../three.min.js"></script>
+  <script src="../../OrbitControls.js"></script>
+  <script src="../../js/app.js"></script>
+  <script src="../../js/texturas_globo.js"></script>
+  <script src="../../js/globo3d.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

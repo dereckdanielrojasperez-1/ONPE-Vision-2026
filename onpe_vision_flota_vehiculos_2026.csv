@@ -1,0 +1,13 @@
+id_vehiculo,placa,tipo_unidad,empresa_contratista,nombre_conductor,efectivo_policial_pnp,capacidad_anforas,estado_operativo,enlace_satelital,velocidad_kmh,latitud,longitud
+"#GAL-104","GAL-104","Furgón Ligero","Galaga SAC (Contratista Observado)","Conductor No Identificado","Sin Custodia PNP","211","alerta_critica","4G Contingencia","0","-12.1611","-76.9682"
+"#DEZ-782","DEZ-782","Camión Scania R450","Transportes Blindados Andinos","Manuel Quispe","Cmdte. PNP R. Soto","350","averiado","Starlink","0","-11.5944","-76.195"
+"#DEZ-365","DEZ-365","Lancha Fluvial Amazonas I","Consorcio Fluvial del Oriente","Segundo Tamani","Tnte. PNP A. Coral","180","retraso","Starlink","22","-3.7437","-73.2516"
+"#DEZ-528","DEZ-528","Volvo FH Classic 15T","Transportes del Sur SAC","Jorge Cárdenas","Cap. PNP M. Silva","400","llegada_conforme","MPLS Dedicada","74","-16.409","-71.5375"
+"#DEZ-234","DEZ-234","Volvo FH 540","Transportes del Norte SAC","Carlos Mendoza P.","Mayor PNP L. Flores","420","llegada_conforme","MPLS Dedicada","81","-5.1945","-80.6328"
+"#DEZ-912","DEZ-912","Mercedes Actros","Logística del Valle Sagrado","Efraín Mamani","SOT1 PNP J. Ramos","380","llegada_conforme","MPLS Dedicada","68","-13.5319","-71.9675"
+"#DEZ-641","DEZ-641","Camión 4x4 Isuzu","Transportes Altiplano","Walter Condori","Cap. PNP D. Quispe","220","retraso","Starlink","35","-15.8402","-70.0219"
+"#DEZ-115","DEZ-115","Volvo FMX 460","Andes Central Express","Raúl Pacherres","Tnte. PNP C. Díaz","360","llegada_conforme","MPLS Dedicada","60","-12.0651","-75.2049"
+"#DEZ-803","DEZ-803","Lancha Rápida Selva","Flota Fluvial Ucayali","Nelson Ahuanari","SBT PNP R. Vela","150","llegada_conforme","Starlink","28","-8.3791","-74.5539"
+"#GAL-109","GAL-109","Furgón Reparto","Galaga SAC (Contratista Observado)","Conductor Observado","Sin Asignar","120","alerta_critica","4G Contingencia","0","-12.2289","-76.8622"
+"#DEZ-447","DEZ-447","Scania G410","Rutas de Ayacucho SAC","Darío Huamán","Cap. PNP F. Castro","300","llegada_conforme","MPLS Dedicada","70","-13.1588","-74.2239"
+"#DEZ-701","DEZ-701","Hino 500","Selva Alta Transportes","Gilberto Ruiz","Tnte. PNP M. Tello","280","llegada_conforme","MPLS Dedicada","65","-6.4842","-76.3688"

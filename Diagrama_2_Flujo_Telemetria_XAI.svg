@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 500" width="100%" height="100%" style="background:#070b14; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="gradFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <filter id="shadowBox">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <!-- TITULO -->
+  <text x="475" y="40" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="800">PIPELINE DE TRANSMISIÓN TELEMÉTRICA E INFERENCIA XAI</text>
+  <text x="475" y="65" text-anchor="middle" fill="#94a3b8" font-size="12">Ciclo de Vida de los Datos desde el Vehículo hasta la Alerta Institucional (Punto 6)</text>
+
+  <!-- PASO 1 -->
+  <rect x="40" y="110" width="160" height="260" rx="10" fill="#0e1526" stroke="#0284c7" stroke-width="1.5" filter="url(#shadowBox)"/>
+  <rect x="40" y="110" width="160" height="30" rx="10" fill="#0284c7"/>
+  <text x="120" y="130" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1. EMISIÓN IoT / GPS</text>
+  <text x="120" y="170" text-anchor="middle" fill="#38bdf8" font-size="28" font-weight="800">30 seg</text>
+  <text x="120" y="195" text-anchor="middle" fill="#94a3b8" font-size="10">Frecuencia de muestreo</text>
+  <text x="55" y="240" fill="#cbd5e1" font-size="10">• Latitud / Longitud</text>
+  <text x="55" y="260" fill="#cbd5e1" font-size="10">• Velocidad (km/h)</text>
+  <text x="55" y="280" fill="#cbd5e1" font-size="10">• Batería telemétrica</text>
+  <text x="55" y="300" fill="#cbd5e1" font-size="10">• Odómetro y sellos</text>
+  <text x="120" y="350" text-anchor="middle" fill="#10b981" font-size="10" font-weight="700">Cifrado de Origen</text>
+
+  <!-- FLECHA 1 -->
+  <path d="M 200 240 L 225 240" stroke="#38bdf8" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- PASO 2 -->
+  <rect x="225" y="110" width="160" height="260" rx="10" fill="#0e1526" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadowBox)"/>
+  <rect x="225" y="110" width="160" height="30" rx="10" fill="#1e3a8a"/>
+  <text x="305" y="130" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2. CANAL SEGURO</text>
+  <text x="305" y="170" text-anchor="middle" fill="#38bdf8" font-size="24" font-weight="800">&lt; 35 ms</text>
+  <text x="305" y="195" text-anchor="middle" fill="#94a3b8" font-size="10">Latencia promedio</text>
+  <text x="240" y="240" fill="#cbd5e1" font-size="10">• Red Dedicada MPLS</text>
+  <text x="240" y="260" fill="#cbd5e1" font-size="10">• Calidad QoS / CoS</text>
+  <text x="240" y="280" fill="#cbd5e1" font-size="10">• Respaldo Starlink</text>
+  <text x="240" y="300" fill="#cbd5e1" font-size="10">• Aislamiento total</text>
+  <text x="305" y="350" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">SLA 99.94% Uptime</text>
+
+  <!-- FLECHA 2 -->
+  <path d="M 385 240 L 410 240" stroke="#38bdf8" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- PASO 3 -->
+  <rect x="410" y="110" width="160" height="260" rx="10" fill="#0e1526" stroke="#10b981" stroke-width="1.5" filter="url(#shadowBox)"/>
+  <rect x="410" y="110" width="160" height="30" rx="10" fill="#059669"/>
+  <text x="490" y="130" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">3. MOTOR POSTGIS</text>
+  <text x="490" y="170" text-anchor="middle" fill="#10b981" font-size="24" font-weight="800">&lt; 12 ms</text>
+  <text x="490" y="195" text-anchor="middle" fill="#94a3b8" font-size="10">Tiempo de consulta espacial</text>
+  <text x="425" y="240" fill="#cbd5e1" font-size="10">• Función ST_Contains</text>
+  <text x="425" y="260" fill="#cbd5e1" font-size="10">• ST_DWithin (Buffer 200m)</text>
+  <text x="425" y="280" fill="#cbd5e1" font-size="10">• Índices GiST espaciales</text>
+  <text x="425" y="300" fill="#cbd5e1" font-size="10">• Geocercas dinámicas</text>
+  <text x="490" y="350" text-anchor="middle" fill="#10b981" font-size="10" font-weight="700">Validación Perimétrica</text>
+
+  <!-- FLECHA 3 -->
+  <path d="M 570 240 L 595 240" stroke="#38bdf8" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- PASO 4 -->
+  <rect x="595" y="110" width="160" height="260" rx="10" fill="#0e1526" stroke="#9333ea" stroke-width="1.5" filter="url(#shadowBox)"/>
+  <rect x="595" y="110" width="160" height="30" rx="10" fill="#7c3aed"/>
+  <text x="675" y="130" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">4. INFERENCIA XAI</text>
+  <text x="675" y="170" text-anchor="middle" fill="#c084fc" font-size="24" font-weight="800">SHAP</text>
+  <text x="675" y="195" text-anchor="middle" fill="#94a3b8" font-size="10">Valores de Atribución</text>
+  <text x="610" y="240" fill="#cbd5e1" font-size="10">• Modelo Aditivo TreeSHAP</text>
+  <text x="610" y="260" fill="#cbd5e1" font-size="10">• Contrata: +40%</text>
+  <text x="610" y="280" fill="#cbd5e1" font-size="10">• Retraso: +24%</text>
+  <text x="610" y="300" fill="#cbd5e1" font-size="10">• Geografía: +16%</text>
+  <text x="675" y="350" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="700">Cero Caja Negra</text>
+
+  <!-- FLECHA 4 -->
+  <path d="M 755 240 L 780 240" stroke="#38bdf8" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- PASO 5 -->
+  <rect x="780" y="110" width="140" height="260" rx="10" fill="#0e1526" stroke="#ef4444" stroke-width="1.5" filter="url(#shadowBox)"/>
+  <rect x="780" y="110" width="140" height="30" rx="10" fill="#dc2626"/>
+  <text x="850" y="130" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">5. ACCIÓN</text>
+  <text x="850" y="170" text-anchor="middle" fill="#ef4444" font-size="20" font-weight="800">SEMÁFORO</text>
+  <text x="850" y="195" text-anchor="middle" fill="#94a3b8" font-size="10">Alerta Temprana</text>
+  <text x="795" y="240" fill="#cbd5e1" font-size="10">• HUD en Vivo</text>
+  <text x="795" y="260" fill="#cbd5e1" font-size="10">• Alarma Sonora</text>
+  <text x="795" y="280" fill="#cbd5e1" font-size="10">• Notif. Contraloría</text>
+  <text x="795" y="300" fill="#cbd5e1" font-size="10">• Despliegue PNP</text>
+  <text x="850" y="350" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="700">Auditoría Legal</text>
+
+  <!-- PIE -->
+  <text x="475" y="440" text-anchor="middle" fill="#64748b" font-size="11">Flujo Arquitectural de la Solución: Telemetría de Alta Disponibilidad para el Avance II (S08.s1)</text>
+</svg>
